@@ -8,6 +8,8 @@ You have learned the **basics of Docusaurus** and made some changes to the **ini
 
 But Docusaurus has **much more to offer**!
 
+asdasdad
+
 ## What's next?
 
 - [Read the official documentation](https://v2.docusaurus.io/).
