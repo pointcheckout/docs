@@ -12,10 +12,6 @@ A curated list of interesting Docusaurus community projects.
 
 - [Live code editing in Docusaurus](https://dev.to/mrmuhammadali/live-code-editing-in-docusaurus-ux-at-its-best-2hj1)
 
-## Showcase {#showcase}
-
-See the <a href={require('@docusaurus/useBaseUrl').default('showcase')}>showcase</a>.
-
 ## Community plugins {#community-plugins}
 
 ### Search {#search}
