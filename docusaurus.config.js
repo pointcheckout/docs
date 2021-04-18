@@ -1,4 +1,5 @@
 /** @type {import('@docusaurus/types').DocusaurusConfig} */
+
 module.exports = {
   title: 'PointCheckout Documentation',
   tagline: 'Making commerce easy',
@@ -11,23 +12,28 @@ module.exports = {
   projectName: 'docs',
   themeConfig: {
     navbar: {
-      title: 'My Site',
       logo: {
-        alt: 'My Site Logo',
+        alt: 'PointCheckout logo',
         src: 'img/logo.svg',
       },
       items: [
         {
-          to: 'docs/',
-          activeBasePath: 'docs',
-          label: 'Docs',
+          to: 'guides/',
+          activeBasePath: 'guides',
+          label: 'Guides',
           position: 'left',
         },
-        {to: 'blog', label: 'Blog', position: 'left'},
         {
-          href: 'https://github.com/facebook/docusaurus',
-          label: 'GitHub',
-          position: 'right',
+          to: 'docs/',
+          activeBasePath: 'docs',
+          label: 'Documentation',
+          position: 'left',
+        },
+        {
+          to: 'api/',
+          activeBasePath: 'api',
+          label: 'API Specs',
+          position: 'left',
         },
       ],
     },
@@ -64,17 +70,13 @@ module.exports = {
           title: 'More',
           items: [
             {
-              label: 'Blog',
-              to: 'blog',
-            },
-            {
               label: 'GitHub',
               href: 'https://github.com/facebook/docusaurus',
             },
           ],
         },
       ],
-      copyright: `Copyright © ${new Date().getFullYear()} My Project, Inc. Built with Docusaurus.`,
+      copyright: `Copyright © ${new Date().getFullYear()} PointCheckout, Ltd.`,
     },
   },
   presets: [
@@ -83,19 +85,40 @@ module.exports = {
       {
         docs: {
           sidebarPath: require.resolve('./sidebars.js'),
-          // Please change this to your repo.
-          editUrl:
-            'https://github.com/facebook/docusaurus/edit/master/website/',
         },
-        blog: {
-          showReadingTime: true,
-          // Please change this to your repo.
-          editUrl:
-            'https://github.com/facebook/docusaurus/edit/master/website/blog/',
-        },
+        blog: false,
         theme: {
           customCss: require.resolve('./src/css/custom.css'),
         },
+      },
+    ],
+    [
+      'redocusaurus',
+      {
+        specs: [
+          {
+            specUrl: 'https://redocly.github.io/redoc/openapi.yaml',
+            routePath: '/api'
+          }
+        ],
+        theme: {
+          primaryColor: '#25405d',
+          redocOptions: {
+            disableSearch: true,
+            hideDownloadButton: false
+          },
+        },
+      }
+    ],
+  ],
+  plugins: [
+    [
+      '@docusaurus/plugin-content-docs',
+      {
+        id: 'guides',
+        path: 'community',
+        routeBasePath: 'guides',
+        sidebarPath: require.resolve('./sidebars.guides.js'),
       },
     ],
   ],

@@ -5,16 +5,33 @@
  * work well for content-centric websites.
  */
 
+@import url('https://fonts.googleapis.com/css2?family=Maven+Pro:wght@400;600;700&display=swap');
+
 /* You can override the default Infima variables here. */
 :root {
-  --ifm-color-primary: #25c2a0;
-  --ifm-color-primary-dark: rgb(33, 175, 144);
-  --ifm-color-primary-darker: rgb(31, 165, 136);
-  --ifm-color-primary-darkest: rgb(26, 136, 112);
-  --ifm-color-primary-light: rgb(70, 203, 174);
-  --ifm-color-primary-lighter: rgb(102, 212, 189);
-  --ifm-color-primary-lightest: rgb(146, 224, 208);
+  --ifm-color-primary: #25405d;
+  --ifm-color-primary-dark: #213a54;
+  --ifm-color-primary-darker: #1f364f;
+  --ifm-color-primary-darkest: #1a2d41;
+  --ifm-color-primary-light: #294666;
+  --ifm-color-primary-lighter: #2b4a6b;
+  --ifm-color-primary-lightest: #305379;
+
+  --ifm-color-secondary: #ee8801;
+  --ifm-color-secondary-dark: #d67a01;
+  --ifm-color-secondary-darker: #ca7401;
+  --ifm-color-secondary-darkest: #a75f01;
+  --ifm-color-secondary-light: #fe9509;
+  --ifm-color-secondary-lighter: #fe9a15;
+  --ifm-color-secondary-lightest: #fea939;
+
+  --ifm-font-family-base: 'Maven Pro', sans-serif;
+  --ifm-font-weight-semibold: 600;
+
   --ifm-code-font-size: 95%;
+
+  --ifm-navbar-link-color: var(--ifm-color-primary);
+  --ifm-navbar-link-hover-color: var(--ifm-color-secondary);
 }
 
 .docusaurus-highlight-code-line {
@@ -22,4 +39,12 @@
   display: block;
   margin: 0 calc(-1 * var(--ifm-pre-padding));
   padding: 0 var(--ifm-pre-padding);
+}
+
+.menu__list-item {
+  font-weight: var(--ifm-font-weight-normal);
+}
+
+.menu__list-item .active {
+  font-weight: var(--ifm-font-weight-semibold);
 }
