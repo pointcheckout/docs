@@ -1,5 +1,9 @@
 ---
-title: Awesome Resources
+id: guide-account-resources
+title: Resources
+slug: resources
+hide_title: false
+hide_table_of_contents: false
 ---
 
 A curated list of interesting Docusaurus community projects.

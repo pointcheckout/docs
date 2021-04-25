@@ -8,18 +8,33 @@ import styles from './styles.module.css';
 
 const features = [
   {
-    title: 'My Websites',
-    imageUrl: 'img/undraw_docusaurus_mountain.svg',
+    title: 'product guides',
+    target: '/guides',
+    imageUrl: 'img/home_guides.svg',
     description: (
       <>
-        Docusaurus was designed from the ground up to be easily installed and
+        Learn about the ins and outs of the PointCheckout platform through  boosts an
+        array of tools  was designed from the ground up to be easily installed and
         used to get your website up and running quickly.
       </>
     ),
   },
   {
-    title: 'Focus on What Matters',
-    imageUrl: 'img/undraw_docusaurus_tree.svg',
+    title: 'developer',
+    target: '/docs',
+    imageUrl: 'img/home_guides.svg',
+    description: (
+      <>
+        Learn about the ins and outs of the PointCheckout platform through  boosts an
+        array of tools  was designed from the ground up to be easily installed and
+        used to get your website up and running quickly.
+      </>
+    ),
+  },
+  {
+    title: 'E-Commerce Plugins',
+    target: '/docs/integrate/plugins',
+    imageUrl: 'img/home_plugins.svg',
     description: (
       <>
         Docusaurus lets you focus on your docs, and we&apos;ll do the chores. Go
@@ -28,8 +43,20 @@ const features = [
     ),
   },
   {
-    title: 'Powered by React',
-    imageUrl: 'img/undraw_docusaurus_react.svg',
+    title: 'SDKs',
+    target: '/docs/integrate/sdks',
+    imageUrl: 'img/home_plugins.svg',
+    description: (
+      <>
+        Docusaurus lets you focus on your docs, and we&apos;ll do the chores. Go
+        ahead and move your docs into the <code>docs</code> directory.
+      </>
+    ),
+  },
+  {
+    title: 'api reference',
+    target: '/api',
+    imageUrl: 'img/home_api.svg',
     description: (
       <>
         Extend or customize your website layout by reusing React. Docusaurus can
@@ -39,7 +66,7 @@ const features = [
   },
 ];
 
-function Feature({imageUrl, title, description}) {
+function Feature({imageUrl, target, title, description}) {
   const imgUrl = useBaseUrl(imageUrl);
   return (
     <div className={clsx('col col--4', styles.feature)}>
@@ -48,7 +75,9 @@ function Feature({imageUrl, title, description}) {
           <img className={styles.featureImage} src={imgUrl} alt={title} />
         </div>
       )}
-      <h3>{title}</h3>
+      <Link className={clsx(styles.featureHead)} to={useBaseUrl(target)}>
+        {title}
+      </Link>
       <p>{description}</p>
     </div>
   );
@@ -61,19 +90,31 @@ export default function Home() {
     <Layout
       title={`${siteConfig.title}`}
       description="Description will go into a meta tag in <head />">
-      <header className={clsx('hero hero--primary', styles.heroBanner)}>
+      <header className={clsx('hero', styles.heroBanner)}>
         <div className="container">
-          <h1 className="hero__title">{siteConfig.title}</h1>
-          <p className="hero__subtitle">{siteConfig.tagline}</p>
-          <div className={styles.buttons}>
-            <Link
-              className={clsx(
-                'button button--outline button--secondary button--lg',
-                styles.getStarted,
-              )}
-              to={useBaseUrl('docs/')}>
-              Get Started
-            </Link>
+          <div class="row">
+            <div class="col col--8">
+              <h1 className="hero__title">{siteConfig.title}</h1>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col col--8">
+              <p className="hero__subtitle">{siteConfig.tagline}</p>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col col--8">
+              <div className={styles.buttons}>
+                <Link
+                  className={clsx(
+                    'button button--outline button--secondary button--lg',
+                    styles.getStarted,
+                  )}
+                  to={useBaseUrl('docs/')}>
+                  get started
+                </Link>
+              </div>
+            </div>
           </div>
         </div>
       </header>

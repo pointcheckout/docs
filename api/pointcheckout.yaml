@@ -1,1202 +1,1756 @@
-openapi: 3.0.0
-servers:
-  - url: //petstore.swagger.io/v2
-    description: Default server
-  - url: //petstore.swagger.io/sandbox
-    description: Sandbox server
+openapi: 3.0.1
 info:
-  description: |
-    This is a sample server Petstore server.
-    You can find out more about Swagger at
-    [http://swagger.io](http://swagger.io) or on [irc.freenode.net, #swagger](http://swagger.io/irc/).
-    For this sample, you can use the api key `special-key` to test the authorization filters.
-
-    # Introduction
-    This API is documented in **OpenAPI format** and is based on
-    [Petstore sample](http://petstore.swagger.io/) provided by [swagger.io](http://swagger.io) team.
-    It was **extended** to illustrate features of [generator-openapi-repo](https://github.com/Rebilly/generator-openapi-repo)
-    tool and [ReDoc](https://github.com/Redocly/redoc) documentation. In addition to standard
-    OpenAPI syntax we use a few [vendor extensions](https://github.com/Redocly/redoc/blob/master/docs/redoc-vendor-extensions.md).
-
-    # OpenAPI Specification
-    This API is documented in **OpenAPI format** and is based on
-    [Petstore sample](http://petstore.swagger.io/) provided by [swagger.io](http://swagger.io) team.
-    It was **extended** to illustrate features of [generator-openapi-repo](https://github.com/Rebilly/generator-openapi-repo)
-    tool and [ReDoc](https://github.com/Redocly/redoc) documentation. In addition to standard
-    OpenAPI syntax we use a few [vendor extensions](https://github.com/Redocly/redoc/blob/master/docs/redoc-vendor-extensions.md).
-
-    # Cross-Origin Resource Sharing
-    This API features Cross-Origin Resource Sharing (CORS) implemented in compliance with  [W3C spec](https://www.w3.org/TR/cors/).
-    And that allows cross-domain communication from the browser.
-    All responses have a wildcard same-origin which makes them completely public and accessible to everyone, including any code on any site.
-
-    # Authentication
-
-    Petstore offers two forms of authentication:
-      - API Key
-      - OAuth2
-    OAuth2 - an open protocol to allow secure authorization in a simple
-    and standard method from web, mobile and desktop applications.
-
-    <SecurityDefinitions />
-
-  version: 1.0.0
-  title: Swagger Petstore
-  termsOfService: 'http://swagger.io/terms/'
-  contact:
-    name: API Support
-    email: apiteam@swagger.io
-    url: https://github.com/Redocly/redoc
-  license:
-    name: Apache 2.0
-    url: 'http://www.apache.org/licenses/LICENSE-2.0.html'
-externalDocs:
-  description: Find out how to create Github repo for your OpenAPI spec.
-  url: 'https://github.com/Rebilly/generator-openapi-repo'
+  title: Merchant API
+  description: PointCheckout Merchant API
+  version: "2.0"
+servers:
+- url: htps://api.pointcheckout.com
+  description: PointCheckout live environment
+- url: htps://api.test.pointcheckout.com
+  description: PointCheckout test environment
 tags:
-  - name: pet
-    description: Everything about your Pets
-  - name: store
-    description: Access to Petstore orders
-  - name: user
-    description: Operations about user
-  - name: pet_model
-    x-displayName: The Pet Model
-    description: |
-      <SchemaDefinition schemaRef="#/components/schemas/Pet" />
-  - name: store_model
-    x-displayName: The Order Model
-    description: |
-      <SchemaDefinition schemaRef="#/components/schemas/Order" exampleRef="#/components/examples/Order" showReadOnly={true} showWriteOnly={true} />
-x-tagGroups:
-  - name: General
-    tags:
-      - pet
-      - store
-  - name: User Management
-    tags:
-      - user
-  - name: Models
-    tags:
-      - pet_model
-      - store_model
+- name: Checkout
+  description: API endpoints for QR payments. Can be used for point of sale intagration.
 paths:
-  /pet:
-    parameters:
-      - name: Accept-Language
+  /api/mer/v2.0/checkout/{checkoutId}/refund:
+    post:
+      tags:
+      - Checkout
+      description: Issue a refund for checkout
+      operationId: Refund checkout
+      parameters:
+      - name: checkoutId
+        in: path
+        description: Checkout Id retrieved from PointCheckout API.
+        required: true
+        style: simple
+        schema:
+          type: string
+        example: 1686414183718160542
+      - name: amount
+        in: query
+        description: Refun amount.
+        required: true
+        style: simple
+        schema:
+          exclusiveMinimum: true
+          type: number
+        example: 1500.0
+      - name: currency
+        in: query
+        description: Currency ISO code.
+        required: true
+        style: simple
+        schema:
+          maxLength: 3
+          minLength: 3
+          type: string
+        example: USD
+      - name: note
+        in: path
+        description: Refund note.
+        required: true
+        style: simple
+        schema:
+          type: string
+        example: Out of stock
+      - name: X-POINTCHECKOUT-KEY
         in: header
-        description: "The language you prefer for messages. Supported values are en-AU, en-CA, en-GB, en-US"
-        example: en-US
-        required: false
+        description: Merchant API Key acquired from PointCheckout
+        required: true
+        style: simple
         schema:
           type: string
-          default: en-AU
-      - name: cookieParam
-        in: cookie
-        description: Some cookie
+      - name: X-POINTCHECKOUT-SECRET
+        in: header
+        description: Merchant API Secret
         required: true
+        style: simple
         schema:
-          type: integer
-          format: int64
-    post:
-      tags:
-        - pet
-      summary: Add a new pet to the store
-      description: Add new pet to the store inventory.
-      operationId: addPet
-      responses:
-        '405':
-          description: Invalid input
-      security:
-        - petstore_auth:
-            - 'write:pets'
-            - 'read:pets'
-      x-codeSamples:
-        - lang: 'C#'
-          source: |
-            PetStore.v1.Pet pet = new PetStore.v1.Pet();
-            pet.setApiKey("your api key");
-            pet.petType = PetStore.v1.Pet.TYPE_DOG;
-            pet.name = "Rex";
-            // set other fields
-            PetStoreResponse response = pet.create();
-            if (response.statusCode == HttpStatusCode.Created)
-            {
-              // Successfully created
-            }
-            else
-            {
-              // Something wrong -- check response for errors
-              Console.WriteLine(response.getRawResponse());
-            }
-        - lang: PHP
-          source: |
-            $form = new \PetStore\Entities\Pet();
-            $form->setPetType("Dog");
-            $form->setName("Rex");
-            // set other fields
-            try {
-                $pet = $client->pets()->create($form);
-            } catch (UnprocessableEntityException $e) {
-                var_dump($e->getErrors());
-            }
-      requestBody:
-        $ref: '#/components/requestBodies/Pet'
-    put:
-      tags:
-        - pet
-      summary: Update an existing pet
-      description: ''
-      operationId: updatePet
-      responses:
-        '400':
-          description: Invalid ID supplied
-        '404':
-          description: Pet not found
-        '405':
-          description: Validation exception
-      security:
-        - petstore_auth:
-            - 'write:pets'
-            - 'read:pets'
-      x-codeSamples:
-        - lang: PHP
-          source: |
-            $form = new \PetStore\Entities\Pet();
-            $form->setPetId(1);
-            $form->setPetType("Dog");
-            $form->setName("Rex");
-            // set other fields
-            try {
-                $pet = $client->pets()->update($form);
-            } catch (UnprocessableEntityException $e) {
-                var_dump($e->getErrors());
-            }
-      requestBody:
-        $ref: '#/components/requestBodies/Pet'
-  '/pet/{petId}':
-    get:
-      tags:
-        - pet
-      summary: Find pet by ID
-      description: Returns a single pet
-      operationId: getPetById
-      parameters:
-        - name: petId
-          in: path
-          description: ID of pet to return
-          required: true
-          deprecated: true
-          schema:
-            type: integer
-            format: int64
-      responses:
-        '200':
-          description: successful operation
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Pet'
-            application/xml:
-              schema:
-                $ref: '#/components/schemas/Pet'
-        '400':
-          description: Invalid ID supplied
-        '404':
-          description: Pet not found
-      security:
-        - api_key: []
-    post:
-      tags:
-        - pet
-      summary: Updates a pet in the store with form data
-      description: ''
-      operationId: updatePetWithForm
-      parameters:
-        - name: petId
-          in: path
-          description: ID of pet that needs to be updated
-          required: true
-          schema:
-            type: integer
-            format: int64
-      responses:
-        '405':
-          description: Invalid input
-      security:
-        - petstore_auth:
-            - 'write:pets'
-            - 'read:pets'
-      requestBody:
-        content:
-          application/x-www-form-urlencoded:
-            schema:
-              type: object
-              properties:
-                name:
-                  description: Updated name of the pet
-                  type: string
-                status:
-                  description: Updated status of the pet
-                  type: string
-    delete:
-      tags:
-        - pet
-      summary: Deletes a pet
-      description: ''
-      operationId: deletePet
-      parameters:
-        - name: api_key
-          in: header
-          required: false
-          schema:
-            type: string
-          example: "Bearer <TOKEN>"
-        - name: petId
-          in: path
-          description: Pet id to delete
-          required: true
-          schema:
-            type: integer
-            format: int64
-      responses:
-        '400':
-          description: Invalid pet value
-      security:
-        - petstore_auth:
-            - 'write:pets'
-            - 'read:pets'
-  '/pet/{petId}/uploadImage':
-    post:
-      tags:
-        - pet
-      summary: uploads an image
-      description: ''
-      operationId: uploadFile
-      parameters:
-        - name: petId
-          in: path
-          description: ID of pet to update
-          required: true
-          schema:
-            type: integer
-            format: int64
-      responses:
-        '200':
-          description: successful operation
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiResponse'
-      security:
-        - petstore_auth:
-            - 'write:pets'
-            - 'read:pets'
-      requestBody:
-        content:
-          application/octet-stream:
-            schema:
-              type: string
-              format: binary
-  /pet/findByStatus:
-    get:
-      tags:
-        - pet
-      summary: Finds Pets by status
-      description: Multiple status values can be provided with comma separated strings
-      operationId: findPetsByStatus
-      parameters:
-        - name: status
-          in: query
-          description: Status values that need to be considered for filter
-          required: true
-          style: form
-          schema:
-            type: array
-            minItems: 1
-            maxItems: 3
-            items:
-              type: string
-              enum:
-                - available
-                - pending
-                - sold
-              default: available
-      responses:
-        '200':
-          description: successful operation
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/Pet'
-            application/xml:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/Pet'
-        '400':
-          description: Invalid status value
-      security:
-        - petstore_auth:
-            - 'write:pets'
-            - 'read:pets'
-  /pet/findByTags:
-    get:
-      tags:
-        - pet
-      summary: Finds Pets by tags
-      description: >-
-        Multiple tags can be provided with comma separated strings. Use tag1,
-        tag2, tag3 for testing.
-      operationId: findPetsByTags
-      deprecated: true
-      parameters:
-        - name: tags
-          in: query
-          description: Tags to filter by
-          required: true
-          style: form
-          schema:
-            type: array
-            items:
-              type: string
-      responses:
-        '200':
-          description: successful operation
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/Pet'
-            application/xml:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/Pet'
-        '400':
-          description: Invalid tag value
-      security:
-        - petstore_auth:
-            - 'write:pets'
-            - 'read:pets'
-  /store/inventory:
-    get:
-      tags:
-        - store
-      summary: Returns pet inventories by status
-      description: Returns a map of status codes to quantities
-      operationId: getInventory
-      responses:
-        '200':
-          description: successful operation
-          content:
-            application/json:
-              schema:
-                type: object
-                additionalProperties:
-                  type: integer
-                  format: int32
-      security:
-        - api_key: []
-  /store/order:
-    post:
-      tags:
-        - store
-      summary: Place an order for a pet
-      description: ''
-      operationId: placeOrder
-      responses:
-        '200':
-          description: successful operation
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Order'
-            application/xml:
-              schema:
-                $ref: '#/components/schemas/Order'
-        '400':
-          description: Invalid Order
-          content:
-            application/json:
-              example:
-                status: 400
-                message: "Invalid Order"
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/Order'
-        description: order placed for purchasing the pet
-        required: true
-  '/store/order/{orderId}':
-    get:
-      tags:
-        - store
-      summary: Find purchase order by ID
-      description: >-
-        For valid response try integer IDs with value <= 5 or > 10. Other values
-        will generated exceptions
-      operationId: getOrderById
-      parameters:
-        - name: orderId
-          in: path
-          description: ID of pet that needs to be fetched
-          required: true
-          schema:
-            type: integer
-            format: int64
-            minimum: 1
-            maximum: 5
-      responses:
-        '200':
-          description: successful operation
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Order'
-            application/xml:
-              schema:
-                $ref: '#/components/schemas/Order'
-        '400':
-          description: Invalid ID supplied
-        '404':
-          description: Order not found
-    delete:
-      tags:
-        - store
-      summary: Delete purchase order by ID
-      description: >-
-        For valid response try integer IDs with value < 1000. Anything above
-        1000 or nonintegers will generate API errors
-      operationId: deleteOrder
-      parameters:
-        - name: orderId
-          in: path
-          description: ID of the order that needs to be deleted
-          required: true
-          schema:
-            type: string
-            minimum: 1
-      responses:
-        '400':
-          description: Invalid ID supplied
-        '404':
-          description: Order not found
-  /store/subscribe:
-    post:
-      tags:
-        - store
-      summary: Subscribe to the Store events
-      description: Add subscription for a store events
-      requestBody:
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                callbackUrl:
-                  type: string
-                  format: uri
-                  description: This URL will be called by the server when the desired event will occur
-                  example: https://myserver.com/send/callback/here
-                eventName:
-                  type: string
-                  description: Event name for the subscription
-                  enum:
-                    - orderInProgress
-                    - orderShipped
-                    - orderDelivered
-                  example: orderInProgress
-              required:
-                - callbackUrl
-                - eventName
-      responses:
-        '201':
-          description: Subscription added
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  subscriptionId:
-                    type: string
-                    example: AAA-123-BBB-456
-      callbacks:
-        orderInProgress:
-          '{$request.body#/callbackUrl}?event={$request.body#/eventName}':
-            servers:
-              - url: //callback-url.path-level/v1
-                description: Path level server 1
-              - url: //callback-url.path-level/v2
-                description: Path level server 2
-            post:
-              summary: Order in Progress (Summary)
-              description: A callback triggered every time an Order is updated status to "inProgress" (Description)
-              externalDocs:
-                description: Find out more
-                url: 'https://more-details.com/demo'
-              requestBody:
-                content:
-                  application/json:
-                    schema:
-                      type: object
-                      properties:
-                        orderId:
-                          type: string
-                          example: '123'
-                        timestamp:
-                          type: string
-                          format: date-time
-                          example: '2018-10-19T16:46:45Z'
-                        status:
-                          type: string
-                          example: 'inProgress'
-                  application/xml:
-                    schema:
-                      type: object
-                      properties:
-                        orderId:
-                          type: string
-                          example: '123'
-                    example: |
-                      <?xml version="1.0" encoding="UTF-8"?>
-                      <root>
-                        <orderId>123</orderId>
-                        <status>inProgress</status>
-                        <timestamp>2018-10-19T16:46:45Z</timestamp>
-                      </root>
-              responses:
-                '200':
-                  description: Callback successfully processed and no retries will be performed
-                  content:
-                    application/json:
-                      schema:
-                        type: object
-                        properties:
-                          someProp:
-                            type: string
-                            example: '123'
-                '299':
-                  description: Response for cancelling subscription
-                '500':
-                  description: Callback processing failed and retries will be performed
-              x-codeSamples:
-                - lang: 'C#'
-                  source: |
-                    PetStore.v1.Pet pet = new PetStore.v1.Pet();
-                    pet.setApiKey("your api key");
-                    pet.petType = PetStore.v1.Pet.TYPE_DOG;
-                    pet.name = "Rex";
-                    // set other fields
-                    PetStoreResponse response = pet.create();
-                    if (response.statusCode == HttpStatusCode.Created)
-                    {
-                      // Successfully created
-                    }
-                    else
-                    {
-                      // Something wrong -- check response for errors
-                      Console.WriteLine(response.getRawResponse());
-                    }
-                - lang: PHP
-                  source: |
-                    $form = new \PetStore\Entities\Pet();
-                    $form->setPetType("Dog");
-                    $form->setName("Rex");
-                    // set other fields
-                    try {
-                        $pet = $client->pets()->create($form);
-                    } catch (UnprocessableEntityException $e) {
-                        var_dump($e->getErrors());
-                    }
-            put:
-              description: Order in Progress (Only Description)
-              servers:
-                - url: //callback-url.operation-level/v1
-                  description: Operation level server 1 (Operation override)
-                - url: //callback-url.operation-level/v2
-                  description: Operation level server 2 (Operation override)
-              requestBody:
-                content:
-                  application/json:
-                    schema:
-                      type: object
-                      properties:
-                        orderId:
-                          type: string
-                          example: '123'
-                        timestamp:
-                          type: string
-                          format: date-time
-                          example: '2018-10-19T16:46:45Z'
-                        status:
-                          type: string
-                          example: 'inProgress'
-                  application/xml:
-                    schema:
-                      type: object
-                      properties:
-                        orderId:
-                          type: string
-                          example: '123'
-                    example: |
-                      <?xml version="1.0" encoding="UTF-8"?>
-                      <root>
-                        <orderId>123</orderId>
-                        <status>inProgress</status>
-                        <timestamp>2018-10-19T16:46:45Z</timestamp>
-                      </root>
-              responses:
-                '200':
-                  description: Callback successfully processed and no retries will be performed
-                  content:
-                    application/json:
-                      schema:
-                        type: object
-                        properties:
-                          someProp:
-                            type: string
-                            example: '123'
-        orderShipped:
-          '{$request.body#/callbackUrl}?event={$request.body#/eventName}':
-            post:
-              description: |
-                Very long description
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
-                incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis
-                nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
-                Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu
-                fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in
-                culpa qui officia deserunt mollit anim id est laborum.
-              requestBody:
-                content:
-                  application/json:
-                    schema:
-                      type: object
-                      properties:
-                        orderId:
-                          type: string
-                          example: '123'
-                        timestamp:
-                          type: string
-                          format: date-time
-                          example: '2018-10-19T16:46:45Z'
-                        estimatedDeliveryDate:
-                          type: string
-                          format: date-time
-                          example: '2018-11-11T16:00:00Z'
-              responses:
-                '200':
-                  description: Callback successfully processed and no retries will be performed
-        orderDelivered:
-          'http://notificationServer.com?url={$request.body#/callbackUrl}&event={$request.body#/eventName}':
-            post:
-              deprecated: true
-              summary: Order delivered
-              description: A callback triggered every time an Order is delivered to the recipient
-              requestBody:
-                content:
-                  application/json:
-                    schema:
-                      type: object
-                      properties:
-                        orderId:
-                          type: string
-                          example: '123'
-                        timestamp:
-                          type: string
-                          format: date-time
-                          example: '2018-10-19T16:46:45Z'
-              responses:
-                '200':
-                  description: Callback successfully processed and no retries will be performed
-  /user:
-    post:
-      tags:
-        - user
-      summary: Create user
-      description: This can only be done by the logged in user.
-      operationId: createUser
-      responses:
-        default:
-          description: successful operation
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/User'
-        description: Created user object
-        required: true
-  '/user/{username}':
-    get:
-      tags:
-        - user
-      summary: Get user by user name
-      description: ''
-      operationId: getUserByName
-      parameters:
-        - name: username
-          in: path
-          description: 'The name that needs to be fetched. Use user1 for testing. '
-          required: true
-          schema:
-            type: string
-      responses:
-        '200':
-          description: successful operation
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/User'
-            application/xml:
-              schema:
-                $ref: '#/components/schemas/User'
-        '400':
-          description: Invalid username supplied
-        '404':
-          description: User not found
-    put:
-      tags:
-        - user
-      summary: Updated user
-      description: This can only be done by the logged in user.
-      operationId: updateUser
-      parameters:
-        - name: username
-          in: path
-          description: name that need to be deleted
-          required: true
-          schema:
-            type: string
-      responses:
-        '400':
-          description: Invalid user supplied
-        '404':
-          description: User not found
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/User'
-        description: Updated user object
-        required: true
-    delete:
-      tags:
-        - user
-      summary: Delete user
-      description: This can only be done by the logged in user.
-      operationId: deleteUser
-      parameters:
-        - name: username
-          in: path
-          description: The name that needs to be deleted
-          required: true
-          schema:
-            type: string
-      responses:
-        '400':
-          description: Invalid username supplied
-        '404':
-          description: User not found
-  /user/createWithArray:
-    post:
-      tags:
-        - user
-      summary: Creates list of users with given input array
-      description: ''
-      operationId: createUsersWithArrayInput
-      responses:
-        default:
-          description: successful operation
-      requestBody:
-        $ref: '#/components/requestBodies/UserArray'
-  /user/createWithList:
-    post:
-      tags:
-        - user
-      summary: Creates list of users with given input array
-      description: ''
-      operationId: createUsersWithListInput
-      responses:
-        default:
-          description: successful operation
-      requestBody:
-        $ref: '#/components/requestBodies/UserArray'
-  /user/login:
-    get:
-      tags:
-        - user
-      summary: Logs user into the system
-      description: ''
-      operationId: loginUser
-      parameters:
-        - name: username
-          in: query
-          description: The user name for login
-          required: true
-          schema:
-            type: string
-        - name: password
-          in: query
-          description: The password for login in clear text
-          required: true
-          schema:
-            type: string
-      responses:
-        '200':
-          description: successful operation
-          headers:
-            X-Rate-Limit:
-              description: calls per hour allowed by the user
-              schema:
-                type: integer
-                format: int32
-            X-Expires-After:
-              description: date in UTC when token expires
-              schema:
-                type: string
-                format: date-time
-          content:
-            application/json:
-              schema:
-                type: string
-              examples:
-                response:
-                  value: OK
-            application/xml:
-              schema:
-                type: string
-              examples:
-                response:
-                  value:  <Message> OK </Message>
-            text/plain:
-              examples:
-                response:
-                  value:  OK
-        '400':
-          description: Invalid username/password supplied
-  /user/logout:
-    get:
-      tags:
-        - user
-      summary: Logs out current logged in user session
-      description: ''
-      operationId: logoutUser
-      responses:
-        default:
-          description: successful operation
-components:
-  schemas:
-    ApiResponse:
-      type: object
-      properties:
-        code:
-          type: integer
-          format: int32
-        type:
           type: string
-        message:
-          type: string
-    Cat:
-      description: A representation of a cat
-      allOf:
-        - $ref: '#/components/schemas/Pet'
-        - type: object
-          properties:
-            huntingSkill:
-              type: string
-              description: The measured skill for hunting
-              default: lazy
-              example: adventurous
-              enum:
-                - clueless
-                - lazy
-                - adventurous
-                - aggressive
-          required:
-            - huntingSkill
-    Category:
-      type: object
-      properties:
-        id:
-          description: Category ID
-          allOf:
-            - $ref: '#/components/schemas/Id'
-        name:
-          description: Category name
-          type: string
-          minLength: 1
-        sub:
-          description: Test Sub Category
-          type: object
-          properties:
-            prop1:
-              type: string
-              description: Dumb Property
-      xml:
-        name: Category
-    Dog:
-      description: A representation of a dog
-      allOf:
-        - $ref: '#/components/schemas/Pet'
-        - type: object
-          properties:
-            packSize:
-              type: integer
-              format: int32
-              description: The size of the pack the dog is from
-              default: 1
-              minimum: 1
-          required:
-            - packSize
-    HoneyBee:
-      description: A representation of a honey bee
-      allOf:
-        - $ref: '#/components/schemas/Pet'
-        - type: object
-          properties:
-            honeyPerDay:
-              type: number
-              description: Average amount of honey produced per day in ounces
-              example: 3.14
-              multipleOf: .01
-          required:
-            - honeyPerDay
-    Id:
-      type: integer
-      format: int64
-      readOnly: true
-    Order:
-      type: object
-      properties:
-        id:
-          description: Order ID
-          allOf:
-            - $ref: '#/components/schemas/Id'
-        petId:
-          description: Pet ID
-          allOf:
-            - $ref: '#/components/schemas/Id'
-        quantity:
-          type: integer
-          format: int32
-          minimum: 1
-          default: 1
-        shipDate:
-          description: Estimated ship date
-          type: string
-          format: date-time
-        status:
-          type: string
-          description: Order Status
-          enum:
-            - placed
-            - approved
-            - delivered
-        complete:
-          description: Indicates whenever order was completed or not
-          type: boolean
-          default: false
-          readOnly: true
-        requestId:
-          description: Unique Request Id
-          type: string
-          writeOnly: true
-      xml:
-        name: Order
-    Pet:
-      type: object
-      required:
-        - name
-        - photoUrls
-      discriminator:
-        propertyName: petType
-        mapping:
-          cat: '#/components/schemas/Cat'
-          dog: '#/components/schemas/Dog'
-          bee: '#/components/schemas/HoneyBee'
-      properties:
-        id:
-          externalDocs:
-            description: "Find more info here"
-            url: "https://example.com"
-          description: Pet ID
-          allOf:
-            - $ref: '#/components/schemas/Id'
-        category:
-          description: Categories this pet belongs to
-          allOf:
-            - $ref: '#/components/schemas/Category'
-        name:
-          description: The name given to a pet
-          type: string
-          example: Guru
-        photoUrls:
-          description: The list of URL to a cute photos featuring pet
-          type: array
-          maxItems: 20
-          xml:
-            name: photoUrl
-            wrapped: true
-          items:
-            type: string
-            format: url
-        friend:
-          allOf:
-            - $ref: '#/components/schemas/Pet'
-        tags:
-          description: Tags attached to the pet
-          type: array
-          minItems: 1
-          xml:
-            name: tag
-            wrapped: true
-          items:
-            $ref: '#/components/schemas/Tag'
-        status:
-          type: string
-          description: Pet status in the store
-          enum:
-            - available
-            - pending
-            - sold
-        petType:
-          description: Type of a pet
-          type: string
-      xml:
-        name: Pet
-    Tag:
-      type: object
-      properties:
-        id:
-          description: Tag ID
-          allOf:
-            - $ref: '#/components/schemas/Id'
-        name:
-          description: Tag name
-          type: string
-          minLength: 1
-      xml:
-        name: Tag
-    User:
-      type: object
-      properties:
-        id:
-          $ref: '#/components/schemas/Id'
-        pet:
-          oneOf:
-            - $ref: '#/components/schemas/Pet'
-            - $ref: '#/components/schemas/Tag'
-        username:
-          description: User supplied username
-          type: string
-          minLength: 4
-          example: John78
-        firstName:
-          description: User first name
-          type: string
-          minLength: 1
-          example: John
-        lastName:
-          description: User last name
-          type: string
-          minLength: 1
-          example: Smith
-        email:
-          description: User email address
-          type: string
-          format: email
-          example: john.smith@example.com
-        password:
-          type: string
-          description: >-
-            User password, MUST contain a mix of upper and lower case letters,
-            as well as digits
-          format: password
-          minLength: 8
-          pattern: '/(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])/'
-          example: drowssaP123
-        phone:
-          description: User phone number in international format
-          type: string
-          pattern: '/^\+(?:[0-9]-?){6,14}[0-9]$/'
-          example: +1-202-555-0192
-        userStatus:
-          description: User status
-          type: integer
-          format: int32
-      xml:
-        name: User
-  requestBodies:
-    Pet:
-      content:
-        application/json:
-          schema:
-            allOf:
-              - description: My Pet
-                title: Pettie
-              - $ref: '#/components/schemas/Pet'
-        application/xml:
-          schema:
-            type: 'object'
-            properties:
-              name:
-                type: string
-                description: hooray
-      description: Pet object that needs to be added to the store
-      required: true
-    UserArray:
-      content:
-        application/json:
-          schema:
-            type: array
-            items:
-              $ref: '#/components/schemas/User'
-      description: List of user object
-      required: true
-  securitySchemes:
-    petstore_auth:
-      description: |
-        Get access to data while protecting your account credentials.
-        OAuth2 is also a safer and more secure way to give you access.
-      type: oauth2
-      flows:
-        implicit:
-          authorizationUrl: 'http://petstore.swagger.io/api/oauth/dialog'
-          scopes:
-            'write:pets': modify pets in your account
-            'read:pets': read your pets
-    api_key:
-      description: >
-        For this sample, you can use the api key `special-key` to test the
-        authorization filters.
-      type: apiKey
-      name: api_key
-      in: header
-  examples:
-    Order:
-      value:
-        quantity: 1
-        shipDate: '2018-10-19T16:46:45Z'
-        status: placed
-        complete: false
-x-webhooks:
-  newPet:
-    post:
-      summary: New pet
-      description: Information about a new pet in the systems
-      operationId: newPet
-      tags:
-        - pet
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/Pet"
       responses:
         "200":
-          description: Return a 200 status to indicate that the data was received successfully
+          description: Get Checkout by ID
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/M_CheckoutResponseWrapper'
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/M_ExampleGetCheckoutErrorResponse'
+  /api/mer/v2.0/checkout/{checkoutId}/cancel:
+    post:
+      tags:
+      - Checkout
+      description: Cancel pending checkout
+      operationId: Cancel Checkout
+      parameters:
+      - name: checkoutId
+        in: path
+        description: Checkout Id.
+        required: true
+        style: simple
+        schema:
+          type: string
+      - name: X-POINTCHECKOUT-KEY
+        in: header
+        description: Merchant API Key acquired from PointCheckout
+        required: true
+        style: simple
+        schema:
+          type: string
+      - name: X-POINTCHECKOUT-SECRET
+        in: header
+        description: Merchant API Secret
+        required: true
+        style: simple
+        schema:
+          type: string
+      responses:
+        "200":
+          description: Checkout was cancelled successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/M_CheckoutResponseWrapper'
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/M_ExampleGetCheckoutErrorResponse'
+  /api/mer/v2.0/checkout/qr:
+    post:
+      tags:
+      - Checkout
+      description: Create QR checkout
+      operationId: Create QR checkout
+      parameters:
+      - name: X-POINTCHECKOUT-KEY
+        in: header
+        description: Merchant API Key acquired from PointCheckout
+        required: true
+        style: simple
+        schema:
+          type: string
+      - name: X-POINTCHECKOUT-SECRET
+        in: header
+        description: Merchant API Secret
+        required: true
+        style: simple
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/M_CheckoutQRRequestV2_0'
+        required: true
+      responses:
+        "200":
+          description: Checkout details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/M_CheckoutLinkResponseWrapper'
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/M_ExampleGetCheckoutErrorResponse'
+  /api/mer/v2.0/checkout/link:
+    post:
+      tags:
+      - Checkout
+      description: Create payment link checkout
+      operationId: Create payment link checkout
+      parameters:
+      - name: X-POINTCHECKOUT-KEY
+        in: header
+        description: Merchant API Key acquired from PointCheckout
+        required: true
+        style: simple
+        schema:
+          type: string
+      - name: X-POINTCHECKOUT-SECRET
+        in: header
+        description: Merchant API Secret
+        required: true
+        style: simple
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/M_CheckoutPaymentLinkRequestV2_0'
+        required: true
+      responses:
+        "200":
+          description: Checkout details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/M_CheckoutLinkResponseWrapper'
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/M_ExampleGetCheckoutErrorResponse'
+  /api/mer/v2.0/checkout/ecom:
+    post:
+      tags:
+      - Checkout
+      description: Create e-commerce checkout
+      operationId: Create e-commerce checkout
+      parameters:
+      - name: X-POINTCHECKOUT-KEY
+        in: header
+        description: Merchant API Key acquired from PointCheckout
+        required: true
+        style: simple
+        schema:
+          type: string
+      - name: X-POINTCHECKOUT-SECRET
+        in: header
+        description: Merchant API Secret
+        required: true
+        style: simple
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/M_CheckoutECommerceRequestV2_0'
+        required: true
+      responses:
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/M_ExampleGetCheckoutErrorResponse'
+        "200":
+          description: Checkout details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/M_CheckoutECommerceResponseWrapper'
+  /api/mer/v2.0/checkout:
+    get:
+      tags:
+      - Checkout
+      description: Search checkouts.
+      operationId: Search Checkouts
+      parameters:
+      - name: type
+        in: query
+        description: query by checkout type
+        required: false
+        style: simple
+        schema:
+          type: enum
+          enum:
+          - QR
+          - ECOM
+          - LINK
+      - name: requestId
+        in: query
+        description: query by requestId used when submitting checkout
+        required: false
+        style: simple
+        schema:
+          type: string
+      - name: orderId
+        in: query
+        description: query by orderId associated with checkout
+        required: false
+        style: simple
+        schema:
+          type: string
+      - name: status
+        in: query
+        description: comma separated list of checkout statuses
+        required: false
+        style: simple
+        schema:
+          type: array
+          enum:
+          - PENDING
+          - AUTHORIZED
+          - PAID
+          - FAILED
+          - CANCELLED
+          - EXPIRED
+          - REFUNDED
+          - PARTIALLY_REFUNDED
+      - name: customer.reference
+        in: query
+        description: query by customer reference Id
+        required: false
+        style: simple
+        schema:
+          type: string
+      - name: customer.email
+        in: query
+        description: query by customer email
+        required: false
+        style: simple
+        schema:
+          type: string
+      - name: customer.phone
+        in: query
+        description: query by customer phone number
+        required: false
+        style: simple
+        schema:
+          type: string
+      - name: afterId
+        in: query
+        description: filer checouts after the provided id
+        required: false
+        style: simple
+        schema:
+          type: long
+      - name: afterTimestamp
+        in: query
+        description: "query checkouts created after specific date/time, date format\
+          \ is `yyyy-mm-dd HH:MM:SS`"
+        required: false
+        style: simple
+        schema:
+          type: timestamp
+      - name: page
+        in: query
+        description: "page number, defult is 0"
+        required: false
+        style: simple
+        schema:
+          minimum: 0
+          type: number
+      - name: size
+        in: query
+        description: "page size, default is 20"
+        required: false
+        style: simple
+        schema:
+          minimum: 1
+          type: number
+      - name: X-POINTCHECKOUT-KEY
+        in: header
+        description: Merchant API Key acquired from PointCheckout
+        required: true
+        style: simple
+        schema:
+          type: string
+      - name: X-POINTCHECKOUT-SECRET
+        in: header
+        description: Merchant API Secret
+        required: true
+        style: simple
+        schema:
+          type: string
+      responses:
+        "200":
+          description: List of checkouts.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/M_PageResponseCheckoutResponseWrapper'
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/M_ExampleGetListErrorResponse'
+  /api/mer/v2.0/checkout/{checkoutId}:
+    get:
+      tags:
+      - Checkout
+      description: Get Checkout by ID
+      operationId: Get Checkout
+      parameters:
+      - name: checkoutId
+        in: path
+        description: Checkout Id retrieved from PointCheckout API.
+        required: true
+        style: simple
+        schema:
+          type: string
+      - name: X-POINTCHECKOUT-KEY
+        in: header
+        description: Merchant API Key acquired from PointCheckout
+        required: true
+        style: simple
+        schema:
+          type: string
+      - name: X-POINTCHECKOUT-SECRET
+        in: header
+        description: Merchant API Secret
+        required: true
+        style: simple
+        schema:
+          type: string
+      responses:
+        "200":
+          description: Get Checkout by ID
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/M_CheckoutResponseWrapper'
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/M_ExampleGetCheckoutErrorResponse'
+  /api/mer/v2.0/branches/{branchId}:
+    get:
+      tags:
+      - Branches
+      description: Get branch by Id
+      operationId: Get branch by Id
+      parameters:
+      - name: branchId
+        in: path
+        description: Branch Id.
+        required: true
+        style: simple
+        schema:
+          type: string
+      - name: X-POINTCHECKOUT-KEY
+        in: header
+        description: Merchant API Key acquired from PointCheckout
+        required: true
+        style: simple
+        schema:
+          type: string
+      - name: X-POINTCHECKOUT-SECRET
+        in: header
+        description: Merchant API Secret
+        required: true
+        style: simple
+        schema:
+          type: string
+      responses:
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/M_ExampleGetBranchErrorResponse'
+        "200":
+          description: Branch details.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/M_BranchResponseWrapper'
+      x-sort:
+        sort: "10010"
+  /api/mer/v2.0/branches:
+    get:
+      tags:
+      - Branches
+      description: List all branches associated with merchant
+      operationId: Get branches
+      parameters:
+      - name: page
+        in: query
+        description: "page number, defult is 0"
+        required: false
+        style: simple
+        schema:
+          minimum: 0
+          type: number
+      - name: size
+        in: query
+        description: "page size, default is 20"
+        required: false
+        style: simple
+        schema:
+          minimum: 1
+          type: number
+      responses:
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/M_ExampleGetListErrorResponse'
+        "200":
+          description: List of all branches.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/M_BranchResponseWrapper'
+      x-sort:
+        sort: "10000"
+    post:
+      tags:
+      - Branches
+      description: Create new branch
+      operationId: Create new branch
+      parameters:
+      - name: X-POINTCHECKOUT-KEY
+        in: header
+        description: Merchant API Key acquired from PointCheckout
+        required: true
+        style: simple
+        schema:
+          type: string
+      - name: X-POINTCHECKOUT-SECRET
+        in: header
+        description: Merchant API Secret
+        required: true
+        style: simple
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/M_BranchRequestV2_0'
+        required: true
+      responses:
+        "200":
+          description: Branch details.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/M_BranchResponseWrapper'
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/M_ExamplePostBranchErrorResponse'
+      x-sort:
+        sort: "10020"
+  /api/mer/v2.0/branches/{branchId}/disable:
+    post:
+      tags:
+      - Branches
+      description: Disable branch
+      operationId: Disable branch
+      parameters:
+      - name: branchId
+        in: path
+        description: Branch Id.
+        required: true
+        style: simple
+        schema:
+          type: string
+      - name: X-POINTCHECKOUT-KEY
+        in: header
+        description: Merchant API Key acquired from PointCheckout
+        required: true
+        style: simple
+        schema:
+          type: string
+      - name: X-POINTCHECKOUT-SECRET
+        in: header
+        description: Merchant API Secret
+        required: true
+        style: simple
+        schema:
+          type: string
+      responses:
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/M_ExampleGetBranchErrorResponse'
+        "200":
+          description: Branch details.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/M_BranchResponseWrapper'
+      x-sort:
+        sort: "10030"
+  /api/mer/v2.0/branches/{branchId}/enable:
+    post:
+      tags:
+      - Branches
+      description: Enable branch
+      operationId: Enable branch
+      parameters:
+      - name: branchId
+        in: path
+        description: Branch Id.
+        required: true
+        style: simple
+        schema:
+          type: string
+      - name: X-POINTCHECKOUT-KEY
+        in: header
+        description: Merchant API Key acquired from PointCheckout
+        required: true
+        style: simple
+        schema:
+          type: string
+      - name: X-POINTCHECKOUT-SECRET
+        in: header
+        description: Merchant API Secret
+        required: true
+        style: simple
+        schema:
+          type: string
+      responses:
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/M_ExampleGetBranchErrorResponse'
+        "200":
+          description: Branch details.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/M_BranchResponseWrapper'
+      x-sort:
+        sort: "10040"
+  /api/mer/v2.0/webhooks/{webhookId}:
+    get:
+      tags:
+      - Webhooks
+      description: Get webhook by Id
+      operationId: Get webhook
+      parameters:
+      - name: webhookId
+        in: path
+        description: Webhook Id.
+        required: true
+        style: simple
+        schema:
+          type: string
+      - name: X-POINTCHECKOUT-KEY
+        in: header
+        description: Merchant API Key acquired from PointCheckout
+        required: true
+        style: simple
+        schema:
+          type: string
+      - name: X-POINTCHECKOUT-SECRET
+        in: header
+        description: Merchant API Secret
+        required: true
+        style: simple
+        schema:
+          type: string
+      responses:
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/M_ExampleGetWebhookErrorResponse'
+        "200":
+          description: Webhook details.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/M_WebhookResponseWrapper'
+      x-sort:
+        sort: "10060"
+  /api/mer/v2.0/webhooks:
+    get:
+      tags:
+      - Webhooks
+      description: List all webhooks associated with merchant
+      operationId: Get webhook list
+      parameters:
+      - name: page
+        in: query
+        description: "page number, defult is 0"
+        required: false
+        style: simple
+        schema:
+          minimum: 0
+          type: number
+      - name: size
+        in: query
+        description: "page size, default is 20"
+        required: false
+        style: simple
+        schema:
+          minimum: 1
+          type: number
+      responses:
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/M_ExampleGetListErrorResponse'
+        "200":
+          description: List of all webhooks.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/M_WebhookResponseWrapper'
+      x-sort:
+        sort: "10050"
+    post:
+      tags:
+      - Webhooks
+      description: Create new webhook
+      operationId: Create new webhook
+      parameters:
+      - name: X-POINTCHECKOUT-KEY
+        in: header
+        description: Merchant API Key acquired from PointCheckout
+        required: true
+        style: simple
+        schema:
+          type: string
+      - name: X-POINTCHECKOUT-SECRET
+        in: header
+        description: Merchant API Secret
+        required: true
+        style: simple
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/M_WebhookRequestV2_0'
+        required: true
+      responses:
+        "200":
+          description: Webhook details.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/M_WebhookResponseWrapper'
+      x-sort:
+        sort: "10070"
+  /api/mer/v2.0/webhooks/{webhookId}/test:
+    post:
+      tags:
+      - Webhooks
+      description: Make a test call for the address associated with the webhook.
+      operationId: Test webhook
+      parameters:
+      - name: webhookId
+        in: path
+        description: Webhook Id.
+        required: true
+        style: simple
+        schema:
+          type: string
+      - name: X-POINTCHECKOUT-KEY
+        in: header
+        description: Merchant API Key acquired from PointCheckout
+        required: true
+        style: simple
+        schema:
+          type: string
+      - name: X-POINTCHECKOUT-SECRET
+        in: header
+        description: Merchant API Secret
+        required: true
+        style: simple
+        schema:
+          type: string
+      responses:
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/M_ExampleGetWebhookErrorResponse'
+        "200":
+          description: Webhook details.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/M_WebhookResponseWrapper'
+      x-sort:
+        sort: "10080"
+  /api/mer/v2.0/webhooks/{webhookId}/disable:
+    post:
+      tags:
+      - Webhooks
+      description: Disable webhook.
+      operationId: Disable webhook
+      parameters:
+      - name: webhookId
+        in: path
+        description: Webhook Id.
+        required: true
+        style: simple
+        schema:
+          type: string
+      - name: X-POINTCHECKOUT-KEY
+        in: header
+        description: Merchant API Key acquired from PointCheckout
+        required: true
+        style: simple
+        schema:
+          type: string
+      - name: X-POINTCHECKOUT-SECRET
+        in: header
+        description: Merchant API Secret
+        required: true
+        style: simple
+        schema:
+          type: string
+      responses:
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/M_ExampleGetWebhookErrorResponse'
+        "200":
+          description: Webhook details.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/M_WebhookResponseWrapper'
+      x-sort:
+        sort: "10090"
+  /api/mer/v2.0/webhooks/{webhookId}/enable:
+    post:
+      tags:
+      - Webhooks
+      description: Enable webhook.
+      operationId: Enable webhook
+      parameters:
+      - name: webhookId
+        in: path
+        description: Webhook Id.
+        required: true
+        style: simple
+        schema:
+          type: string
+      - name: X-POINTCHECKOUT-KEY
+        in: header
+        description: Merchant API Key acquired from PointCheckout
+        required: true
+        style: simple
+        schema:
+          type: string
+      - name: X-POINTCHECKOUT-SECRET
+        in: header
+        description: Merchant API Secret
+        required: true
+        style: simple
+        schema:
+          type: string
+      responses:
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/M_ExampleGetWebhookErrorResponse'
+        "200":
+          description: Webhook details.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/M_WebhookResponseWrapper'
+      x-sort:
+        sort: "10100"
+  /api/mer/v2.0/webhooks/{webhookId}/delete:
+    post:
+      tags:
+      - Webhooks
+      description: Delete webhook.
+      operationId: Delete webhook
+      parameters:
+      - name: webhookId
+        in: path
+        description: Webhook Id.
+        required: true
+        style: simple
+        schema:
+          type: string
+      - name: X-POINTCHECKOUT-KEY
+        in: header
+        description: Merchant API Key acquired from PointCheckout
+        required: true
+        style: simple
+        schema:
+          type: string
+      - name: X-POINTCHECKOUT-SECRET
+        in: header
+        description: Merchant API Secret
+        required: true
+        style: simple
+        schema:
+          type: string
+      responses:
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/M_ExampleGetWebhookErrorResponse'
+        "200":
+          description: Webhook details.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/M_WebhookResponseWrapper'
+      x-sort:
+        sort: "10110"
+components:
+  schemas:
+    CheckoutAddress:
+      required:
+      - address1
+      - country
+      - name
+      type: object
+      properties:
+        name:
+          type: string
+          description: Address person name.
+          example: "[NAME]"
+        address1:
+          type: string
+          description: Address line 1.
+          example: "[ADDRESS 1]"
+        address2:
+          type: string
+          description: Address line 2.
+          example: "[ADDRESS 2]"
+        city:
+          type: string
+          description: Address city.
+          example: "[CITY]"
+        state:
+          type: string
+          description: Address state.
+          example: "[STATE]"
+        zip:
+          type: string
+          description: Address zip code.
+          example: "12345"
+        country:
+          type: string
+          description: Address country (3 letter ISO country code)
+          example: "[COUNTRY 3-LETTER ISO CODE]"
+      description: Delivery address
+    CheckoutCustomer:
+      required:
+      - email
+      - firstName
+      - lastName
+      type: object
+      properties:
+        id:
+          type: string
+          description: Customer identifier at the merchant system.
+          example: "123456"
+        firstName:
+          type: string
+          description: Customer first name.
+          example: John
+        lastName:
+          type: string
+          description: Customer last name.
+          example: Doe
+        email:
+          type: string
+          description: Customer email address.
+          example: "[CUSTOMER EMAIL]"
+        phone:
+          type: string
+          description: Customer phone number with international calling code (Ex.
+            971567xxxxxx)..
+          example: "[CUSTOMER PHONE]"
+      description: Customer associated with this checkout
+    CheckoutRequestTotals:
+      required:
+      - subtotal
+      - tax
+      type: object
+      properties:
+        subtotal:
+          minimum: 0
+          exclusiveMinimum: false
+          type: number
+        tax:
+          minimum: 0
+          exclusiveMinimum: false
+          type: number
+        shipping:
+          minimum: 0
+          exclusiveMinimum: false
+          type: number
+        handling:
+          minimum: 0
+          exclusiveMinimum: false
+          type: number
+        discount:
+          minimum: 0
+          exclusiveMinimum: false
+          type: number
+        skipTotalsValidation:
+          type: boolean
+    CheckoutResponse:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Checkout ID at PointCheckout database
+          example: "1653241101733169556"
+        displayId:
+          type: string
+          description: "Checkout human readable short key, serves as an easier reference\
+            \ to the checkout"
+          example: QS3IM5
+        requestId:
+          type: string
+          description: Merchant unique reference ID for this payment request.
+          example: ORD-1234-r1
+        orderId:
+          type: string
+          description: Merchant unique reference ID for this checkout.
+          example: ORD-1234
+        currency:
+          type: string
+          description: ISO 4217 Currency Code (3 letter currency code) associated
+            with this checkout.
+          example: USD
+        amount:
+          type: number
+          description: The grand total of the whole order. This is the amount the
+            customer must pay.
+          example: 1499.99
+        cashAmount:
+          type: number
+          description: Cash amount to be collected from Shopper
+          example: 0.0
+        branchId:
+          type: string
+          description: The PointCheckout branch ID associated with this checkout.
+          example: "1601731695315563241"
+        branchName:
+          type: string
+          description: The PointCheckout branch name associated with this checkout.
+          example: Test store
+        status:
+          type: string
+          description: Current checkout status.
+          example: PENDING
+          enum:
+          - Pending
+          - Authorized
+          - Paid
+          - Failed
+          - Cancelled
+          - Expired
+          - Refunded
+          - Partially refunded
+        totalRefunded:
+          type: number
+          description: The total amount refunded from the checkout in checkout currency.
+          example: 0.0
+        redirectUrl:
+          type: string
+          description: 'URL for the customer payment redirect. '
+          example: http://pcout.co/c/dEHizoxw
+        usedPaymentMethod:
+          type: string
+          description: Payment method used while processing the payment.
+          example: CARD
+          enum:
+          - PointCheckout
+          - Card
+          - Cash
+          - ZainCash
+        customer:
+          $ref: '#/components/schemas/CheckoutCustomer'
+        billingAddress:
+          $ref: '#/components/schemas/CheckoutAddress'
+        deliveryAddress:
+          $ref: '#/components/schemas/CheckoutAddress'
+        firebaseDatabase:
+          type: string
+          description: "Google firebase database name, to be used to receive notifications\
+            \ on checkout updates."
+          example: pc-test-734bc
+        firebaseCollection:
+          type: string
+          description: "Google firebase collection name, to be used to receive notifications\
+            \ on checkout updates."
+        firebaseDocument:
+          type: string
+          description: "Google firebase document name, to be used to receive notifications\
+            \ on checkout updates."
+        timestamp:
+          type: string
+          description: The date time of creating the payment in ISO8601 format (yyyy-MM-ddTHH:mm:ss.SSSZZ).
+          format: date-time
+      description: Result Object.
+    ECommerceCheckoutResponse:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Checkout ID at PointCheckout database
+          example: "1653241101733169556"
+        displayId:
+          type: string
+          description: "Checkout human readable short key, serves as an easier reference\
+            \ to the checkout"
+          example: QS3IM5
+        requestId:
+          type: string
+          description: Merchant unique reference ID for this payment request.
+          example: ORD-1234-r1
+        orderId:
+          type: string
+          description: Merchant unique reference ID for this checkout.
+          example: ORD-1234
+        currency:
+          type: string
+          description: ISO 4217 Currency Code (3 letter currency code) associated
+            with this checkout.
+          example: USD
+        amount:
+          type: number
+          description: The grand total of the whole order. This is the amount the
+            customer must pay.
+          example: 1499.99
+        cashAmount:
+          type: number
+          description: Cash amount to be collected from Shopper
+          example: 0.0
+        status:
+          type: string
+          description: Current checkout status.
+          example: PENDING
+          enum:
+          - Pending
+          - Authorized
+          - Paid
+          - Failed
+          - Cancelled
+          - Expired
+          - Refunded
+          - Partially refunded
+        redirectUrl:
+          type: string
+          description: 'URL for the customer payment redirect. '
+          example: http://pcout.co/c/dEHizoxw
+        usedPaymentMethod:
+          type: string
+          description: Payment method used while processing the payment.
+          example: CARD
+          enum:
+          - PointCheckout
+          - Card
+          - Cash
+          - ZainCash
+        customer:
+          $ref: '#/components/schemas/CheckoutCustomer'
+        billingAddress:
+          $ref: '#/components/schemas/CheckoutAddress'
+        deliveryAddress:
+          $ref: '#/components/schemas/CheckoutAddress'
+        firebaseCollection:
+          type: string
+          description: "Google firebase collection name, to be used to receive notifications\
+            \ on checkout updates."
+        firebaseDatabase:
+          type: string
+          description: "Google firebase database name, to be used to receive notifications\
+            \ on checkout updates."
+          example: pc-test-734bc
+        firebaseDocument:
+          type: string
+          description: "Google firebase document name, to be used to receive notifications\
+            \ on checkout updates."
+        timestamp:
+          type: string
+          description: The date time of creating the payment in ISO8601 format (yyyy-MM-ddTHH:mm:ss.SSSZZ).
+          format: date-time
+        branchId:
+          type: string
+          description: The PointCheckout branch ID associated with this checkout.
+          example: "1601731695315563241"
+        branchName:
+          type: string
+          description: The PointCheckout branch name associated with this checkout.
+          example: Test store
+        totalRefunded:
+          type: number
+          description: The total amount refunded from the checkout in checkout currency.
+          example: 0.0
+      description: Result Object.
+    M_BranchRequestV2_0:
+      required:
+      - currency
+      - name
+      type: object
+      properties:
+        name:
+          type: string
+        currency:
+          type: string
+        description:
+          type: string
+    M_BranchResponseV2_0:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        currency:
+          type: string
+        description:
+          type: string
+        enabled:
+          type: boolean
+      description: Result Object.
+    M_BranchResponseWrapper:
+      type: object
+      properties:
+        success:
+          type: boolean
+          description: Whether or not this operation completed successfully.
+          example: true
+        elapsed:
+          type: integer
+          description: Time in milliseconds elapsed at server processing this request.
+          format: int64
+          example: 12
+        result:
+          $ref: '#/components/schemas/M_BranchResponseV2_0'
+    M_CheckoutECommerceRequestV2_0:
+      required:
+      - amount
+      - billingAddress
+      - currency
+      - customer
+      - items
+      - orderId
+      - requestId
+      - returnUrl
+      type: object
+      properties:
+        requestId:
+          type: string
+        orderId:
+          type: string
+        currency:
+          type: string
+        amount:
+          minimum: 0
+          exclusiveMinimum: true
+          type: number
+        language:
+          maxLength: 3
+          minLength: 2
+          type: string
+        branchId:
+          type: integer
+          format: int64
+        allowedPaymentMethods:
+          type: array
+          items:
+            type: string
+            enum:
+            - PointCheckout
+            - Card
+            - Cash
+            - ZainCash
+        defaultPaymentMethod:
+          type: string
+          enum:
+          - PointCheckout
+          - Card
+          - Cash
+          - ZainCash
+        totals:
+          $ref: '#/components/schemas/CheckoutRequestTotals'
+        returnUrl:
+          type: string
+        customer:
+          $ref: '#/components/schemas/CheckoutCustomer'
+        billingAddress:
+          $ref: '#/components/schemas/CheckoutAddress'
+        deliveryAddress:
+          $ref: '#/components/schemas/CheckoutAddress'
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/M_CheckoutRequestItem'
+        expiresIn:
+          type: integer
+          format: int32
+    M_CheckoutECommerceResponseWrapper:
+      type: object
+      properties:
+        success:
+          type: boolean
+          description: Whether or not this operation completed successfully.
+          example: true
+        elapsed:
+          type: integer
+          description: Time in milliseconds elapsed at server processing this request.
+          format: int64
+          example: 12
+        result:
+          $ref: '#/components/schemas/ECommerceCheckoutResponse'
+    M_CheckoutLinkResponseV2_0:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Checkout ID at PointCheckout database
+          example: "1653241101733169556"
+        displayId:
+          type: string
+          description: "Checkout human readable short key, serves as an easier reference\
+            \ to the checkout"
+          example: QS3IM5
+        requestId:
+          type: string
+          description: Merchant unique reference ID for this payment request.
+          example: ORD-1234-r1
+        orderId:
+          type: string
+          description: Merchant unique reference ID for this checkout.
+          example: ORD-1234
+        currency:
+          type: string
+          description: ISO 4217 Currency Code (3 letter currency code) associated
+            with this checkout.
+          example: USD
+        amount:
+          type: number
+          description: The grand total of the whole order. This is the amount the
+            customer must pay.
+          example: 1499.99
+        cashAmount:
+          type: number
+          description: Cash amount to be collected from Shopper
+          example: 0.0
+        status:
+          type: string
+          description: Current checkout status.
+          example: PENDING
+          enum:
+          - Pending
+          - Authorized
+          - Paid
+          - Failed
+          - Cancelled
+          - Expired
+          - Refunded
+          - Partially refunded
+        redirectUrl:
+          type: string
+          description: 'URL for the customer payment redirect. '
+          example: http://pcout.co/c/dEHizoxw
+        usedPaymentMethod:
+          type: string
+          description: Payment method used while processing the payment.
+          example: CARD
+          enum:
+          - PointCheckout
+          - Card
+          - Cash
+          - ZainCash
+        customer:
+          $ref: '#/components/schemas/CheckoutCustomer'
+        billingAddress:
+          $ref: '#/components/schemas/CheckoutAddress'
+        deliveryAddress:
+          $ref: '#/components/schemas/CheckoutAddress'
+        firebaseCollection:
+          type: string
+          description: "Google firebase collection name, to be used to receive notifications\
+            \ on checkout updates."
+        firebaseDatabase:
+          type: string
+          description: "Google firebase database name, to be used to receive notifications\
+            \ on checkout updates."
+          example: pc-test-734bc
+        firebaseDocument:
+          type: string
+          description: "Google firebase document name, to be used to receive notifications\
+            \ on checkout updates."
+        timestamp:
+          type: string
+          description: The date time of creating the payment in ISO8601 format (yyyy-MM-ddTHH:mm:ss.SSSZZ).
+          format: date-time
+        branchId:
+          type: string
+          description: The PointCheckout branch ID associated with this checkout.
+          example: "1601731695315563241"
+        branchName:
+          type: string
+          description: The PointCheckout branch name associated with this checkout.
+          example: Test store
+        totalRefunded:
+          type: number
+          description: The total amount refunded from the checkout in checkout currency.
+          example: 0.0
+      description: Result Object.
+    M_CheckoutLinkResponseWrapper:
+      type: object
+      properties:
+        success:
+          type: boolean
+          description: Whether or not this operation completed successfully.
+          example: true
+        elapsed:
+          type: integer
+          description: Time in milliseconds elapsed at server processing this request.
+          format: int64
+          example: 12
+        result:
+          $ref: '#/components/schemas/M_CheckoutLinkResponseV2_0'
+    M_CheckoutPaymentLinkRequestV2_0:
+      required:
+      - amount
+      - currency
+      - description
+      - orderId
+      - requestId
+      type: object
+      properties:
+        requestId:
+          type: string
+        orderId:
+          type: string
+        currency:
+          type: string
+        amount:
+          minimum: 0
+          exclusiveMinimum: true
+          type: number
+        language:
+          maxLength: 3
+          minLength: 2
+          type: string
+        branchId:
+          type: integer
+          format: int64
+        allowedPaymentMethods:
+          type: array
+          items:
+            type: string
+            enum:
+            - PointCheckout
+            - Card
+            - Cash
+            - ZainCash
+        defaultPaymentMethod:
+          type: string
+          enum:
+          - PointCheckout
+          - Card
+          - Cash
+          - ZainCash
+        totals:
+          $ref: '#/components/schemas/CheckoutRequestTotals'
+        description:
+          type: string
+        expiresIn:
+          maximum: 10080
+          minimum: 15
+          type: integer
+          format: int32
+        sendSms:
+          type: boolean
+        sendEmail:
+          type: boolean
+        customer:
+          $ref: '#/components/schemas/CheckoutCustomer'
+        billingAddress:
+          $ref: '#/components/schemas/CheckoutAddress'
+        deliveryAddress:
+          $ref: '#/components/schemas/CheckoutAddress'
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/M_CheckoutRequestItem'
+        returnUrl:
+          type: string
+    M_CheckoutQRRequestV2_0:
+      required:
+      - amount
+      - currency
+      - orderId
+      - requestId
+      type: object
+      properties:
+        requestId:
+          type: string
+        orderId:
+          type: string
+        currency:
+          type: string
+        amount:
+          minimum: 0
+          exclusiveMinimum: true
+          type: number
+        language:
+          maxLength: 3
+          minLength: 2
+          type: string
+        branchId:
+          type: integer
+          format: int64
+        allowedPaymentMethods:
+          type: array
+          items:
+            type: string
+            enum:
+            - PointCheckout
+            - Card
+            - Cash
+            - ZainCash
+        defaultPaymentMethod:
+          type: string
+          enum:
+          - PointCheckout
+          - Card
+          - Cash
+          - ZainCash
+        totals:
+          $ref: '#/components/schemas/CheckoutRequestTotals'
+        description:
+          type: string
+        deviceReference:
+          type: string
+        qrSize:
+          maximum: 1024
+          minimum: 64
+          type: integer
+          format: int32
+        expiresIn:
+          maximum: 10080
+          minimum: 5
+          type: integer
+          format: int32
+        customer:
+          $ref: '#/components/schemas/CheckoutCustomer'
+        billingAddress:
+          $ref: '#/components/schemas/CheckoutAddress'
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/M_CheckoutRequestItem'
+        deliveryAddress:
+          $ref: '#/components/schemas/CheckoutAddress'
+        returnUrl:
+          type: string
+    M_CheckoutRequestItem:
+      required:
+      - linetotal
+      - name
+      - quantity
+      type: object
+      properties:
+        name:
+          type: string
+        sku:
+          type: string
+        unitprice:
+          minimum: 0
+          exclusiveMinimum: false
+          type: number
+        quantity:
+          minimum: 0
+          exclusiveMinimum: true
+          type: number
+        linetotal:
+          minimum: 0
+          exclusiveMinimum: false
+          type: number
+    M_CheckoutResponseWrapper:
+      type: object
+      properties:
+        success:
+          type: boolean
+          description: Whether or not this operation completed successfully.
+          example: true
+        elapsed:
+          type: integer
+          description: Time in milliseconds elapsed at server processing this request.
+          format: int64
+          example: 12
+        result:
+          $ref: '#/components/schemas/CheckoutResponse'
+    M_ExampleGetBranchErrorResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+          description: Whether or not this operation completed successfully.
+          example: false
+        elapsed:
+          type: integer
+          description: Time in milliseconds elapsed at server processing this request.
+          format: int64
+          example: 3
+        error:
+          type: string
+          description: Error message
+          example: Branch not found for API merchant
+    M_ExampleGetCheckoutErrorResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+          description: Whether or not this operation completed successfully.
+          example: false
+        elapsed:
+          type: integer
+          description: Time in milliseconds elapsed at server processing this request.
+          format: int64
+          example: 3
+        error:
+          type: string
+          description: Error message
+          example: Checkout not found for API merchant
+    M_ExampleGetListErrorResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+          description: Whether or not this operation completed successfully.
+          example: false
+        elapsed:
+          type: integer
+          description: Time in milliseconds elapsed at server processing this request.
+          format: int64
+          example: 3
+        error:
+          type: string
+          description: Error message.
+          example: page size parameter must be a positive integer
+    M_ExampleGetWebhookErrorResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+          description: Whether or not this operation completed successfully.
+          example: false
+        elapsed:
+          type: integer
+          description: Time in milliseconds elapsed at server processing this request.
+          format: int64
+          example: 3
+        error:
+          type: string
+          description: Error message
+          example: Webhook not found for API merchant
+    M_ExamplePostBranchErrorResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+          description: Whether or not this operation completed successfully.
+          example: false
+        elapsed:
+          type: integer
+          description: Time in milliseconds elapsed at server processing this request.
+          format: int64
+          example: 3
+        error:
+          type: string
+          description: Error message.
+          example: A branch already exists with the same name 'Store'
+    M_PageResponseCheckoutResponseWrapper:
+      type: object
+      properties:
+        success:
+          type: boolean
+          description: Whether or not this operation completed successfully.
+          example: true
+        elapsed:
+          type: integer
+          description: Time in milliseconds elapsed at server processing this request.
+          format: int64
+          example: 12
+        result:
+          $ref: '#/components/schemas/PageResponseCheckoutResponse'
+    M_WebhookRequestV2_0:
+      required:
+      - address
+      type: object
+      properties:
+        address:
+          type: string
+    M_WebhookResponseV2_0:
+      type: object
+      properties:
+        id:
+          type: string
+        hmacKey:
+          type: string
+        address:
+          type: string
+        failed:
+          type: boolean
+        enabled:
+          type: boolean
+      description: Result Object.
+    M_WebhookResponseWrapper:
+      type: object
+      properties:
+        success:
+          type: boolean
+          description: Whether or not this operation completed successfully.
+          example: true
+        elapsed:
+          type: integer
+          description: Time in milliseconds elapsed at server processing this request.
+          format: int64
+          example: 12
+        result:
+          $ref: '#/components/schemas/M_WebhookResponseV2_0'
+    PageResponseCheckoutResponse:
+      type: object
+      properties:
+        page:
+          type: integer
+          description: "Item page number, starting with 0"
+          format: int32
+          example: 0
+        size:
+          type: integer
+          description: Number of items per page
+          format: int32
+          example: 10
+        totalPages:
+          type: integer
+          description: Total pages
+          format: int32
+          example: 1
+        totalElements:
+          type: integer
+          description: Total elements in the current page
+          format: int64
+          example: 7
+        content:
+          type: array
+          description: Page content array
+          items:
+            $ref: '#/components/schemas/CheckoutResponse'
+      description: Result Object.

@@ -1,7 +1,10 @@
 ---
-title: Support
-slug: /
+title: Branches
+slug: branches
+hide_title: false
+hide_table_of_contents: false
 ---
+
 
 Docusaurus has a community of thousands of developers.
 
