@@ -5,7 +5,7 @@
  * work well for content-centric websites.
  */
 
-@import url('https://fonts.googleapis.com/css2?family=Maven+Pro:wght@400;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Maven+Pro:wght@400;500;700&display=swap');
 
 /* You can override the default Infima variables here. */
 :root {
@@ -25,14 +25,31 @@
   --ifm-color-secondary-lighter: #fe9a15;
   --ifm-color-secondary-lightest: #fea939;
 
+  --ifm-button-border-radius: 24px;
+
+  --ifm-heading-color: var(--ifm-color-primary);
+
   --ifm-font-family-base: 'Maven Pro', sans-serif;
-  --ifm-font-weight-semibold: 600;
+  --ifm-font-size-base: 90%;
+  --ifm-font-weight-semibold: 500;
 
   --ifm-code-font-size: 95%;
 
   --ifm-navbar-link-color: var(--ifm-color-primary);
   --ifm-navbar-link-hover-color: var(--ifm-color-secondary);
 }
+
+/**
+ HOME PAGE OVERRIDES
+ */
+.button.button--secondary {
+  color: var(--ifm-button-color);
+}
+
+.button.button--secondary.button--outline:not(.button--active):not(:hover) {
+    color: var(--ifm-button-color);
+}
+
 
 .docusaurus-highlight-code-line {
   background-color: rgb(72, 77, 91);
@@ -43,8 +60,9 @@
 
 .menu__list-item {
   font-weight: var(--ifm-font-weight-normal);
+  font-size:
 }
 
-.menu__list-item .active {
+.menu__link--active {
   font-weight: var(--ifm-font-weight-semibold);
 }

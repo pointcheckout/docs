@@ -7,9 +7,12 @@
 
 .heroBanner {
   padding: 4rem 0;
-  text-align: center;
   position: relative;
   overflow: hidden;
+  min-height: 550px;
+  background-image: url(/img/home.png);
+  background-size: cover;
+  background-position: top;
 }
 
 @media screen and (max-width: 966px) {
@@ -21,7 +24,6 @@
 .buttons {
   display: flex;
   align-items: center;
-  justify-content: center;
 }
 
 .features {
@@ -29,6 +31,20 @@
   align-items: center;
   padding: 2rem 0;
   width: 100%;
+}
+
+.featureHead {
+  color: var(--ifm-navbar-link-color);
+  cursor: pointer;
+  font-weight: var(--ifm-font-weight-semibold);
+  position: relative;
+  text-decoration: none;
+  font-size: large;
+}
+
+.featureHead:hover {
+  color: var(--ifm-navbar-link-hover-color);
+  text-decoration: none;
 }
 
 .featureImage {

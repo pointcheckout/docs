@@ -1,7 +1,8 @@
 ---
-title: Create a Blog Post
+title: iOS SDK
+hide_title: false
+hide_table_of_contents: false
 ---
-
 This page will help you on how to create blog posts in Docusaurus.
 
 ## Create a Blog Post

@@ -1,8 +1,8 @@
 /** @type {import('@docusaurus/types').DocusaurusConfig} */
 
 module.exports = {
-  title: 'PointCheckout Documentation',
-  tagline: 'Making commerce easy',
+  title: 'pointcheckout documentation',
+  tagline: 'build amazing payment experiences with the pointcheckout platform',
   url: 'https://github.com/pointcheckout/docs',
   baseUrl: '/',
   onBrokenLinks: 'throw',
@@ -20,19 +20,19 @@ module.exports = {
         {
           to: 'guides/',
           activeBasePath: 'guides',
-          label: 'Guides',
+          label: 'guides',
           position: 'left',
         },
         {
           to: 'docs/',
           activeBasePath: 'docs',
-          label: 'Documentation',
+          label: 'documentation',
           position: 'left',
         },
         {
           to: 'api/',
           activeBasePath: 'api',
-          label: 'API Specs',
+          label: 'api specs',
           position: 'left',
         },
       ],
@@ -78,13 +78,17 @@ module.exports = {
       ],
       copyright: `Copyright © ${new Date().getFullYear()} PointCheckout, Ltd.`,
     },
+    colorMode: {
+      defaultMode: 'light',
+      disableSwitch: true,
+    }
   },
   presets: [
     [
       '@docusaurus/preset-classic',
       {
         docs: {
-          sidebarPath: require.resolve('./sidebars.js'),
+          sidebarPath: require.resolve('./sidebars.docs.js'),
         },
         blog: false,
         theme: {
@@ -97,7 +101,7 @@ module.exports = {
       {
         specs: [
           {
-            specUrl: 'https://redocly.github.io/redoc/openapi.yaml',
+            spec: 'api/pointcheckout.yaml',
             routePath: '/api'
           }
         ],
