@@ -9,6 +9,7 @@
 
 /* You can override the default Infima variables here. */
 :root {
+  /* COLORS */
   --ifm-color-primary: #25405d;
   --ifm-color-primary-dark: #213a54;
   --ifm-color-primary-darker: #1f364f;
@@ -17,26 +18,33 @@
   --ifm-color-primary-lighter: #2b4a6b;
   --ifm-color-primary-lightest: #305379;
 
-  --ifm-color-secondary: #ee8801;
-  --ifm-color-secondary-dark: #d67a01;
-  --ifm-color-secondary-darker: #ca7401;
-  --ifm-color-secondary-darkest: #a75f01;
-  --ifm-color-secondary-light: #fe9509;
-  --ifm-color-secondary-lighter: #fe9a15;
-  --ifm-color-secondary-lightest: #fea939;
-
-  --ifm-button-border-radius: 24px;
+  --ifm-color-warning: #ee8801;
+  --ifm-color-warning-dark: #d67a01;
+  --ifm-color-warning-darker: #ca7401;
+  --ifm-color-warning-darkest: #a75f01;
+  --ifm-color-warning-light: #fe9509;
+  --ifm-color-warning-lighter: #fe9a15;
+  --ifm-color-warning-lightest: #fea939;
 
   --ifm-heading-color: var(--ifm-color-primary);
+  --ifm-link-color: var(--ifm-color-warning-darker);
 
+  /* LOOK AND FEEL */
+  --ifm-button-border-radius: 24px;
+
+  /* FONT */
   --ifm-font-family-base: 'Maven Pro', sans-serif;
   --ifm-font-size-base: 90%;
   --ifm-font-weight-semibold: 500;
-
   --ifm-code-font-size: 95%;
 
+  /* NAVBAR */
   --ifm-navbar-link-color: var(--ifm-color-primary);
-  --ifm-navbar-link-hover-color: var(--ifm-color-secondary);
+  --ifm-navbar-link-hover-color: var(--ifm-color-warning);
+
+  /* FOOTER */
+  --ifm-footer-link-hover-color: var(--ifm-color-warning);
+  --ifm-footer-padding-vertical: calc(var(--ifm-spacing-vertical) / 2);
 }
 
 /**
@@ -47,9 +55,8 @@
 }
 
 .button.button--secondary.button--outline:not(.button--active):not(:hover) {
-    color: var(--ifm-button-color);
+  color: var(--ifm-button-color);
 }
-
 
 .docusaurus-highlight-code-line {
   background-color: rgb(72, 77, 91);
@@ -65,4 +72,27 @@
 
 .menu__link--active {
   font-weight: var(--ifm-font-weight-semibold);
+}
+
+/* ****************************************** */
+/* DOC PAGES                                  */
+/* ****************************************** */
+
+.markdown {
+  padding-bottom: 50px;
+}
+
+.markdown .alert .admonition-heading {
+  display: none;
+}
+
+.markdown .alert h5 {
+  color: var(--ifm-alert-color);
+}
+
+.markdown img {
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+  margin: 0 auto;
+  display: block;
+  max-width: 85%;
 }
