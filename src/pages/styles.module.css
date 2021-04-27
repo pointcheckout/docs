@@ -9,10 +9,10 @@
   padding: 4rem 0;
   position: relative;
   overflow: hidden;
-  min-height: 550px;
+  min-height: 400px;
   background-image: url(/img/home.png);
   background-size: cover;
-  background-position: top;
+  background-position: center;
 }
 
 @media screen and (max-width: 966px) {

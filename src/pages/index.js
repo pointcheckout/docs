@@ -13,14 +13,14 @@ const features = [
     imageUrl: 'img/home_guides.svg',
     description: (
       <>
-        Learn about the ins and outs of the PointCheckout platform through  boosts an
-        array of tools  was designed from the ground up to be easily installed and
+        learn about the ins and outs of the pointcheckout platform through  boosts an
+        array of tools was designed from the ground up to be easily installed and
         used to get your website up and running quickly.
       </>
     ),
   },
   {
-    title: 'developer',
+    title: 'accept payments',
     target: '/docs',
     imageUrl: 'img/home_guides.svg',
     description: (
@@ -92,22 +92,22 @@ export default function Home() {
       description="Description will go into a meta tag in <head />">
       <header className={clsx('hero', styles.heroBanner)}>
         <div className="container">
-          <div class="row">
-            <div class="col col--8">
+          <div className="row">
+            <div className="col col--8">
               <h1 className="hero__title">{siteConfig.title}</h1>
             </div>
           </div>
-          <div class="row">
-            <div class="col col--8">
+          <div className="row">
+            <div className="col col--8">
               <p className="hero__subtitle">{siteConfig.tagline}</p>
             </div>
           </div>
-          <div class="row">
-            <div class="col col--8">
+          <div className="row">
+            <div className="col col--8">
               <div className={styles.buttons}>
                 <Link
                   className={clsx(
-                    'button button--outline button--secondary button--lg',
+                    'button button--outline button--warning button--lg',
                     styles.getStarted,
                   )}
                   to={useBaseUrl('docs/')}>

@@ -3,38 +3,18 @@ title: E-Commerce Plugins
 sidebar_label: Overview
 slug: /integrate/plugins
 ---
+import Card from '@site/src/components/Card';
 
-Documents are pages with a **sidebar**, a **previous/next navigation** and many other useful features.
+We offer a range of plugins for leading technology solutions to give your shoppers the best checkout experience. Our plugins are easy to integrate and come with PointCheckout payments platform functionality delivered out of the box.
 
-## Create a Document
+## Built by PointCheckout
 
-Create a markdown file at `docs/my-doc.md`:
-
-```mdx title="docs/hello.md"
----
-title: Hello, World!
----
-
-## Hello, World!
-
-This is your first document in **Docusaurus**, Congratulations!
-```
-
-A new document is now available at `http://localhost:3000/docs/hello`.
-
-## Add your document to the sidebar
-
-Add `hello` to the `sidebars.js` file:
-
-```diff title="sidebars.js"
-module.exports = {
-  docs: [
-    {
-      type: 'category',
-      label: 'Docusaurus Tutorial',
--     items: ['getting-started', 'create-a-doc', ...],
-+     items: ['getting-started', 'create-a-doc', 'hello', ...],
-    },
-  ],
-};
-```
+<div class="row">
+  <div class="col col--4">
+    <Card
+      image="/img/docs/integrate/plugins/woocommerce.svg"
+      link="/docs/integrate/plugins/woocommerce"
+      action="view guide">
+    </Card>
+  </div>
+</div>
