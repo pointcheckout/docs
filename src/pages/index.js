@@ -92,18 +92,18 @@ export default function Home() {
       description="Description will go into a meta tag in <head />">
       <header className={clsx('hero', styles.heroBanner)}>
         <div className="container">
-          <div class="row">
-            <div class="col col--8">
+          <div className="row">
+            <div className="col col--8">
               <h1 className="hero__title">{siteConfig.title}</h1>
             </div>
           </div>
-          <div class="row">
-            <div class="col col--8">
+          <div className="row">
+            <div className="col col--8">
               <p className="hero__subtitle">{siteConfig.tagline}</p>
             </div>
           </div>
-          <div class="row">
-            <div class="col col--8">
+          <div className="row">
+            <div className="col col--8">
               <div className={styles.buttons}>
                 <Link
                   className={clsx(

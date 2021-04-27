@@ -48,6 +48,13 @@
 }
 
 /**
+ */
+.markdown h2, .markdown h3 {
+  color: var(--ifm-color-primary-light);
+  font-weight: var(--ifm-font-weight-semibold);
+}
+
+/**
  HOME PAGE OVERRIDES
  */
 .button.button--secondary {
@@ -94,5 +101,14 @@
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
   margin: 0 auto;
   display: block;
-  max-width: 85%;
+  max-width: 92%;
+}
+
+.markdown .card {
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+
+.markdown .card img {
+  box-shadow: unset;
+  height: 200px;
 }

@@ -12,13 +12,48 @@ tags:
 - name: Checkout
   description: API endpoints for QR payments. Can be used for point of sale intagration.
 paths:
-  /api/mer/v2.0/checkout/web:
+  /api/mer/v2.0/checkout/{checkoutId}/refund:
     post:
       tags:
       - Checkout
-      description: Create web checkout
-      operationId: Create web checkout
+      description: Issue a refund for checkout
+      operationId: Refund checkout
       parameters:
+      - name: checkoutId
+        in: path
+        description: Checkout Id retrieved from PointCheckout API.
+        required: true
+        style: simple
+        schema:
+          type: string
+        example: 1686414183718160542
+      - name: amount
+        in: query
+        description: Refun amount.
+        required: true
+        style: simple
+        schema:
+          exclusiveMinimum: true
+          type: number
+        example: 1500.0
+      - name: currency
+        in: query
+        description: Currency ISO code.
+        required: true
+        style: simple
+        schema:
+          maxLength: 3
+          minLength: 3
+          type: string
+        example: USD
+      - name: note
+        in: path
+        description: Refund note.
+        required: true
+        style: simple
+        schema:
+          type: string
+        example: Out of stock
       - name: X-POINTCHECKOUT-KEY
         in: header
         description: Merchant API Key acquired from PointCheckout
@@ -33,34 +68,33 @@ paths:
         style: simple
         schema:
           type: string
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/M_CheckoutWebPaymentRequestV2_0'
-        required: true
       responses:
         "200":
-          description: Checkout details
+          description: Get Checkout by ID
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/M_CheckoutWebPaymentResponseWrapper'
+                $ref: '#/components/schemas/M_CheckoutResponseWrapper'
         "400":
           description: Bad Request
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/M_ExampleGetCheckoutErrorResponse'
-      x-sort:
-        sort: "110"
-  /api/mer/v2.0/checkout/link:
+  /api/mer/v2.0/checkout/{checkoutId}/cancel:
     post:
       tags:
       - Checkout
-      description: Create payment link checkout
-      operationId: Create payment link checkout
+      description: Cancel pending checkout
+      operationId: Cancel Checkout
       parameters:
+      - name: checkoutId
+        in: path
+        description: Checkout Id.
+        required: true
+        style: simple
+        schema:
+          type: string
       - name: X-POINTCHECKOUT-KEY
         in: header
         description: Merchant API Key acquired from PointCheckout
@@ -75,27 +109,19 @@ paths:
         style: simple
         schema:
           type: string
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/M_CheckoutPaymentLinkRequestV2_0'
-        required: true
       responses:
+        "200":
+          description: Checkout was cancelled successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/M_CheckoutResponseWrapper'
         "400":
           description: Bad Request
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/M_ExampleGetCheckoutErrorResponse'
-        "200":
-          description: Checkout details
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/M_CheckoutLinkResponseWrapper'
-      x-sort:
-        sort: "120"
   /api/mer/v2.0/checkout/qr:
     post:
       tags:
@@ -124,26 +150,24 @@ paths:
               $ref: '#/components/schemas/M_CheckoutQRRequestV2_0'
         required: true
       responses:
-        "400":
-          description: Bad Request
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/M_ExampleGetCheckoutErrorResponse'
         "200":
           description: Checkout details
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/M_CheckoutLinkResponseWrapper'
-      x-sort:
-        sort: "130"
-  /api/mer/v2.0/checkout/mobile:
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/M_ExampleGetCheckoutErrorResponse'
+  /api/mer/v2.0/checkout/link:
     post:
       tags:
       - Checkout
-      description: Create Mobile device checkout
-      operationId: Create Mobile checkout
+      description: Create payment link checkout
+      operationId: Create payment link checkout
       parameters:
       - name: X-POINTCHECKOUT-KEY
         in: header
@@ -163,7 +187,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/M_CheckoutMobilePaymentRequestV2_0'
+              $ref: '#/components/schemas/M_CheckoutPaymentLinkRequestV2_0'
         required: true
       responses:
         "200":
@@ -171,15 +195,53 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/M_CheckoutMobilePaymentResponseWrapper'
+                $ref: '#/components/schemas/M_CheckoutLinkResponseWrapper'
         "400":
           description: Bad Request
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/M_ExampleGetCheckoutErrorResponse'
-      x-sort:
-        sort: "140"
+  /api/mer/v2.0/checkout/ecom:
+    post:
+      tags:
+      - Checkout
+      description: Create e-commerce checkout
+      operationId: Create e-commerce checkout
+      parameters:
+      - name: X-POINTCHECKOUT-KEY
+        in: header
+        description: Merchant API Key acquired from PointCheckout
+        required: true
+        style: simple
+        schema:
+          type: string
+      - name: X-POINTCHECKOUT-SECRET
+        in: header
+        description: Merchant API Secret
+        required: true
+        style: simple
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/M_CheckoutECommerceRequestV2_0'
+        required: true
+      responses:
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/M_ExampleGetCheckoutErrorResponse'
+        "200":
+          description: Checkout details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/M_CheckoutECommerceResponseWrapper'
   /api/mer/v2.0/checkout:
     get:
       tags:
@@ -196,8 +258,7 @@ paths:
           type: enum
           enum:
           - QR
-          - WEB
-          - MOBILE
+          - ECOM
           - LINK
       - name: requestId
         in: query
@@ -296,20 +357,18 @@ paths:
         schema:
           type: string
       responses:
-        "400":
-          description: Bad Request
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/M_ExampleGetListErrorResponse'
         "200":
           description: List of checkouts.
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/M_PageResponseCheckoutResponseWrapper'
-      x-sort:
-        sort: "200"
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/M_ExampleGetListErrorResponse'
   /api/mer/v2.0/checkout/{checkoutId}:
     get:
       tags:
@@ -351,122 +410,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/M_ExampleGetCheckoutErrorResponse'
-      x-sort:
-        sort: "210"
-  /api/mer/v2.0/checkout/{checkoutId}/cancel:
-    post:
-      tags:
-      - Checkout
-      description: Cancel pending checkout
-      operationId: Cancel Checkout
-      parameters:
-      - name: checkoutId
-        in: path
-        description: Checkout Id.
-        required: true
-        style: simple
-        schema:
-          type: string
-      - name: X-POINTCHECKOUT-KEY
-        in: header
-        description: Merchant API Key acquired from PointCheckout
-        required: true
-        style: simple
-        schema:
-          type: string
-      - name: X-POINTCHECKOUT-SECRET
-        in: header
-        description: Merchant API Secret
-        required: true
-        style: simple
-        schema:
-          type: string
-      responses:
-        "400":
-          description: Bad Request
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/M_ExampleGetCheckoutErrorResponse'
-        "200":
-          description: Checkout was cancelled successfully
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/M_CheckoutResponseWrapper'
-      x-sort:
-        sort: "300"
-  /api/mer/v2.0/checkout/{checkoutId}/refund:
-    post:
-      tags:
-      - Checkout
-      description: Issue a refund for checkout
-      operationId: Refund checkout
-      parameters:
-      - name: checkoutId
-        in: path
-        description: Checkout Id retrieved from PointCheckout API.
-        required: true
-        style: simple
-        schema:
-          type: string
-        example: 1686414183718160542
-      - name: amount
-        in: query
-        description: Refun amount.
-        required: true
-        style: simple
-        schema:
-          exclusiveMinimum: true
-          type: number
-        example: 1500.0
-      - name: currency
-        in: query
-        description: Currency ISO code.
-        required: true
-        style: simple
-        schema:
-          maxLength: 3
-          minLength: 3
-          type: string
-        example: USD
-      - name: note
-        in: path
-        description: Refund note.
-        required: true
-        style: simple
-        schema:
-          type: string
-        example: Out of stock
-      - name: X-POINTCHECKOUT-KEY
-        in: header
-        description: Merchant API Key acquired from PointCheckout
-        required: true
-        style: simple
-        schema:
-          type: string
-      - name: X-POINTCHECKOUT-SECRET
-        in: header
-        description: Merchant API Secret
-        required: true
-        style: simple
-        schema:
-          type: string
-      responses:
-        "200":
-          description: Get Checkout by ID
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/M_CheckoutResponseWrapper'
-        "400":
-          description: Bad Request
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/M_ExampleGetCheckoutErrorResponse'
-      x-sort:
-        sort: "310"
   /api/mer/v2.0/branches/{branchId}:
     get:
       tags:
@@ -496,18 +439,18 @@ paths:
         schema:
           type: string
       responses:
-        "200":
-          description: Branch details.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/M_BranchResponseWrapper'
         "400":
           description: Bad Request
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/M_ExampleGetBranchErrorResponse'
+        "200":
+          description: Branch details.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/M_BranchResponseWrapper'
       x-sort:
         sort: "10010"
   /api/mer/v2.0/branches:
@@ -620,18 +563,18 @@ paths:
         schema:
           type: string
       responses:
-        "200":
-          description: Branch details.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/M_BranchResponseWrapper'
         "400":
           description: Bad Request
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/M_ExampleGetBranchErrorResponse'
+        "200":
+          description: Branch details.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/M_BranchResponseWrapper'
       x-sort:
         sort: "10030"
   /api/mer/v2.0/branches/{branchId}/enable:
@@ -663,18 +606,18 @@ paths:
         schema:
           type: string
       responses:
-        "200":
-          description: Branch details.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/M_BranchResponseWrapper'
         "400":
           description: Bad Request
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/M_ExampleGetBranchErrorResponse'
+        "200":
+          description: Branch details.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/M_BranchResponseWrapper'
       x-sort:
         sort: "10040"
   /api/mer/v2.0/webhooks/{webhookId}:
@@ -706,18 +649,18 @@ paths:
         schema:
           type: string
       responses:
-        "200":
-          description: Webhook details.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/M_WebhookResponseWrapper'
         "400":
           description: Bad Request
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/M_ExampleGetWebhookErrorResponse'
+        "200":
+          description: Webhook details.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/M_WebhookResponseWrapper'
       x-sort:
         sort: "10060"
   /api/mer/v2.0/webhooks:
@@ -824,18 +767,18 @@ paths:
         schema:
           type: string
       responses:
-        "200":
-          description: Webhook details.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/M_WebhookResponseWrapper'
         "400":
           description: Bad Request
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/M_ExampleGetWebhookErrorResponse'
+        "200":
+          description: Webhook details.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/M_WebhookResponseWrapper'
       x-sort:
         sort: "10080"
   /api/mer/v2.0/webhooks/{webhookId}/disable:
@@ -867,18 +810,18 @@ paths:
         schema:
           type: string
       responses:
-        "200":
-          description: Webhook details.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/M_WebhookResponseWrapper'
         "400":
           description: Bad Request
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/M_ExampleGetWebhookErrorResponse'
+        "200":
+          description: Webhook details.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/M_WebhookResponseWrapper'
       x-sort:
         sort: "10090"
   /api/mer/v2.0/webhooks/{webhookId}/enable:
@@ -910,18 +853,18 @@ paths:
         schema:
           type: string
       responses:
-        "200":
-          description: Webhook details.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/M_WebhookResponseWrapper'
         "400":
           description: Bad Request
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/M_ExampleGetWebhookErrorResponse'
+        "200":
+          description: Webhook details.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/M_WebhookResponseWrapper'
       x-sort:
         sort: "10100"
   /api/mer/v2.0/webhooks/{webhookId}/delete:
@@ -953,18 +896,18 @@ paths:
         schema:
           type: string
       responses:
-        "200":
-          description: Webhook details.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/M_WebhookResponseWrapper'
         "400":
           description: Bad Request
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/M_ExampleGetWebhookErrorResponse'
+        "200":
+          description: Webhook details.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/M_WebhookResponseWrapper'
       x-sort:
         sort: "10110"
 components:
@@ -1158,102 +1101,6 @@ components:
           description: The date time of creating the payment in ISO8601 format (yyyy-MM-ddTHH:mm:ss.SSSZZ).
           format: date-time
       description: Result Object.
-    DeviceCheckoutResponse:
-      type: object
-      properties:
-        id:
-          type: string
-          description: Checkout ID at PointCheckout database
-          example: "1653241101733169556"
-        displayId:
-          type: string
-          description: "Checkout human readable short key, serves as an easier reference\
-            \ to the checkout"
-          example: QS3IM5
-        requestId:
-          type: string
-          description: Merchant unique reference ID for this payment request.
-          example: ORD-1234-r1
-        orderId:
-          type: string
-          description: Merchant unique reference ID for this checkout.
-          example: ORD-1234
-        currency:
-          type: string
-          description: ISO 4217 Currency Code (3 letter currency code) associated
-            with this checkout.
-          example: USD
-        amount:
-          type: number
-          description: The grand total of the whole order. This is the amount the
-            customer must pay.
-          example: 1499.99
-        cashAmount:
-          type: number
-          description: Cash amount to be collected from Shopper
-          example: 0.0
-        status:
-          type: string
-          description: Current checkout status.
-          example: PENDING
-          enum:
-          - Pending
-          - Authorized
-          - Paid
-          - Failed
-          - Cancelled
-          - Expired
-          - Refunded
-          - Partially refunded
-        redirectUrl:
-          type: string
-          description: 'URL for the customer payment redirect. '
-          example: http://pcout.co/c/dEHizoxw
-        usedPaymentMethod:
-          type: string
-          description: Payment method used while processing the payment.
-          example: CARD
-          enum:
-          - PointCheckout
-          - Card
-          - Cash
-          - ZainCash
-        customer:
-          $ref: '#/components/schemas/CheckoutCustomer'
-        billingAddress:
-          $ref: '#/components/schemas/CheckoutAddress'
-        deliveryAddress:
-          $ref: '#/components/schemas/CheckoutAddress'
-        firebaseCollection:
-          type: string
-          description: "Google firebase collection name, to be used to receive notifications\
-            \ on checkout updates."
-        firebaseDatabase:
-          type: string
-          description: "Google firebase database name, to be used to receive notifications\
-            \ on checkout updates."
-          example: pc-test-734bc
-        firebaseDocument:
-          type: string
-          description: "Google firebase document name, to be used to receive notifications\
-            \ on checkout updates."
-        timestamp:
-          type: string
-          description: The date time of creating the payment in ISO8601 format (yyyy-MM-ddTHH:mm:ss.SSSZZ).
-          format: date-time
-        branchId:
-          type: string
-          description: The PointCheckout branch ID associated with this checkout.
-          example: "1601731695315563241"
-        branchName:
-          type: string
-          description: The PointCheckout branch name associated with this checkout.
-          example: Test store
-        totalRefunded:
-          type: number
-          description: The total amount refunded from the checkout in checkout currency.
-          example: 0.0
-      description: Result Object.
     ECommerceCheckoutResponse:
       type: object
       properties:
@@ -1390,6 +1237,82 @@ components:
           example: 12
         result:
           $ref: '#/components/schemas/M_BranchResponseV2_0'
+    M_CheckoutECommerceRequestV2_0:
+      required:
+      - amount
+      - billingAddress
+      - currency
+      - customer
+      - items
+      - orderId
+      - requestId
+      - returnUrl
+      type: object
+      properties:
+        requestId:
+          type: string
+        orderId:
+          type: string
+        currency:
+          type: string
+        amount:
+          minimum: 0
+          exclusiveMinimum: true
+          type: number
+        language:
+          maxLength: 3
+          minLength: 2
+          type: string
+        branchId:
+          type: integer
+          format: int64
+        allowedPaymentMethods:
+          type: array
+          items:
+            type: string
+            enum:
+            - PointCheckout
+            - Card
+            - Cash
+            - ZainCash
+        defaultPaymentMethod:
+          type: string
+          enum:
+          - PointCheckout
+          - Card
+          - Cash
+          - ZainCash
+        totals:
+          $ref: '#/components/schemas/CheckoutRequestTotals'
+        returnUrl:
+          type: string
+        customer:
+          $ref: '#/components/schemas/CheckoutCustomer'
+        billingAddress:
+          $ref: '#/components/schemas/CheckoutAddress'
+        deliveryAddress:
+          $ref: '#/components/schemas/CheckoutAddress'
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/M_CheckoutRequestItem'
+        expiresIn:
+          type: integer
+          format: int32
+    M_CheckoutECommerceResponseWrapper:
+      type: object
+      properties:
+        success:
+          type: boolean
+          description: Whether or not this operation completed successfully.
+          example: true
+        elapsed:
+          type: integer
+          description: Time in milliseconds elapsed at server processing this request.
+          format: int64
+          example: 12
+        result:
+          $ref: '#/components/schemas/ECommerceCheckoutResponse'
     M_CheckoutLinkResponseV2_0:
       type: object
       properties:
@@ -1500,81 +1423,6 @@ components:
           example: 12
         result:
           $ref: '#/components/schemas/M_CheckoutLinkResponseV2_0'
-    M_CheckoutMobilePaymentRequestV2_0:
-      required:
-      - amount
-      - billingAddress
-      - currency
-      - customer
-      - items
-      - orderId
-      - requestId
-      type: object
-      properties:
-        requestId:
-          type: string
-        orderId:
-          type: string
-        currency:
-          type: string
-        amount:
-          minimum: 0
-          exclusiveMinimum: true
-          type: number
-        language:
-          maxLength: 3
-          minLength: 2
-          type: string
-        branchId:
-          type: integer
-          format: int64
-        allowedPaymentMethods:
-          type: array
-          items:
-            type: string
-            enum:
-            - PointCheckout
-            - Card
-            - Cash
-            - ZainCash
-        defaultPaymentMethod:
-          type: string
-          enum:
-          - PointCheckout
-          - Card
-          - Cash
-          - ZainCash
-        totals:
-          $ref: '#/components/schemas/CheckoutRequestTotals'
-        customer:
-          $ref: '#/components/schemas/CheckoutCustomer'
-        billingAddress:
-          $ref: '#/components/schemas/CheckoutAddress'
-        deliveryAddress:
-          $ref: '#/components/schemas/CheckoutAddress'
-        items:
-          type: array
-          items:
-            $ref: '#/components/schemas/M_CheckoutRequestItem'
-        returnUrl:
-          type: string
-        expiresIn:
-          type: integer
-          format: int32
-    M_CheckoutMobilePaymentResponseWrapper:
-      type: object
-      properties:
-        success:
-          type: boolean
-          description: Whether or not this operation completed successfully.
-          example: true
-        elapsed:
-          type: integer
-          description: Time in milliseconds elapsed at server processing this request.
-          format: int64
-          example: 12
-        result:
-          $ref: '#/components/schemas/DeviceCheckoutResponse'
     M_CheckoutPaymentLinkRequestV2_0:
       required:
       - amount
@@ -1748,82 +1596,6 @@ components:
           example: 12
         result:
           $ref: '#/components/schemas/CheckoutResponse'
-    M_CheckoutWebPaymentRequestV2_0:
-      required:
-      - amount
-      - billingAddress
-      - currency
-      - customer
-      - items
-      - orderId
-      - requestId
-      - returnUrl
-      type: object
-      properties:
-        requestId:
-          type: string
-        orderId:
-          type: string
-        currency:
-          type: string
-        amount:
-          minimum: 0
-          exclusiveMinimum: true
-          type: number
-        language:
-          maxLength: 3
-          minLength: 2
-          type: string
-        branchId:
-          type: integer
-          format: int64
-        allowedPaymentMethods:
-          type: array
-          items:
-            type: string
-            enum:
-            - PointCheckout
-            - Card
-            - Cash
-            - ZainCash
-        defaultPaymentMethod:
-          type: string
-          enum:
-          - PointCheckout
-          - Card
-          - Cash
-          - ZainCash
-        totals:
-          $ref: '#/components/schemas/CheckoutRequestTotals'
-        returnUrl:
-          type: string
-        customer:
-          $ref: '#/components/schemas/CheckoutCustomer'
-        billingAddress:
-          $ref: '#/components/schemas/CheckoutAddress'
-        deliveryAddress:
-          $ref: '#/components/schemas/CheckoutAddress'
-        items:
-          type: array
-          items:
-            $ref: '#/components/schemas/M_CheckoutRequestItem'
-        expiresIn:
-          type: integer
-          format: int32
-    M_CheckoutWebPaymentResponseWrapper:
-      type: object
-      properties:
-        success:
-          type: boolean
-          description: Whether or not this operation completed successfully.
-          example: true
-        elapsed:
-          type: integer
-          description: Time in milliseconds elapsed at server processing this request.
-          format: int64
-          example: 12
-        result:
-          $ref: '#/components/schemas/ECommerceCheckoutResponse'
     M_ExampleGetBranchErrorResponse:
       type: object
       properties:

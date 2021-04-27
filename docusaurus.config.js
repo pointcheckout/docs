@@ -44,7 +44,10 @@ module.exports = {
     colorMode: {
       defaultMode: 'light',
       disableSwitch: true,
-    }
+    },
+    prism: {
+      additionalLanguages: ['swift'],
+    },
   },
   presets: [
     [
@@ -72,7 +75,7 @@ module.exports = {
           primaryColor: '#25405d',
           redocOptions: {
             disableSearch: true,
-            hideDownloadButton: false
+            hideDownloadButton: true
           },
         },
       }
