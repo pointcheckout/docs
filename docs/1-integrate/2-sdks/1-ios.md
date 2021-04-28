@@ -2,6 +2,13 @@
 title: iOS SDK
 ---
 
+<a className="button button--primary button--large" href="http://www.github.com/pointcheckout/ios-sdk">
+  View on GitHub
+</a>
+
+<br />
+<br />
+
 These are the minimum required steps to use the PointCheckout SDK in your IOS app.
 
 ## Installing the PointCheckout iOS SDK

@@ -2,7 +2,14 @@
 title: WooCommerce
 ---
 
-From downloading the plugin to requesting your first test payment, learn how to get started with the Checkout.com for WooCommerce plugin.
+<a className="button button--primary button--large" href="http://www.github.com/pointcheckout/woocommerce">
+  View on GitHub
+</a>
+
+<br />
+<br />
+
+From downloading the plugin to requesting your first test payment, learn how to get started with the pointcheckout for WooCommerce plugin.
 
 :::info
 This guide assumes that you have already [set up WooCommerce on your WordPress instance](https://docs.woocommerce.com/document/installing-uninstalling-woocommerce/).
@@ -46,7 +53,8 @@ That's it! You're ready to start testing.
 
 ## Test the plugin
 1. Go to your shop's public URL and add a product to your cart.
-2. Go to your cart then proceed to the checkout.
+2. Go to your cart then proceed
+   to the checkout.
 3. Enter the required customer and billing details.
 4. Select the **PointCheckout payment method**.
 5. Click **Place Order**. You will now be redirected to the PointCheckout payment page.
