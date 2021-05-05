@@ -12,7 +12,14 @@ We offer a range of plugins for leading technology solutions to give your shoppe
 <div class="row">
   <div class="col col--4">
     <Card
-      image="/img/docs/integrate/plugins/woocommerce.svg"
+      image="/img/docs/integrate/plugins/shopify/shopify.svg"
+      link="/docs/integrate/plugins/shopify"
+      action="view guide">
+    </Card>
+  </div>
+  <div class="col col--4">
+    <Card
+      image="/img/docs/integrate/plugins/woocommerce/woocommerce.svg"
       link="/docs/integrate/plugins/woocommerce"
       action="view guide">
     </Card>
