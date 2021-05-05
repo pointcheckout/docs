@@ -22,7 +22,7 @@ This guide assumes that you have already [set up WooCommerce on your WordPress i
 2. In the left menu, click Plugins > Installed Plugins.
 3. Search for `PointCheckout` using the search box at the top. If you find one, click **Delete**, or click **Deactivate** and then **Delete**.
 
-![](/img/docs/integrate/plugins/woocommerce-1.png)
+![](/img/docs/integrate/plugins/woocommerce/woocommerce-1.png)
 
 ## Install the plugin
 
@@ -41,7 +41,7 @@ This guide assumes that you have already [set up WooCommerce on your WordPress i
 3. Find the PointCheckout payment method and click on **Manage**
 
 
-![](/img/docs/integrate/plugins/woocommerce-2.png)
+![](/img/docs/integrate/plugins/woocommerce/woocommerce-2.png)
 
 4. Tick **Enable card payments via PointCheckout**
 5. Choose the payment **Title** and **Description**. This will be displayed to customers on your checkout page.
@@ -62,7 +62,7 @@ That's it! You're ready to start testing.
     - Number: `4242 4242 4242 4242`
     - Expiry date: `12/25`
     - CVV: `100`
-    - Name: You can specify any name
+    - Name: `TEST USER`
 7. Accept the **Terms & Conditions** and click **Pay**. You will be redirected to the order confirmation page. If you entered a real email address in the billing details, you'll also receive an order confirmation email.
 8. Log in to your Wordpress account as an administrator.
 9. Click **WooCommerce** in the left menu. Your test order is displayed and has a status of `Processing`. This indicates that the payment has been successfully processed.
