@@ -8,21 +8,20 @@ import styles from './styles.module.css';
 
 const features = [
   {
-    title: 'product guides',
+    title: 'Product Guides',
     target: '/guides',
-    imageUrl: 'img/home_guides.svg',
+    imageUrl: 'img/home/guides.svg',
     description: (
       <>
-        learn about the ins and outs of the pointcheckout platform through  boosts an
-        array of tools was designed from the ground up to be easily installed and
-        used to get your website up and running quickly.
+        Learn the ins and outs of the PointCheckout platform. Our product guides will show you how to manage your
+        PointCheckout merchant account and covers topics critical for any business.
       </>
     ),
   },
   {
-    title: 'accept payments',
+    title: 'Accept Payments',
     target: '/docs',
-    imageUrl: 'img/home_guides.svg',
+    imageUrl: 'img/home/accept.svg',
     description: (
       <>
         Learn about the ins and outs of the PointCheckout platform through  boosts an
@@ -33,34 +32,34 @@ const features = [
   },
   {
     title: 'E-Commerce Plugins',
-    target: '/docs/integrate/plugins',
-    imageUrl: 'img/home_plugins.svg',
+    target: '/docs/integrate/ecomm',
+    imageUrl: 'img/home/plugins.svg',
     description: (
       <>
-        Docusaurus lets you focus on your docs, and we&apos;ll do the chores. Go
-        ahead and move your docs into the <code>docs</code> directory.
+      Connect your e-commerce platform to the powerful payment processing capabilities of PointCheckout. Choose a quick,
+      reliable, and low-code solution thanks to our flexible plugins.
       </>
     ),
   },
   {
     title: 'SDKs',
     target: '/docs/integrate/sdks',
-    imageUrl: 'img/home_plugins.svg',
+    imageUrl: 'img/home/sdks.svg',
     description: (
       <>
-        Docusaurus lets you focus on your docs, and we&apos;ll do the chores. Go
-        ahead and move your docs into the <code>docs</code> directory.
+        Whether for your server or your mobile app, PointCheckout provides you with an array of SDKs to make your
+        product development journey simpler.
       </>
     ),
   },
   {
-    title: 'api reference',
+    title: 'API Reference',
     target: '/api',
-    imageUrl: 'img/home_api.svg',
+    imageUrl: 'img/home/api.svg',
     description: (
       <>
-        Extend or customize your website layout by reusing React. Docusaurus can
-        be extended while reusing the same header and footer.
+        Access our full API reference documentation for complete instructions on how to implement and access the full
+        range of features and tools made available to our merchants.
       </>
     ),
   },
