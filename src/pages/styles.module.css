@@ -10,7 +10,7 @@
   position: relative;
   overflow: hidden;
   min-height: 400px;
-  background-image: url(/img/home.png);
+  background-image: url(/img/home/home.png);
   background-size: cover;
   background-position: center;
 }

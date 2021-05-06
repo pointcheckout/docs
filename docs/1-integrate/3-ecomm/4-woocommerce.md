@@ -22,7 +22,7 @@ This guide assumes that you have already [set up WooCommerce on your WordPress i
 2. In the left menu, click Plugins > Installed Plugins.
 3. Search for `PointCheckout` using the search box at the top. If you find one, click **Delete**, or click **Deactivate** and then **Delete**.
 
-![](/img/docs/integrate/plugins/woocommerce/woocommerce-1.png)
+![](/img/docs/integrate/ecomm/woocommerce/woocommerce-1.png)
 
 ## Install the plugin
 
@@ -41,7 +41,7 @@ This guide assumes that you have already [set up WooCommerce on your WordPress i
 3. Find the PointCheckout payment method and click on **Manage**
 
 
-![](/img/docs/integrate/plugins/woocommerce/woocommerce-2.png)
+![](/img/docs/integrate/ecomm/woocommerce/woocommerce-2.png)
 
 4. Tick **Enable card payments via PointCheckout**
 5. Choose the payment **Title** and **Description**. This will be displayed to customers on your checkout page.
