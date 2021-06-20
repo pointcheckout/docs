@@ -1,9 +1,11 @@
 /** @type {import('@docusaurus/types').DocusaurusConfig} */
 
+const path = require('path');
+
 module.exports = {
   title: 'pointcheckout documentation',
   tagline: 'build amazing payment experiences with the pointcheckout platform',
-  url: 'https://github.com/pointcheckout/docs',
+  url: 'https://docs.pointcheckout.com',
   baseUrl: '/',
   onBrokenLinks: 'throw',
   onBrokenMarkdownLinks: 'warn',
@@ -48,9 +50,6 @@ module.exports = {
     prism: {
       additionalLanguages: ['swift'],
     },
-    plugins: [
-      require.resolve('./sitePlugin')
-    ],
   },
   presets: [
     [
@@ -94,5 +93,6 @@ module.exports = {
         sidebarPath: require.resolve('./sidebars.guides.js'),
       },
     ],
+    path.resolve(__dirname, 'plugins/webpack'),
   ],
 };
