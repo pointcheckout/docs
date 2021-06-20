@@ -1,4 +1,6 @@
 // https://github.com/rohit-gohri/redocusaurus/issues/57
+const webpack = require('webpack');
+
 module.exports = function (context, options) {
   return {
     name: 'custom-docusaurus-plugin',
@@ -16,6 +18,11 @@ module.exports = function (context, options) {
             os: require.resolve('os-browserify/browser'),
           },
         },
+        plugins: [
+          new webpack.ProvidePlugin({
+            process: 'process/browser',
+          }),
+        ],
       };
     },
   };
