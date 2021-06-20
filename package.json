@@ -22,9 +22,6 @@
     "react-dom": "^17.0.1",
     "redocusaurus": "^0.4.1"
   },
-  "resolutions": {
-    "redocusaurus/**/redoc": "2.0.0-rc.53"
-  },
   "browserslist": {
     "production": [
       ">0.5%",

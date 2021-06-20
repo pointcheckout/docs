@@ -22,12 +22,12 @@ Make sure your customers can find multiple contact methods on your site, includi
 ​​If we review your website and can’t find a clear way to contact you, we may ask that you add some contact options to the site.
 
 ### Fulfilment policies
-Your customers should be able to determine how you fulfill orders. Some examples of policies that may be relevant for your business include:
+Your customers should be able to determine how you fulfill and handle orders. Depending on your business nature and products or services offered, you should provide relevant policies that may include:
 
-- Refund policy — Describe under what conditions customers can receive a refund.
-- Delivery policy — Describe how and where goods are shipped, and on what timeline.
-- Return policy – Describe under what conditions customers can return purchased goods.
-- Cancellation policy — Describe under what conditions customers can cancel subscriptions or reservations.
+- **Refund policy**. Describe under what conditions customers can receive a refund.
+- **Delivery policy**. Describe how and where goods are shipped, and on what timeline.
+- **Return policy**. Describe under what conditions customers can return purchased goods.
+- **Cancellation policy**. Describe under what conditions customers can cancel subscriptions or reservations.
 
 Being clear and fair in these policies goes a long way toward building customer trust, and it can also provide you with protection against disputes. If we review your website and can’t find information on your fulfillment policies, we may request that you add some additional content about order fulfillment.
 
@@ -41,4 +41,4 @@ If you have a physical address, listing it on your website adds credibility for 
 You can reduce friction in the checkout process by displaying the brand logos of the credit cards that you accept, making it clear to customers that you accept their preferred card.
 
 ## Card network policies
-hese guidelines are based on the rules published by the card networks. As an online merchant, it’s your responsibility to ensure that you’re compliant with these rules, including the [Visa Rules and Regulations](https://usa.visa.com/dam/VCOM/download/about-visa/visa-rules-public.pdf) and Regulations, and the [Mastercard Rules](https://www.mastercard.us/en-us/business/overview/support/rules.html).
+These guidelines are based on the rules published by the card networks. As an online merchant, it’s your responsibility to ensure that you’re compliant with these rules, including the [Visa Rules and Regulations](https://usa.visa.com/dam/VCOM/download/about-visa/visa-rules-public.pdf) and Regulations, and the [Mastercard Rules](https://www.mastercard.us/en-us/business/overview/support/rules.html).

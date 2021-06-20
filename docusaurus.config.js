@@ -48,6 +48,9 @@ module.exports = {
     prism: {
       additionalLanguages: ['swift'],
     },
+    plugins: [
+      require.resolve('./sitePlugin')
+    ],
   },
   presets: [
     [
