@@ -110,5 +110,5 @@
 
 .markdown .card img {
   box-shadow: unset;
-  height: 200px;
+  max-height: 160px;
 }

@@ -18,7 +18,7 @@ The SDK uses Google's [SafetyNet API](https://developer.android.com/training/saf
 ## Setting up the SDK
 
 Add the SDK to your project:
- - Add the following to `YourProject/build.gradle`
+ - Add the following to `your_project_home/build.gradle`
 
 ```jsx
 allprojects {
@@ -31,7 +31,8 @@ allprojects {
   }
 }
 ```
- - Add the following dependency to `YourProject/app/build.gradle`
+
+ - Add the following dependency to `your_project_home/app/build.gradle`
 
 ```jsx
 dependencies {
@@ -39,19 +40,93 @@ dependencies {
 }
 ```
 
-### Add permissions
+### Required Permissions
 The PointCheckout SDK requires the following permissions. Please add them to your AndroidManifest.xml file if they are not already present:
 ```xml
 <uses-permission android:name="android.permission.INTERNET"/>
 ```
 
-### Adding SafetyNet
+### Adding SafetyNet Support
 Add Google's SafetyNet API to your `app/build.gradle`, follow [this guide](https://developers.google.com/android/guides/setup).
 
 After these steps, rebuild your app and you are good to go!
 
 ## Using the SDK
-### Checkout request
+### Sequence diagram
+
+This diagram shows the overall payment and data flow in order to accept payments using the PointCheckout
+mobile SDK
+
+![Sequence Diagram](/img/docs/integrate/sdks/sdk-flow.png)
+
+### Server Checkout request
+
+Send new checkout request to [PointCheckout's API](https://www.pointcheckout.com/en/developers/api/api-integration) using endpoint `/mer/v1.2/checkouts` (check the [documentation](https://www.pointcheckout.com/en/developers/api/api-integration) for more details).
+
+### Initializing PointCheckoutClient
+Create an object of PointCheckoutClient:
+
+```jsx
+PointCheckoutClient pcClient = new PointCheckoutClient();
+```
+> Keep a reference of the created client to reuse the same instance
+
+#### Initialize
+Initialize the created `PointCheckoutClient` using:
+
+```jsx
+pcClient.initialize(context);
+```
+> Invoke initialize when the app starts because it needs 2-3 seconds. If the client is not initialized and pay is called, the client will call initialize internally before calling pay.
+
+#### Payment submit
+
+To submit a payment call the static `pay` method of the `PointCheckoutClient`:
+
+```java
+pcClient.pay(context, redirectUrl, resultUrl, new PointCheckoutEventListener() {
+                @Override
+                public void onPaymentCancel() {
+                    System.out.println("!!PAYMENT CANCELLED");
+                }
+
+                @Override
+                public void onPaymentUpdate() {
+                    System.out.println("!!PAYMENT UPDATED");
+                }
+        });
+```
+
+| Parameter   | Description                                                         |
+|-------------|---------------------------------------------------------------------|
+| context     | Current activity context                                            |
+| redirectUrl | This URL is included in the checkout response from PointCheckout API|
+| resultUrl   | The same URL passed to PointCheckout API when creating the checkout |
+| listener    | Listener that will be called on payment update or cancellation      |
+
+Calling the `pay` function will open a modal and the user will be able to login and complete the payment.
+
+#### PointCheckoutEventListener
+
+The event listener has two callbacks, `onPaymentCancel` and `onPaymentUpdate`.
+
+`onPaymentCancel` will only be called if the user closes the modal by clicking on close button.
+
+`onPaymentUpdate` will be called whenever the checkout status is updated (paid, cancelled, failed .etc). When this callback is invoked you should call PointCheckout API to fetch the new status of the checkout.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 Send new checkout request to [PointCheckout's API](https://www.pointcheckout.com/en/developers/api/api-integration) using endpoint `/mer/v1.2/checkouts` (check the [documentation](https://www.pointcheckout.com/en/developers/api/api-integration) for more details). The SDK needs two variables:
 
