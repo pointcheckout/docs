@@ -1,0 +1,127 @@
+---
+title: Android SDK
+---
+<a className="button button--primary button--large" href="http://www.github.com/pointcheckout/android-sdk">
+  View on GitHub
+</a>
+
+<br/>
+<br/>
+
+This documentation highlights the requirements for using the PointCheckout Android SDK. Throughout this document, we aassume that you are using Android Studio for your Android development.
+
+:::caution MINIMUM REQUIREMENTS
+The minimum supported Android API level for the SDK is **16 (KitKat)**, however, setting the minimum Android API level to **26 (Pie)** is recommended.
+:::
+
+:::note
+The SDK uses Google's [SafetyNet API](https://developer.android.com/training/safetynet/attestation) for security, setting minimum Android API to lower than 26 will prevent it from functioning.
+:::
+
+## Setting up the SDK
+
+### JitPack Repository
+Include the [JitPack.io](https://jitpack.io) repository to your Android project in `your_project_home/build.gradle`
+
+```jsx
+allprojects {
+  repositories {
+    ...
+    maven { url 'https://jitpack.io' }
+    flatDir {
+      dirs 'libs'
+    }
+  }
+}
+```
+### PointCheckout SDK Dependency
+Include the PointCheckout Android SDK dependency to your project in `your_project_home/app/build.gradle`
+
+```jsx
+dependencies {
+  implementation 'com.github.pointcheckout:android-sdk:v1.0.0'
+}
+```
+
+### Required Permissions
+The PointCheckout SDK requires the following permissions. Please add them to your AndroidManifest.xml file if they are not already present:
+```xml
+<uses-permission android:name="android.permission.INTERNET"/>
+```
+
+### Adding SafetyNet Support
+You must add Google's SafetyNet API to your `app/build.gradle`. For details on how to add SafetyNet to your project, follow the instructions found in [this guide](https://developers.google.com/android/guides/setup).
+
+## Using the SDK
+### SDK Flow
+The PointCheckout Android SDK usage requires three distinct steps for you to accept card payments:
+1. Create a new Device Checkout
+2. Initiate the SDK's PointCheckoutClient using the provided checkout key
+3. Query the API for the payment status
+
+This diagram shows the overall payment and data flow in order to accept payments using the PointCheckout
+mobile SDK
+
+![Sequence Diagram](/img/docs/integrate/sdks/sdk-flow.png)
+
+### Device Checkout request
+Send new checkout request to [PointCheckout's API](https://www.pointcheckout.com/en/developers/api/api-integration) using endpoint `/mer/v1.2/checkouts` (check the [documentation](https://www.pointcheckout.com/en/developers/api/api-integration) for more details).
+
+### Initializing PointCheckoutClient
+Create an object of PointCheckoutClient:
+
+```jsx
+PointCheckoutClient pcoClient = new PointCheckoutClient();
+```
+:::tip
+Keep a reference of the created client to reuse the same instance
+:::
+
+#### Initialize
+Initialize the created `PointCheckoutClient` using:
+
+```jsx
+pcoClient.initialize(context);
+```
+:::tip
+Invoke the `initialize` method when the app starts as it requires 2-3 seconds to initialize the SDK. If the client is not initialized and `pay` is called, the client will call initialize internally before calling pay resulting in delay.
+:::
+
+### Commencing Payment Process
+
+To commence the payment process, you must call the static `pay` method of the `PointCheckoutClient`. This method accepts 3 parameters:
+- **`context`** which refers to the current activity context
+- **`checkoutKey`** received in the [Device Checkout Request](#device-checkout-request)
+- **`listener`** that will be called on payment update or cancellation
+
+```jsx
+pcoClient.pay(context, checkoutKey, new PointCheckoutEventListener() {
+    @Override
+    public void onPaymentCancel() {
+        System.out.println("!!PAYMENT CANCELLED");
+    }
+
+    @Override
+    public void onPaymentUpdate() {
+        // This does not mean a payment has been made. You must check the status
+        // of the payment using the server API
+        System.out.println("!!PAYMENT UPDATED");
+    }
+});
+```
+Calling the `pay` function will open a modal where the user will be able to complete the payment in a secure manner.
+
+### Listening Payment Events
+
+The `PointCheckoutEventListener` event listener has two callbacks:
+1. `onPaymentCancel` which is called if the user closes the modal by clicking on close button; and
+2. `onPaymentUpdate` which is called the checkout status is updated (paid, cancelled, failed .etc). You **MUST** call PointCheckout API to fetch the new status of the checkout to verify that its been successfully paid.
+
+## API References
+**1. New Device Checkout**
+
+[**Instructions**](/api/#operation/get-checkout) / [**API Details**](/api/#operation/get-checkout)
+
+**2. Get Checkout Details**
+
+[**Instructions**](/api/#operation/get-checkout) / [**API Details**](/api/#operation/get-checkout)
