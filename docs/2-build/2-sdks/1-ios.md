@@ -9,80 +9,108 @@ title: iOS SDK
 <br />
 <br />
 
-These are the minimum required steps to use the PointCheckout SDK in your IOS app.
+This shows the steps requires to use the PointCheckout iOS SDK for accepting card payments via the PointCheckout payment gateway in your iOS mobile application.
 
-## Installing the PointCheckout iOS SDK
+## SDK Flow
+The PointCheckout iOS SDK requires three distinct steps for you to accept card payments:
+1. Create a new Device Checkout
+2. Initiate the SDK's PointCheckoutClient using the provided checkout key
+3. Query the API for the payment status
 
-#### Add PointCheckoutSdk pod to your podfile:
+This diagram shows the overall payment and data flow in order to accept payments using the PointCheckout
+mobile SDK
 
- `pod 'PointCheckoutSdk', :git => 'git@github.com:pointcheckout/merchant-ios-sdk.git', :tag=> v${version}`
-> replace ${version} with the latest version of the SDK, you can check all available versions [here](https://github.com/pointcheckout/merchant-ios-sdk/releases), example:  `pod 'PointCheckoutSdk', :git => 'git@github.com:pointcheckout/merchant-ios-sdk.git', :tag=> v1.1`
+![Sequence Diagram](/img/docs/build/sdks/sdk-flow.png)
 
- Execute `pod install` inside the project directory.
+## Installation
+We support CocoaPods. To install the PointCheckout iOS SDK:
+1. Add PointCheckoutSdk to your project by adding the following line to your `Podfile`
+```
+pod 'PointCheckoutSdk', :git => 'git@github.com:pointcheckout/merchant-ios-sdk.git', :tag=> v${version}
+```
 
- Re-build the project.
+:::note
+replace ${version} with the latest version of the SDK, you can check all available versions [here](https://github.com/pointcheckout/merchant-ios-sdk/releases). Example: <br />
+`pod 'PointCheckoutSdk', :git => 'git@github.com:pointcheckout/merchant-ios-sdk.git', :tag=> v1.1`
+:::
+
+2. Execute `pod install` inside the project directory.
+
+3. Re-build the project.
 
 ## Using the SDK
 
-### Importing the SDK into your project
+### Device Checkout request
+Send new checkout request to [PointCheckout's API](https://www.pointcheckout.com/en/developers/api/api-integration) using endpoint `/mer/v2.0/checkouts` (check the [documentation](https://www.pointcheckout.com/en/developers/api/api-integration) for more details).
 
-You can import the framework using `import PointCheckoutSdk`
+:::danger SERVER API CALL
+API calls made to the PointCheckout API endpoints should be made from your server. You should **NEVER** include your API keys in your mobile application. A mallicious user can gain access to your account if those keys are exposed.
+:::
 
-### Creating a new payment request
-
-Send new checkout request to [PointCheckout's API](https://www.pointcheckout.com/en/developers/api/api-integration) using endpoint `/mer/v1.2/checkouts` (check the [documentation](https://www.pointcheckout.com/en/developers/api/api-integration) for more details). The SDK needs two variables:
-
-| Variable | Required | Description |
-|---|---|---|
-| redirectUrl | Yes | Will be returned in the response body of the checkout request. This is the URL to the payment page of PointCheckout. The SDK accepts only PointCheckout URLs. |
-| resultUrl | No | This is where you normally redirect the user on payment success or failure, for instance to mark the order as paid on payment success.                        |
-
-### Initiating customer payment
-
-To submit a payment call the static `pay` function of the `PointCheckoutClient`:
+### Create a new PointCheckoutClient
+Create an object of PointCheckoutClient:
 
 ```swift
-  PointCheckoutClient.pay(
-    controller: viewController,
-    redirectUrl: strRedirectUrl,
-    resultUrl: strResultUrl,
-    delegate: callback
-  )
+var pcoClient = PointCheckoutClient();
 ```
+|Environment|Description|
+|-|-|
+|`Enviornment.PRODUCTION`|Use this for accepting customer payments|
+|`Enviornment.TEST`|Use this during integration testing|
+:::tip
+Keep a reference of the created client to reuse the same instance
+:::
 
-| Parameter   | Description                                                      |
-|-------------|------------------------------------------------------------------|
-| controller  | A UIViewController calling the pay function                      |
-| redirectUrl | URL of the payment page, can be obtained from the API            |
-| resultUrl   | URL that PointCheckout will call upon payment success or failure |
-| delegate    | Delegate that will be called on payment update or cancellation   |
+### Start the Payment Process
 
-Calling the `pay` function will open a modal and the user will be able to login and complete the payment.
+To commence the payment process, you must call the static `pay` method of the `PointCheckoutClient`. This method accepts 3 parameters:
+- **`viewController`** is a UIViewController that is calling the `pay` function
+- **`checkoutKey`** received in the [Device Checkout Request](#device-checkout-request)
+- **`delegate`** that will be called on payment update or cancellation
 
-### Listening to payment updates
+```swift
+pcClient.pay(controller: viewController, checkoutKey: strCheckoutKey, delegate: callback)
+```
+Calling the `pay` function will open a modal where the user will be able to complete the payment in a secure manner.
 
-Use `PointCheckoutPaymentDelegate` to listen for payment updates.
+### Listen to Payment Events
+
+The `PointCheckoutPaymentDelegate` has two callbacks:
+1. `onDismiss` which is called if the user closes the modal by clicking on dismiss or close button; and
+2. `onUpdate` which is called the checkout status is updated (paid, cancelled, failed .etc). You **MUST** call PointCheckout API to fetch the new status of the checkout to verify that its been successfully paid.
 
 ```swift
 import UIKit
 import PointCheckoutSdk
 
 class ViewController: UIViewController, PointCheckoutPaymentDelegate{
-
     override func viewDidLoad() {
         super.viewDidLoad()
-
     }
 
-    func onPaymentUpdate(){
+    func onUpdate(){
         print("UPDATE CALLBACK")
     }
 
-    func onPaymentCancel(){
-        print("CANCEL CALLBACK")
+    func onDismiss(){
+        print("USER CLOSED THE MODAL")
     }
 }
 ```
 
-## Demo application
-You can use our Demo app as an example of how to integrate our SDK on your application. you can access it from [here](https://github.com/pointcheckout/merchant-ios-sdk-demo). You can import the example app to Xcode and see how the SDK can be used.
+### Retrieve Checkout Status
+Retrieve checkout request to [PointCheckout's API](https://www.pointcheckout.com/en/developers/api/api-integration) using endpoint `/mer/v2.0/checkouts` (check the [documentation](https://www.pointcheckout.com/en/developers/api/api-integration) for more details).
+
+
+:::danger SERVER API CALL
+API calls made to the PointCheckout API endpoints should be made from your server. You should **NEVER** include your API keys in your mobile application. A mallicious user can gain access to your account if those keys are exposed.
+:::
+
+## API References
+**1. New Device Checkout**
+
+[**Instructions**](/api/#operation/get-checkout) / [**API Details**](/api/#operation/get-checkout)
+
+**2. Get Checkout Details**
+
+[**Instructions**](/api/#operation/get-checkout) / [**API Details**](/api/#operation/get-checkout)
