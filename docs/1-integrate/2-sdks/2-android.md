@@ -61,7 +61,7 @@ The PointCheckout Android SDK requires three distinct steps for you to accept ca
 This diagram shows the overall payment and data flow in order to accept payments using the PointCheckout
 mobile SDK
 
-![Sequence Diagram](/img/docs/build/sdks/sdk-flow.png)
+![Sequence Diagram](/img/docs/integrate/sdks/sdk-flow.png)
 
 ## Using the SDK
 

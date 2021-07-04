@@ -20,7 +20,7 @@ The PointCheckout iOS SDK requires three distinct steps for you to accept card p
 This diagram shows the overall payment and data flow in order to accept payments using the PointCheckout
 mobile SDK
 
-![Sequence Diagram](/img/docs/build/sdks/sdk-flow.png)
+![Sequence Diagram](/img/docs/integrate/sdks/sdk-flow.png)
 
 ## Installation
 We support CocoaPods. To install the PointCheckout iOS SDK:
@@ -100,7 +100,6 @@ class ViewController: UIViewController, PointCheckoutPaymentDelegate{
 
 ### Retrieve Checkout Status
 Retrieve checkout request to [PointCheckout's API](https://www.pointcheckout.com/en/developers/api/api-integration) using endpoint `/mer/v2.0/checkouts` (check the [documentation](https://www.pointcheckout.com/en/developers/api/api-integration) for more details).
-
 
 :::danger SERVER API CALL
 API calls made to the PointCheckout API endpoints should be made from your server. You should **NEVER** include your API keys in your mobile application. A mallicious user can gain access to your account if those keys are exposed.
