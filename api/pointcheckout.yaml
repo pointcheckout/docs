@@ -1,1082 +1,964 @@
 openapi: 3.0.1
 info:
-  title: Merchant API
-  description: PointCheckout Merchant API
-  version: "2.0"
+  title: PointCheckout Merchant API
+  version: '2.0'
+  description: >
+    PointCheckout provides a collection of APIs that enable you to process and
+    manage payments. Our APIs accept and return JSON in the HTTP body, and
+    return standard HTTP response codes. You can consume the APIs directly using
+    your favorite HTTP/REST library or make use of one of our SDKs.
+
+
+    # Introduction
+
+    Learn how to integrate our APIs into your application
+
+
+    ### API Basics
+
+    The PointCheckout API gives you access to pretty much all the features you
+    can use on our dashboard and lets you extend them for use in your
+    application. It strives to be RESTful and is organized around the main
+    resources you would be interacting with - with a few notable exceptions.
+
+
+    ### Requests and Response
+
+    Both request body data and response data are formatted as JSON. Content type
+    for responses will always be `application/json`. Generally, all responses
+    will be in the following format:
+
+
+    ```js title="/src/components/HelloCodeTitle.js"
+
+    {
+      "success": [boolean], // true indicates a successfull operation
+      "elapsed": [number], // time spent server side processing the request
+      "error": [string], // if success is false, this will indicate the error
+      "result": [object] // the result of the operation
+    }
+
+    ```
+
+
+    # Authentication
+
+
+    Petstore offers two forms of authentication:
+      - API Key
+      - OAuth2
+    OAuth2 - an open protocol to allow secure authorization in a simple
+
+    and standard method from web, mobile and desktop applications.
+  x-logo:
+    url: /img/logo.svg
+    altText: Petstore logo
+  license:
+    name: MIT License
+    url: https://opensource.org/licenses/MIT
+    x-last-modified: 1625078678334
 servers:
-- url: htps://api.pointcheckout.com
-  description: PointCheckout live environment
-- url: htps://api.test.pointcheckout.com
-  description: PointCheckout test environment
-tags:
-- name: Checkout
-  description: API endpoints for QR payments. Can be used for point of sale intagration.
+  - url: https://api.pointcheckout.com/mer/v2.0
+    description: PointCheckout live environment.
+    variables: {}
+    x-last-modified: 1625078075232
+  - url: https://api.test.pointcheckout.com/mer/v2.0
+    description: PointCheckout test environment
+    variables: {}
+    x-last-modified: 1625078080727
 paths:
-  /api/mer/v2.0/checkout/{checkoutId}/refund:
-    post:
-      tags:
-      - Checkout
-      description: Issue a refund for checkout
-      operationId: Refund checkout
-      parameters:
-      - name: checkoutId
-        in: path
-        description: Checkout Id retrieved from PointCheckout API.
-        required: true
-        style: simple
-        schema:
-          type: string
-        example: 1686414183718160542
-      - name: amount
-        in: query
-        description: Refun amount.
-        required: true
-        style: simple
-        schema:
-          exclusiveMinimum: true
-          type: number
-        example: 1500.0
-      - name: currency
-        in: query
-        description: Currency ISO code.
-        required: true
-        style: simple
-        schema:
-          maxLength: 3
-          minLength: 3
-          type: string
-        example: USD
-      - name: note
-        in: path
-        description: Refund note.
-        required: true
-        style: simple
-        schema:
-          type: string
-        example: Out of stock
-      - name: X-POINTCHECKOUT-KEY
-        in: header
-        description: Merchant API Key acquired from PointCheckout
-        required: true
-        style: simple
-        schema:
-          type: string
-      - name: X-POINTCHECKOUT-SECRET
-        in: header
-        description: Merchant API Secret
-        required: true
-        style: simple
-        schema:
-          type: string
-      responses:
-        "200":
-          description: Get Checkout by ID
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/M_CheckoutResponseWrapper'
-        "400":
-          description: Bad Request
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/M_ExampleGetCheckoutErrorResponse'
-  /api/mer/v2.0/checkout/{checkoutId}/cancel:
-    post:
-      tags:
-      - Checkout
-      description: Cancel pending checkout
-      operationId: Cancel Checkout
-      parameters:
-      - name: checkoutId
-        in: path
-        description: Checkout Id.
-        required: true
-        style: simple
-        schema:
-          type: string
-      - name: X-POINTCHECKOUT-KEY
-        in: header
-        description: Merchant API Key acquired from PointCheckout
-        required: true
-        style: simple
-        schema:
-          type: string
-      - name: X-POINTCHECKOUT-SECRET
-        in: header
-        description: Merchant API Secret
-        required: true
-        style: simple
-        schema:
-          type: string
-      responses:
-        "200":
-          description: Checkout was cancelled successfully
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/M_CheckoutResponseWrapper'
-        "400":
-          description: Bad Request
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/M_ExampleGetCheckoutErrorResponse'
-  /api/mer/v2.0/checkout/qr:
-    post:
-      tags:
-      - Checkout
-      description: Create QR checkout
-      operationId: Create QR checkout
-      parameters:
-      - name: X-POINTCHECKOUT-KEY
-        in: header
-        description: Merchant API Key acquired from PointCheckout
-        required: true
-        style: simple
-        schema:
-          type: string
-      - name: X-POINTCHECKOUT-SECRET
-        in: header
-        description: Merchant API Secret
-        required: true
-        style: simple
-        schema:
-          type: string
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/M_CheckoutQRRequestV2_0'
-        required: true
-      responses:
-        "200":
-          description: Checkout details
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/M_CheckoutLinkResponseWrapper'
-        "400":
-          description: Bad Request
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/M_ExampleGetCheckoutErrorResponse'
-  /api/mer/v2.0/checkout/link:
-    post:
-      tags:
-      - Checkout
-      description: Create payment link checkout
-      operationId: Create payment link checkout
-      parameters:
-      - name: X-POINTCHECKOUT-KEY
-        in: header
-        description: Merchant API Key acquired from PointCheckout
-        required: true
-        style: simple
-        schema:
-          type: string
-      - name: X-POINTCHECKOUT-SECRET
-        in: header
-        description: Merchant API Secret
-        required: true
-        style: simple
-        schema:
-          type: string
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/M_CheckoutPaymentLinkRequestV2_0'
-        required: true
-      responses:
-        "200":
-          description: Checkout details
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/M_CheckoutLinkResponseWrapper'
-        "400":
-          description: Bad Request
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/M_ExampleGetCheckoutErrorResponse'
-  /api/mer/v2.0/checkout/ecom:
-    post:
-      tags:
-      - Checkout
-      description: Create e-commerce checkout
-      operationId: Create e-commerce checkout
-      parameters:
-      - name: X-POINTCHECKOUT-KEY
-        in: header
-        description: Merchant API Key acquired from PointCheckout
-        required: true
-        style: simple
-        schema:
-          type: string
-      - name: X-POINTCHECKOUT-SECRET
-        in: header
-        description: Merchant API Secret
-        required: true
-        style: simple
-        schema:
-          type: string
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/M_CheckoutECommerceRequestV2_0'
-        required: true
-      responses:
-        "400":
-          description: Bad Request
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/M_ExampleGetCheckoutErrorResponse'
-        "200":
-          description: Checkout details
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/M_CheckoutECommerceResponseWrapper'
-  /api/mer/v2.0/checkout:
+  /branches:
     get:
       tags:
-      - Checkout
-      description: Search checkouts.
-      operationId: Search Checkouts
+        - Branches
       parameters:
-      - name: type
-        in: query
-        description: query by checkout type
-        required: false
-        style: simple
-        schema:
-          type: enum
-          enum:
-          - QR
-          - ECOM
-          - LINK
-      - name: requestId
-        in: query
-        description: query by requestId used when submitting checkout
-        required: false
-        style: simple
-        schema:
-          type: string
-      - name: orderId
-        in: query
-        description: query by orderId associated with checkout
-        required: false
-        style: simple
-        schema:
-          type: string
-      - name: status
-        in: query
-        description: comma separated list of checkout statuses
-        required: false
-        style: simple
-        schema:
-          type: array
-          enum:
-          - PENDING
-          - AUTHORIZED
-          - PAID
-          - FAILED
-          - CANCELLED
-          - EXPIRED
-          - REFUNDED
-          - PARTIALLY_REFUNDED
-      - name: customer.reference
-        in: query
-        description: query by customer reference Id
-        required: false
-        style: simple
-        schema:
-          type: string
-      - name: customer.email
-        in: query
-        description: query by customer email
-        required: false
-        style: simple
-        schema:
-          type: string
-      - name: customer.phone
-        in: query
-        description: query by customer phone number
-        required: false
-        style: simple
-        schema:
-          type: string
-      - name: afterId
-        in: query
-        description: filer checouts after the provided id
-        required: false
-        style: simple
-        schema:
-          type: long
-      - name: afterTimestamp
-        in: query
-        description: "query checkouts created after specific date/time, date format\
-          \ is `yyyy-mm-dd HH:MM:SS`"
-        required: false
-        style: simple
-        schema:
-          type: timestamp
-      - name: page
-        in: query
-        description: "page number, defult is 0"
-        required: false
-        style: simple
-        schema:
-          minimum: 0
-          type: number
-      - name: size
-        in: query
-        description: "page size, default is 20"
-        required: false
-        style: simple
-        schema:
-          minimum: 1
-          type: number
-      - name: X-POINTCHECKOUT-KEY
-        in: header
-        description: Merchant API Key acquired from PointCheckout
-        required: true
-        style: simple
-        schema:
-          type: string
-      - name: X-POINTCHECKOUT-SECRET
-        in: header
-        description: Merchant API Secret
-        required: true
-        style: simple
-        schema:
-          type: string
+        - name: page
+          description: page number, defult is 0
+          schema:
+            minimum: 0
+            type: number
+          in: query
+          required: false
+        - name: size
+          description: page size, default is 20
+          schema:
+            minimum: 1
+            type: number
+          in: query
+          required: false
       responses:
-        "200":
-          description: List of checkouts.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/M_PageResponseCheckoutResponseWrapper'
-        "400":
-          description: Bad Request
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/M_ExampleGetListErrorResponse'
-  /api/mer/v2.0/checkout/{checkoutId}:
-    get:
-      tags:
-      - Checkout
-      description: Get Checkout by ID
-      operationId: Get Checkout
-      parameters:
-      - name: checkoutId
-        in: path
-        description: Checkout Id retrieved from PointCheckout API.
-        required: true
-        style: simple
-        schema:
-          type: string
-      - name: X-POINTCHECKOUT-KEY
-        in: header
-        description: Merchant API Key acquired from PointCheckout
-        required: true
-        style: simple
-        schema:
-          type: string
-      - name: X-POINTCHECKOUT-SECRET
-        in: header
-        description: Merchant API Secret
-        required: true
-        style: simple
-        schema:
-          type: string
-      responses:
-        "200":
-          description: Get Checkout by ID
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/M_CheckoutResponseWrapper'
-        "400":
-          description: Bad Request
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/M_ExampleGetCheckoutErrorResponse'
-  /api/mer/v2.0/branches/{branchId}:
-    get:
-      tags:
-      - Branches
-      description: Get branch by Id
-      operationId: Get branch by Id
-      parameters:
-      - name: branchId
-        in: path
-        description: Branch Id.
-        required: true
-        style: simple
-        schema:
-          type: string
-      - name: X-POINTCHECKOUT-KEY
-        in: header
-        description: Merchant API Key acquired from PointCheckout
-        required: true
-        style: simple
-        schema:
-          type: string
-      - name: X-POINTCHECKOUT-SECRET
-        in: header
-        description: Merchant API Secret
-        required: true
-        style: simple
-        schema:
-          type: string
-      responses:
-        "400":
-          description: Bad Request
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/M_ExampleGetBranchErrorResponse'
-        "200":
-          description: Branch details.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/M_BranchResponseWrapper'
-      x-sort:
-        sort: "10010"
-  /api/mer/v2.0/branches:
-    get:
-      tags:
-      - Branches
-      description: List all branches associated with merchant
-      operationId: Get branches
-      parameters:
-      - name: page
-        in: query
-        description: "page number, defult is 0"
-        required: false
-        style: simple
-        schema:
-          minimum: 0
-          type: number
-      - name: size
-        in: query
-        description: "page size, default is 20"
-        required: false
-        style: simple
-        schema:
-          minimum: 1
-          type: number
-      responses:
-        "400":
-          description: Bad Request
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/M_ExampleGetListErrorResponse'
-        "200":
-          description: List of all branches.
+        '200':
           content:
             application/json:
               schema:
                 type: array
                 items:
                   $ref: '#/components/schemas/M_BranchResponseWrapper'
+          description: List of all branches.
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/M_ExampleGetListErrorResponse'
+          description: Bad Request
+      operationId: Get branches
+      summary: ''
+      description: List all branches associated with merchant
       x-sort:
-        sort: "10000"
+        sort: '10000'
     post:
-      tags:
-      - Branches
-      description: Create new branch
-      operationId: Create new branch
-      parameters:
-      - name: X-POINTCHECKOUT-KEY
-        in: header
-        description: Merchant API Key acquired from PointCheckout
-        required: true
-        style: simple
-        schema:
-          type: string
-      - name: X-POINTCHECKOUT-SECRET
-        in: header
-        description: Merchant API Secret
-        required: true
-        style: simple
-        schema:
-          type: string
       requestBody:
         content:
           application/json:
             schema:
               $ref: '#/components/schemas/M_BranchRequestV2_0'
         required: true
+      tags:
+        - Branches
       responses:
-        "200":
-          description: Branch details.
+        '200':
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/M_BranchResponseWrapper'
-        "400":
-          description: Bad Request
+          description: Branch details.
+        '400':
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/M_ExamplePostBranchErrorResponse'
+          description: Bad Request
+      operationId: Create new branch
+      description: Create new branch
       x-sort:
-        sort: "10020"
-  /api/mer/v2.0/branches/{branchId}/disable:
+        sort: '10020'
+    x-last-modified: 1625078095272
+  /branches/{branchId}:
+    get:
+      tags:
+        - Branches
+      parameters:
+        - name: branchId
+          description: Branch Id.
+          schema:
+            type: string
+          in: path
+          required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/M_BranchResponseWrapper'
+          description: Branch details.
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/M_ExampleGetBranchErrorResponse'
+          description: Bad Request
+      operationId: Get branch by Id
+      description: Get branch by Id
+      x-sort:
+        sort: '10010'
+    x-last-modified: 1625078107909
+    parameters:
+      - $ref: '#/components/parameters/branchID'
+        name: branchID
+        x-last-modified: 1625078626697
+  /branches/{branchId}/disable:
     post:
       tags:
-      - Branches
-      description: Disable branch
+        - Branches
+      parameters:
+        - name: branchId
+          description: Branch Id.
+          schema:
+            type: string
+          in: path
+          required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/M_BranchResponseWrapper'
+          description: Branch details.
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/M_ExampleGetBranchErrorResponse'
+          description: Bad Request
       operationId: Disable branch
-      parameters:
-      - name: branchId
-        in: path
-        description: Branch Id.
-        required: true
-        style: simple
-        schema:
-          type: string
-      - name: X-POINTCHECKOUT-KEY
-        in: header
-        description: Merchant API Key acquired from PointCheckout
-        required: true
-        style: simple
-        schema:
-          type: string
-      - name: X-POINTCHECKOUT-SECRET
-        in: header
-        description: Merchant API Secret
-        required: true
-        style: simple
-        schema:
-          type: string
-      responses:
-        "400":
-          description: Bad Request
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/M_ExampleGetBranchErrorResponse'
-        "200":
-          description: Branch details.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/M_BranchResponseWrapper'
+      description: Disable branch
       x-sort:
-        sort: "10030"
-  /api/mer/v2.0/branches/{branchId}/enable:
+        sort: '10030'
+    x-last-modified: 1625078113348
+  /branches/{branchId}/enable:
     post:
       tags:
-      - Branches
-      description: Enable branch
-      operationId: Enable branch
+        - Branches
       parameters:
-      - name: branchId
-        in: path
-        description: Branch Id.
-        required: true
-        style: simple
-        schema:
-          type: string
-      - name: X-POINTCHECKOUT-KEY
-        in: header
-        description: Merchant API Key acquired from PointCheckout
-        required: true
-        style: simple
-        schema:
-          type: string
-      - name: X-POINTCHECKOUT-SECRET
-        in: header
-        description: Merchant API Secret
-        required: true
-        style: simple
-        schema:
-          type: string
+        - name: branchId
+          description: Branch Id.
+          schema:
+            type: string
+          in: path
+          required: true
       responses:
-        "400":
-          description: Bad Request
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/M_ExampleGetBranchErrorResponse'
-        "200":
-          description: Branch details.
+        '200':
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/M_BranchResponseWrapper'
-      x-sort:
-        sort: "10040"
-  /api/mer/v2.0/webhooks/{webhookId}:
-    get:
-      tags:
-      - Webhooks
-      description: Get webhook by Id
-      operationId: Get webhook
-      parameters:
-      - name: webhookId
-        in: path
-        description: Webhook Id.
-        required: true
-        style: simple
-        schema:
-          type: string
-      - name: X-POINTCHECKOUT-KEY
-        in: header
-        description: Merchant API Key acquired from PointCheckout
-        required: true
-        style: simple
-        schema:
-          type: string
-      - name: X-POINTCHECKOUT-SECRET
-        in: header
-        description: Merchant API Secret
-        required: true
-        style: simple
-        schema:
-          type: string
-      responses:
-        "400":
-          description: Bad Request
+          description: Branch details.
+        '400':
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/M_ExampleGetWebhookErrorResponse'
-        "200":
-          description: Webhook details.
+                $ref: '#/components/schemas/M_ExampleGetBranchErrorResponse'
+          description: Bad Request
+      operationId: Enable branch
+      description: Enable branch
+      x-sort:
+        sort: '10040'
+    x-last-modified: 1625078118387
+  /checkout:
+    get:
+      tags:
+        - Checkout
+      parameters:
+        - name: type
+          description: query by checkout type
+          schema:
+            enum:
+              - QR
+              - WEB
+              - MOBILE
+              - LINK
+            type: string
+          in: query
+          required: false
+        - name: requestId
+          description: query by requestId used when submitting checkout
+          schema:
+            type: string
+          in: query
+          required: false
+        - name: orderId
+          description: query by orderId associated with checkout
+          schema:
+            type: string
+          in: query
+          required: false
+        - name: status
+          description: comma separated list of checkout statuses
+          schema:
+            type: array
+            items:
+              enum:
+                - PENDING
+                - AUTHORIZED
+                - PAID
+                - FAILED
+                - CANCELLED
+                - EXPIRED
+                - REFUNDED
+                - PARTIALLY_REFUNDED
+              type: string
+          in: query
+          required: false
+        - name: customer.reference
+          description: query by customer reference Id
+          schema:
+            type: string
+          in: query
+          required: false
+        - name: customer.email
+          description: query by customer email
+          schema:
+            type: string
+          in: query
+          required: false
+        - name: customer.phone
+          description: query by customer phone number
+          schema:
+            type: string
+          in: query
+          required: false
+        - name: afterId
+          description: filer checouts after the provided id
+          schema:
+            type: integer
+          in: query
+          required: false
+        - name: afterTimestamp
+          description: >-
+            query checkouts created after specific date/time, date format is
+            `yyyy-mm-dd HH:MM:SS`
+          schema:
+            type: string
+          in: query
+          required: false
+        - name: page
+          description: page number, defult is 0
+          schema:
+            minimum: 0
+            type: number
+          in: query
+          required: false
+        - name: size
+          description: page size, default is 20
+          schema:
+            minimum: 1
+            type: number
+          in: query
+          required: false
+      responses:
+        '200':
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/M_WebhookResponseWrapper'
-      x-sort:
-        sort: "10060"
-  /api/mer/v2.0/webhooks:
-    get:
-      tags:
-      - Webhooks
-      description: List all webhooks associated with merchant
-      operationId: Get webhook list
-      parameters:
-      - name: page
-        in: query
-        description: "page number, defult is 0"
-        required: false
-        style: simple
-        schema:
-          minimum: 0
-          type: number
-      - name: size
-        in: query
-        description: "page size, default is 20"
-        required: false
-        style: simple
-        schema:
-          minimum: 1
-          type: number
-      responses:
-        "400":
-          description: Bad Request
+                $ref: '#/components/schemas/M_PageResponseCheckoutResponseWrapper'
+          description: List of checkouts.
+          headers: {}
+          links: {}
+        '400':
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/M_ExampleGetListErrorResponse'
-        "200":
-          description: List of all webhooks.
+          description: Bad Request
+      operationId: checkout_search
+      summary: Search Checkouts
+      description: Used to search for checkouts matching the request criteria
+      x-sort:
+        sort: '200'
+    x-last-modified: 1625078124086
+  /checkout/link:
+    post:
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/M_CheckoutPaymentLinkRequestV2_0'
+        required: true
+      tags:
+        - Checkout
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/M_CheckoutLinkResponseWrapper'
+          description: Checkout details
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/M_ExampleGetCheckoutErrorResponse'
+          description: Bad Request
+      operationId: checkout_create_link
+      description: Create payment link checkout
+      x-sort:
+        sort: '120'
+      summary: Create payment link checkout
+    x-last-modified: 1625078129468
+  /checkout/mobile:
+    post:
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/M_CheckoutMobilePaymentRequestV2_0'
+        required: true
+      tags:
+        - Checkout
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/M_CheckoutMobilePaymentResponseWrapper'
+          description: Checkout details
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/M_ExampleGetCheckoutErrorResponse'
+          description: Bad Request
+      operationId: create_checkout_mobile
+      description: Create Mobile device checkout
+      x-sort:
+        sort: '140'
+      summary: Create Mobile checkout
+    x-last-modified: 1625078134572
+  /checkout/qr:
+    post:
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/M_CheckoutQRRequestV2_0'
+        required: true
+      tags:
+        - Checkout
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/M_CheckoutLinkResponseWrapper'
+          description: Checkout details
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/M_ExampleGetCheckoutErrorResponse'
+          description: Bad Request
+      operationId: create_checkout_qr
+      description: Create QR checkout
+      x-sort:
+        sort: '130'
+      summary: Create QR code checkout
+    x-last-modified: 1625078140984
+  /checkout/web:
+    post:
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/M_CheckoutWebPaymentRequestV2_0'
+        required: true
+      tags:
+        - Checkout
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/M_CheckoutWebPaymentResponseWrapper'
+          description: Checkout details
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/M_ExampleGetCheckoutErrorResponse'
+          description: Bad Request
+      operationId: create_checkout_web
+      description: Create web checkout
+      x-sort:
+        sort: '110'
+      summary: Create web checkout
+    x-last-modified: 1625078151500
+  /checkout/{checkoutId}:
+    get:
+      tags:
+        - Checkout
+      parameters:
+        - name: checkoutId
+          description: Checkout Id retrieved from PointCheckout API.
+          schema:
+            type: string
+          in: path
+          required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/M_CheckoutResponseWrapper'
+          description: Get Checkout by ID
+          headers: {}
+          links: {}
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/M_ExampleGetCheckoutErrorResponse'
+          description: Bad Request
+      operationId: Get Checkout
+      description: Get Checkout by ID
+      x-sort:
+        sort: '210'
+    x-last-modified: 1625078162937
+  /checkout/{checkoutId}/cancel:
+    post:
+      tags:
+        - Checkout
+      parameters:
+        - name: checkoutId
+          description: Checkout Id.
+          schema:
+            type: string
+          in: path
+          required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/M_CheckoutResponseWrapper'
+          description: Checkout was cancelled successfully
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/M_ExampleGetCheckoutErrorResponse'
+          description: Bad Request
+      operationId: Cancel Checkout
+      description: Cancel pending checkout
+      x-sort:
+        sort: '300'
+    x-last-modified: 1625078168711
+  /checkout/{checkoutId}/refund:
+    post:
+      tags:
+        - Checkout
+      parameters:
+        - example: 1686414183718160600
+          name: checkoutId
+          description: Checkout Id retrieved from PointCheckout API.
+          schema:
+            type: string
+          in: path
+          required: true
+        - example: 1500
+          name: amount
+          description: Refun amount.
+          schema:
+            exclusiveMinimum: true
+            type: number
+          in: query
+          required: true
+        - example: USD
+          name: currency
+          description: Currency ISO code.
+          schema:
+            maxLength: 3
+            minLength: 3
+            type: string
+          in: query
+          required: true
+        - example: Out of stock
+          name: note
+          description: Refund note.
+          schema:
+            type: string
+          in: query
+          required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/M_CheckoutResponseWrapper'
+          description: Get Checkout by ID
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/M_ExampleGetCheckoutErrorResponse'
+          description: Bad Request
+      operationId: Refund checkout
+      description: Issue a refund for checkout
+      x-sort:
+        sort: '310'
+    x-last-modified: 1625078175174
+  /webhooks:
+    get:
+      tags:
+        - Webhooks
+      parameters:
+        - name: page
+          description: page number, defult is 0
+          schema:
+            minimum: 0
+            type: number
+          in: query
+          required: false
+        - name: size
+          description: page size, default is 20
+          schema:
+            minimum: 1
+            type: number
+          in: query
+          required: false
+      responses:
+        '200':
           content:
             application/json:
               schema:
                 type: array
                 items:
                   $ref: '#/components/schemas/M_WebhookResponseWrapper'
+          description: List of all webhooks.
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/M_ExampleGetListErrorResponse'
+          description: Bad Request
+      operationId: Get webhook list
+      description: List all webhooks associated with merchant
       x-sort:
-        sort: "10050"
+        sort: '10050'
     post:
-      tags:
-      - Webhooks
-      description: Create new webhook
-      operationId: Create new webhook
-      parameters:
-      - name: X-POINTCHECKOUT-KEY
-        in: header
-        description: Merchant API Key acquired from PointCheckout
-        required: true
-        style: simple
-        schema:
-          type: string
-      - name: X-POINTCHECKOUT-SECRET
-        in: header
-        description: Merchant API Secret
-        required: true
-        style: simple
-        schema:
-          type: string
       requestBody:
         content:
           application/json:
             schema:
               $ref: '#/components/schemas/M_WebhookRequestV2_0'
         required: true
+      tags:
+        - Webhooks
       responses:
-        "200":
-          description: Webhook details.
+        '200':
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/M_WebhookResponseWrapper'
+          description: Webhook details.
+      operationId: Create new webhook
+      description: Create new webhook
       x-sort:
-        sort: "10070"
-  /api/mer/v2.0/webhooks/{webhookId}/test:
+        sort: '10070'
+    x-last-modified: 1625078180635
+  /webhooks/{webhookId}/delete:
     post:
       tags:
-      - Webhooks
-      description: Make a test call for the address associated with the webhook.
-      operationId: Test webhook
+        - Webhooks
       parameters:
-      - name: webhookId
-        in: path
-        description: Webhook Id.
-        required: true
-        style: simple
-        schema:
-          type: string
-      - name: X-POINTCHECKOUT-KEY
-        in: header
-        description: Merchant API Key acquired from PointCheckout
-        required: true
-        style: simple
-        schema:
-          type: string
-      - name: X-POINTCHECKOUT-SECRET
-        in: header
-        description: Merchant API Secret
-        required: true
-        style: simple
-        schema:
-          type: string
+        - name: webhookId
+          description: Webhook Id.
+          schema:
+            type: string
+          in: path
+          required: true
       responses:
-        "400":
-          description: Bad Request
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/M_WebhookResponseWrapper'
+          description: Webhook details.
+        '400':
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/M_ExampleGetWebhookErrorResponse'
-        "200":
-          description: Webhook details.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/M_WebhookResponseWrapper'
-      x-sort:
-        sort: "10080"
-  /api/mer/v2.0/webhooks/{webhookId}/disable:
-    post:
-      tags:
-      - Webhooks
-      description: Disable webhook.
-      operationId: Disable webhook
-      parameters:
-      - name: webhookId
-        in: path
-        description: Webhook Id.
-        required: true
-        style: simple
-        schema:
-          type: string
-      - name: X-POINTCHECKOUT-KEY
-        in: header
-        description: Merchant API Key acquired from PointCheckout
-        required: true
-        style: simple
-        schema:
-          type: string
-      - name: X-POINTCHECKOUT-SECRET
-        in: header
-        description: Merchant API Secret
-        required: true
-        style: simple
-        schema:
-          type: string
-      responses:
-        "400":
           description: Bad Request
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/M_ExampleGetWebhookErrorResponse'
-        "200":
-          description: Webhook details.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/M_WebhookResponseWrapper'
-      x-sort:
-        sort: "10090"
-  /api/mer/v2.0/webhooks/{webhookId}/enable:
-    post:
-      tags:
-      - Webhooks
-      description: Enable webhook.
-      operationId: Enable webhook
-      parameters:
-      - name: webhookId
-        in: path
-        description: Webhook Id.
-        required: true
-        style: simple
-        schema:
-          type: string
-      - name: X-POINTCHECKOUT-KEY
-        in: header
-        description: Merchant API Key acquired from PointCheckout
-        required: true
-        style: simple
-        schema:
-          type: string
-      - name: X-POINTCHECKOUT-SECRET
-        in: header
-        description: Merchant API Secret
-        required: true
-        style: simple
-        schema:
-          type: string
-      responses:
-        "400":
-          description: Bad Request
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/M_ExampleGetWebhookErrorResponse'
-        "200":
-          description: Webhook details.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/M_WebhookResponseWrapper'
-      x-sort:
-        sort: "10100"
-  /api/mer/v2.0/webhooks/{webhookId}/delete:
-    post:
-      tags:
-      - Webhooks
-      description: Delete webhook.
       operationId: Delete webhook
+      description: Delete webhook.
+      x-sort:
+        sort: '10110'
+    x-last-modified: 1625078186858
+  /webhooks/{webhookId}:
+    get:
+      tags:
+        - Webhooks
       parameters:
-      - name: webhookId
-        in: path
-        description: Webhook Id.
-        required: true
-        style: simple
-        schema:
-          type: string
-      - name: X-POINTCHECKOUT-KEY
-        in: header
-        description: Merchant API Key acquired from PointCheckout
-        required: true
-        style: simple
-        schema:
-          type: string
-      - name: X-POINTCHECKOUT-SECRET
-        in: header
-        description: Merchant API Secret
-        required: true
-        style: simple
-        schema:
-          type: string
+        - name: webhookId
+          description: Webhook Id.
+          schema:
+            type: string
+          in: path
+          required: true
       responses:
-        "400":
-          description: Bad Request
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/M_ExampleGetWebhookErrorResponse'
-        "200":
-          description: Webhook details.
+        '200':
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/M_WebhookResponseWrapper'
+          description: Webhook details.
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/M_ExampleGetWebhookErrorResponse'
+          description: Bad Request
+      operationId: Get webhook
+      description: Get webhook by Id
       x-sort:
-        sort: "10110"
+        sort: '10060'
+    x-last-modified: 1625078193006
+  /webhooks/{webhookId}/disable:
+    post:
+      tags:
+        - Webhooks
+      parameters:
+        - name: webhookId
+          description: Webhook Id.
+          schema:
+            type: string
+          in: path
+          required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/M_WebhookResponseWrapper'
+          description: Webhook details.
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/M_ExampleGetWebhookErrorResponse'
+          description: Bad Request
+      operationId: Disable webhook
+      description: Disable webhook.
+      x-sort:
+        sort: '10090'
+    x-last-modified: 1625078199469
+  /webhooks/{webhookId}/enable:
+    post:
+      tags:
+        - Webhooks
+      parameters:
+        - name: webhookId
+          description: Webhook Id.
+          schema:
+            type: string
+          in: path
+          required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/M_WebhookResponseWrapper'
+          description: Webhook details.
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/M_ExampleGetWebhookErrorResponse'
+          description: Bad Request
+      operationId: Enable webhook
+      description: Enable webhook.
+      x-sort:
+        sort: '10100'
+    x-last-modified: 1625078204731
+  /webhooks/{webhookId}/test:
+    post:
+      tags:
+        - Webhooks
+      parameters:
+        - name: webhookId
+          description: Webhook Id.
+          schema:
+            type: string
+          in: path
+          required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/M_WebhookResponseWrapper'
+          description: Webhook details.
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/M_ExampleGetWebhookErrorResponse'
+          description: Bad Request
+      operationId: Test webhook
+      description: Make a test call for the address associated with the webhook.
+      x-sort:
+        sort: '10080'
+    x-last-modified: 1625078210122
 components:
   schemas:
     CheckoutAddress:
+      description: Delivery address
       required:
-      - address1
-      - country
-      - name
+        - address1
+        - country
+        - name
       type: object
       properties:
         name:
-          type: string
           description: Address person name.
-          example: "[NAME]"
+          type: string
+          example: '[NAME]'
         address1:
-          type: string
           description: Address line 1.
-          example: "[ADDRESS 1]"
+          type: string
+          example: '[ADDRESS 1]'
         address2:
-          type: string
           description: Address line 2.
-          example: "[ADDRESS 2]"
+          type: string
+          example: '[ADDRESS 2]'
         city:
-          type: string
           description: Address city.
-          example: "[CITY]"
+          type: string
+          example: '[CITY]'
         state:
-          type: string
           description: Address state.
-          example: "[STATE]"
+          type: string
+          example: '[STATE]'
         zip:
-          type: string
           description: Address zip code.
-          example: "12345"
-        country:
           type: string
+          example: '12345'
+        country:
           description: Address country (3 letter ISO country code)
-          example: "[COUNTRY 3-LETTER ISO CODE]"
-      description: Delivery address
+          type: string
+          example: '[COUNTRY 3-LETTER ISO CODE]'
     CheckoutCustomer:
+      description: Customer associated with this checkout
       required:
-      - email
-      - firstName
-      - lastName
+        - email
+        - firstName
+        - lastName
       type: object
       properties:
         id:
-          type: string
           description: Customer identifier at the merchant system.
-          example: "123456"
-        firstName:
           type: string
+          example: '123456'
+        firstName:
           description: Customer first name.
+          type: string
           example: John
         lastName:
-          type: string
           description: Customer last name.
+          type: string
           example: Doe
         email:
-          type: string
           description: Customer email address.
-          example: "[CUSTOMER EMAIL]"
-        phone:
           type: string
-          description: Customer phone number with international calling code (Ex.
+          example: '[CUSTOMER EMAIL]'
+        phone:
+          description: >-
+            Customer phone number with international calling code (Ex.
             971567xxxxxx)..
-          example: "[CUSTOMER PHONE]"
-      description: Customer associated with this checkout
+          type: string
+          example: '[CUSTOMER PHONE]'
     CheckoutRequestTotals:
+      description: Order totals
       required:
-      - subtotal
-      - tax
+        - subtotal
+        - tax
       type: object
       properties:
         subtotal:
+          description: >-
+            Sum of all individual line items (without discount / tax / shipping
+            / etc).
           minimum: 0
           exclusiveMinimum: false
           type: number
+          example: 100
         tax:
+          description: Total tax value on the order.
           minimum: 0
           exclusiveMinimum: false
           type: number
+          example: 5
         shipping:
+          description: Total value of shipping.
           minimum: 0
           exclusiveMinimum: false
           type: number
+          example: 3
         handling:
+          description: Handling fees for the order.
           minimum: 0
           exclusiveMinimum: false
           type: number
+          example: 2
         discount:
+          description: Value of discount applied to Subtotal.
           minimum: 0
           exclusiveMinimum: false
           type: number
+          example: 10
         skipTotalsValidation:
+          description: Disable totals validation.
+          default: false
           type: boolean
+          example: false
     CheckoutResponse:
+      description: Result Object.
       type: object
       properties:
         id:
-          type: string
           description: Checkout ID at PointCheckout database
-          example: "1653241101733169556"
-        displayId:
           type: string
-          description: "Checkout human readable short key, serves as an easier reference\
-            \ to the checkout"
+          example: '1653241101733169556'
+        displayId:
+          description: >-
+            Checkout human readable short key, serves as an easier reference to
+            the checkout
+          type: string
           example: QS3IM5
         requestId:
-          type: string
           description: Merchant unique reference ID for this payment request.
+          type: string
           example: ORD-1234-r1
         orderId:
-          type: string
           description: Merchant unique reference ID for this checkout.
+          type: string
           example: ORD-1234
         currency:
+          description: >-
+            ISO 4217 Currency Code (3 letter currency code) associated with this
+            checkout.
           type: string
-          description: ISO 4217 Currency Code (3 letter currency code) associated
-            with this checkout.
           example: USD
         amount:
+          description: >-
+            The grand total of the whole order. This is the amount the customer
+            must pay.
           type: number
-          description: The grand total of the whole order. This is the amount the
-            customer must pay.
           example: 1499.99
         cashAmount:
-          type: number
           description: Cash amount to be collected from Shopper
-          example: 0.0
+          type: number
+          example: 0
         branchId:
-          type: string
           description: The PointCheckout branch ID associated with this checkout.
-          example: "1601731695315563241"
-        branchName:
           type: string
+          example: '1601731695315563241'
+        branchName:
           description: The PointCheckout branch name associated with this checkout.
+          type: string
           example: Test store
         status:
-          type: string
           description: Current checkout status.
+          enum:
+            - Pending
+            - Authorized
+            - Paid
+            - Failed
+            - Cancelled
+            - Expired
+            - Refunded
+            - Partially refunded
+          type: string
           example: PENDING
-          enum:
-          - Pending
-          - Authorized
-          - Paid
-          - Failed
-          - Cancelled
-          - Expired
-          - Refunded
-          - Partially refunded
         totalRefunded:
-          type: number
           description: The total amount refunded from the checkout in checkout currency.
-          example: 0.0
+          type: number
+          example: 0
         redirectUrl:
-          type: string
           description: 'URL for the customer payment redirect. '
-          example: http://pcout.co/c/dEHizoxw
-        usedPaymentMethod:
           type: string
+          example: >-
+            https://pay.test.pointcheckout.com/checkout/7a3ce540effe3c9a568a577d1f717e5267e73dc503663d4f
+        usedPaymentMethod:
           description: Payment method used while processing the payment.
-          example: CARD
           enum:
-          - PointCheckout
-          - Card
-          - Cash
-          - ZainCash
+            - PointCheckout
+            - Card
+            - Cash
+            - ZainCash
+          type: string
+          example: CARD
         customer:
           $ref: '#/components/schemas/CheckoutCustomer'
         billingAddress:
@@ -1084,83 +966,219 @@ components:
         deliveryAddress:
           $ref: '#/components/schemas/CheckoutAddress'
         firebaseDatabase:
+          description: >-
+            Google firebase database name, to be used to receive notifications
+            on checkout updates.
           type: string
-          description: "Google firebase database name, to be used to receive notifications\
-            \ on checkout updates."
           example: pc-test-734bc
         firebaseCollection:
+          description: >-
+            Google firebase collection name, to be used to receive notifications
+            on checkout updates.
           type: string
-          description: "Google firebase collection name, to be used to receive notifications\
-            \ on checkout updates."
         firebaseDocument:
+          description: >-
+            Google firebase document name, to be used to receive notifications
+            on checkout updates.
           type: string
-          description: "Google firebase document name, to be used to receive notifications\
-            \ on checkout updates."
         timestamp:
-          type: string
-          description: The date time of creating the payment in ISO8601 format (yyyy-MM-ddTHH:mm:ss.SSSZZ).
           format: date-time
+          description: >-
+            The date time of creating the payment in ISO8601 format
+            (yyyy-MM-ddTHH:mm:ss.SSSZZ).
+          type: string
+        checkoutKey:
+          description: >-
+            Checkout key, serves as a unique identifier for the checkout. Used
+            to generate the payment payge redirect URL
+          type: string
+          example: 90ed4298f15d46df994fd1cfbbec5aa24390e811295cf8b5
+    DeviceCheckoutResponse:
       description: Result Object.
+      type: object
+      properties:
+        id:
+          description: Checkout ID at PointCheckout database
+          type: string
+          example: '1653241101733169556'
+        displayId:
+          description: >-
+            Checkout human readable short key, serves as an easier reference to
+            the checkout
+          type: string
+          example: QS3IM5
+        checkoutKey:
+          description: >-
+            Checkout key, serves as a unique identifier for the checkout. Used
+            to generate the payment payge redirect URL
+          type: string
+          example: 90ed4298f15d46df994fd1cfbbec5aa24390e811295cf8b5
+        requestId:
+          description: Merchant unique reference ID for this payment request.
+          type: string
+          example: ORD-1234-r1
+        orderId:
+          description: Merchant unique reference ID for this checkout.
+          type: string
+          example: ORD-1234
+        currency:
+          description: >-
+            ISO 4217 Currency Code (3 letter currency code) associated with this
+            checkout.
+          type: string
+          example: USD
+        amount:
+          description: >-
+            The grand total of the whole order. This is the amount the customer
+            must pay.
+          type: number
+          example: 1499.99
+        cashAmount:
+          description: Cash amount to be collected from Shopper
+          type: number
+          example: 0
+        status:
+          description: Current checkout status.
+          enum:
+            - Pending
+            - Authorized
+            - Paid
+            - Failed
+            - Cancelled
+            - Expired
+            - Refunded
+            - Partially refunded
+          type: string
+          example: PENDING
+        totalRefunded:
+          description: The total amount refunded from the checkout in checkout currency.
+          type: number
+          example: 0
+        redirectUrl:
+          description: 'URL for the customer payment redirect. '
+          type: string
+          example: >-
+            https://pay.test.pointcheckout.com/checkout/7a3ce540effe3c9a568a577d1f717e5267e73dc503663d4f
+        usedPaymentMethod:
+          description: Payment method used while processing the payment.
+          enum:
+            - PointCheckout
+            - Card
+            - Cash
+            - ZainCash
+          type: string
+          example: CARD
+        customer:
+          $ref: '#/components/schemas/CheckoutCustomer'
+        billingAddress:
+          $ref: '#/components/schemas/CheckoutAddress'
+        deliveryAddress:
+          $ref: '#/components/schemas/CheckoutAddress'
+        firebaseCollection:
+          description: >-
+            Google firebase collection name, to be used to receive notifications
+            on checkout updates.
+          type: string
+        firebaseDatabase:
+          description: >-
+            Google firebase database name, to be used to receive notifications
+            on checkout updates.
+          type: string
+          example: pc-test-734bc
+        firebaseDocument:
+          description: >-
+            Google firebase document name, to be used to receive notifications
+            on checkout updates.
+          type: string
+        timestamp:
+          format: date-time
+          description: >-
+            The date time of creating the payment in ISO8601 format
+            (yyyy-MM-ddTHH:mm:ss.SSSZZ).
+          type: string
+        branchId:
+          description: The PointCheckout branch ID associated with this checkout.
+          type: string
+          example: '1601731695315563241'
+        branchName:
+          description: The PointCheckout branch name associated with this checkout.
+          type: string
+          example: Test store
     ECommerceCheckoutResponse:
+      description: Result Object.
       type: object
       properties:
         id:
-          type: string
           description: Checkout ID at PointCheckout database
-          example: "1653241101733169556"
+          type: string
+          example: '1653241101733169556'
         displayId:
+          description: >-
+            Checkout human readable short key, serves as an easier reference to
+            the checkout
           type: string
-          description: "Checkout human readable short key, serves as an easier reference\
-            \ to the checkout"
           example: QS3IM5
-        requestId:
+        checkoutKey:
+          description: >-
+            Checkout key, serves as a unique identifier for the checkout. Used
+            to generate the payment payge redirect URL
           type: string
+          example: 90ed4298f15d46df994fd1cfbbec5aa24390e811295cf8b5
+        requestId:
           description: Merchant unique reference ID for this payment request.
+          type: string
           example: ORD-1234-r1
         orderId:
-          type: string
           description: Merchant unique reference ID for this checkout.
+          type: string
           example: ORD-1234
         currency:
+          description: >-
+            ISO 4217 Currency Code (3 letter currency code) associated with this
+            checkout.
           type: string
-          description: ISO 4217 Currency Code (3 letter currency code) associated
-            with this checkout.
           example: USD
         amount:
+          description: >-
+            The grand total of the whole order. This is the amount the customer
+            must pay.
           type: number
-          description: The grand total of the whole order. This is the amount the
-            customer must pay.
           example: 1499.99
         cashAmount:
-          type: number
           description: Cash amount to be collected from Shopper
-          example: 0.0
+          type: number
+          example: 0
         status:
-          type: string
           description: Current checkout status.
+          enum:
+            - Pending
+            - Authorized
+            - Paid
+            - Failed
+            - Cancelled
+            - Expired
+            - Refunded
+            - Partially refunded
+          type: string
           example: PENDING
-          enum:
-          - Pending
-          - Authorized
-          - Paid
-          - Failed
-          - Cancelled
-          - Expired
-          - Refunded
-          - Partially refunded
+        totalRefunded:
+          description: The total amount refunded from the checkout in checkout currency.
+          type: number
+          example: 0
         redirectUrl:
-          type: string
           description: 'URL for the customer payment redirect. '
-          example: http://pcout.co/c/dEHizoxw
-        usedPaymentMethod:
           type: string
+          example: >-
+            https://pay.test.pointcheckout.com/checkout/7a3ce540effe3c9a568a577d1f717e5267e73dc503663d4f
+        usedPaymentMethod:
           description: Payment method used while processing the payment.
-          example: CARD
           enum:
-          - PointCheckout
-          - Card
-          - Cash
-          - ZainCash
+            - PointCheckout
+            - Card
+            - Cash
+            - ZainCash
+          type: string
+          example: CARD
         customer:
           $ref: '#/components/schemas/CheckoutCustomer'
         billingAddress:
@@ -1168,48 +1186,57 @@ components:
         deliveryAddress:
           $ref: '#/components/schemas/CheckoutAddress'
         firebaseCollection:
+          description: >-
+            Google firebase collection name, to be used to receive notifications
+            on checkout updates.
           type: string
-          description: "Google firebase collection name, to be used to receive notifications\
-            \ on checkout updates."
         firebaseDatabase:
+          description: >-
+            Google firebase database name, to be used to receive notifications
+            on checkout updates.
           type: string
-          description: "Google firebase database name, to be used to receive notifications\
-            \ on checkout updates."
           example: pc-test-734bc
         firebaseDocument:
+          description: >-
+            Google firebase document name, to be used to receive notifications
+            on checkout updates.
           type: string
-          description: "Google firebase document name, to be used to receive notifications\
-            \ on checkout updates."
         timestamp:
-          type: string
-          description: The date time of creating the payment in ISO8601 format (yyyy-MM-ddTHH:mm:ss.SSSZZ).
           format: date-time
+          description: >-
+            The date time of creating the payment in ISO8601 format
+            (yyyy-MM-ddTHH:mm:ss.SSSZZ).
+          type: string
         branchId:
-          type: string
           description: The PointCheckout branch ID associated with this checkout.
-          example: "1601731695315563241"
-        branchName:
           type: string
+          example: '1601731695315563241'
+        branchName:
           description: The PointCheckout branch name associated with this checkout.
+          type: string
           example: Test store
-        totalRefunded:
-          type: number
-          description: The total amount refunded from the checkout in checkout currency.
-          example: 0.0
-      description: Result Object.
     M_BranchRequestV2_0:
       required:
-      - currency
-      - name
+        - currency
+        - name
       type: object
       properties:
         name:
+          description: Branch name.
           type: string
+          example: Main branch
         currency:
+          description: >-
+            Branch currency code, ISO 4217 Currency Code (3 letter currency
+            code).
           type: string
+          example: Main branch
         description:
+          description: Short description of the branch.
           type: string
+          example: Main branch
     M_BranchResponseV2_0:
+      description: Result Object.
       type: object
       properties:
         id:
@@ -1222,157 +1249,95 @@ components:
           type: string
         enabled:
           type: boolean
-      description: Result Object.
     M_BranchResponseWrapper:
       type: object
       properties:
         success:
-          type: boolean
           description: Whether or not this operation completed successfully.
+          type: boolean
           example: true
         elapsed:
-          type: integer
-          description: Time in milliseconds elapsed at server processing this request.
           format: int64
+          description: Time in milliseconds elapsed at server processing this request.
+          type: integer
           example: 12
         result:
           $ref: '#/components/schemas/M_BranchResponseV2_0'
-    M_CheckoutECommerceRequestV2_0:
-      required:
-      - amount
-      - billingAddress
-      - currency
-      - customer
-      - items
-      - orderId
-      - requestId
-      - returnUrl
+    M_CheckoutLinkResponseV2_0:
+      description: Result Object.
       type: object
       properties:
+        id:
+          description: Checkout ID at PointCheckout database
+          type: string
+          example: '1653241101733169556'
+        displayId:
+          description: >-
+            Checkout human readable short key, serves as an easier reference to
+            the checkout
+          type: string
+          example: QS3IM5
+        checkoutKey:
+          description: >-
+            Checkout key, serves as a unique identifier for the checkout. Used
+            to generate the payment payge redirect URL
+          type: string
+          example: 90ed4298f15d46df994fd1cfbbec5aa24390e811295cf8b5
         requestId:
+          description: Merchant unique reference ID for this payment request.
           type: string
+          example: ORD-1234-r1
         orderId:
+          description: Merchant unique reference ID for this checkout.
           type: string
+          example: ORD-1234
         currency:
+          description: >-
+            ISO 4217 Currency Code (3 letter currency code) associated with this
+            checkout.
           type: string
+          example: USD
         amount:
-          minimum: 0
-          exclusiveMinimum: true
+          description: >-
+            The grand total of the whole order. This is the amount the customer
+            must pay.
           type: number
-        language:
-          maxLength: 3
-          minLength: 2
+          example: 1499.99
+        cashAmount:
+          description: Cash amount to be collected from Shopper
+          type: number
+          example: 0
+        status:
+          description: Current checkout status.
+          enum:
+            - Pending
+            - Authorized
+            - Paid
+            - Failed
+            - Cancelled
+            - Expired
+            - Refunded
+            - Partially refunded
           type: string
-        branchId:
-          type: integer
-          format: int64
-        allowedPaymentMethods:
-          type: array
-          items:
-            type: string
-            enum:
+          example: PENDING
+        totalRefunded:
+          description: The total amount refunded from the checkout in checkout currency.
+          type: number
+          example: 0
+        redirectUrl:
+          description: 'URL for the customer payment redirect. '
+          type: string
+          example: >-
+            https://pay.test.pointcheckout.com/checkout/7a3ce540effe3c9a568a577d1f717e5267e73dc503663d4f
+        usedPaymentMethod:
+          description: Payment method used while processing the payment.
+          enum:
             - PointCheckout
             - Card
             - Cash
             - ZainCash
-        defaultPaymentMethod:
           type: string
-          enum:
-          - PointCheckout
-          - Card
-          - Cash
-          - ZainCash
-        totals:
-          $ref: '#/components/schemas/CheckoutRequestTotals'
-        returnUrl:
-          type: string
-        customer:
-          $ref: '#/components/schemas/CheckoutCustomer'
-        billingAddress:
-          $ref: '#/components/schemas/CheckoutAddress'
-        deliveryAddress:
-          $ref: '#/components/schemas/CheckoutAddress'
-        items:
-          type: array
-          items:
-            $ref: '#/components/schemas/M_CheckoutRequestItem'
-        expiresIn:
-          type: integer
-          format: int32
-    M_CheckoutECommerceResponseWrapper:
-      type: object
-      properties:
-        success:
-          type: boolean
-          description: Whether or not this operation completed successfully.
-          example: true
-        elapsed:
-          type: integer
-          description: Time in milliseconds elapsed at server processing this request.
-          format: int64
-          example: 12
-        result:
-          $ref: '#/components/schemas/ECommerceCheckoutResponse'
-    M_CheckoutLinkResponseV2_0:
-      type: object
-      properties:
-        id:
-          type: string
-          description: Checkout ID at PointCheckout database
-          example: "1653241101733169556"
-        displayId:
-          type: string
-          description: "Checkout human readable short key, serves as an easier reference\
-            \ to the checkout"
-          example: QS3IM5
-        requestId:
-          type: string
-          description: Merchant unique reference ID for this payment request.
-          example: ORD-1234-r1
-        orderId:
-          type: string
-          description: Merchant unique reference ID for this checkout.
-          example: ORD-1234
-        currency:
-          type: string
-          description: ISO 4217 Currency Code (3 letter currency code) associated
-            with this checkout.
-          example: USD
-        amount:
-          type: number
-          description: The grand total of the whole order. This is the amount the
-            customer must pay.
-          example: 1499.99
-        cashAmount:
-          type: number
-          description: Cash amount to be collected from Shopper
-          example: 0.0
-        status:
-          type: string
-          description: Current checkout status.
-          example: PENDING
-          enum:
-          - Pending
-          - Authorized
-          - Paid
-          - Failed
-          - Cancelled
-          - Expired
-          - Refunded
-          - Partially refunded
-        redirectUrl:
-          type: string
-          description: 'URL for the customer payment redirect. '
-          example: http://pcout.co/c/dEHizoxw
-        usedPaymentMethod:
-          type: string
-          description: Payment method used while processing the payment.
           example: CARD
-          enum:
-          - PointCheckout
-          - Card
-          - Cash
-          - ZainCash
         customer:
           $ref: '#/components/schemas/CheckoutCustomer'
         billingAddress:
@@ -1380,104 +1345,244 @@ components:
         deliveryAddress:
           $ref: '#/components/schemas/CheckoutAddress'
         firebaseCollection:
+          description: >-
+            Google firebase collection name, to be used to receive notifications
+            on checkout updates.
           type: string
-          description: "Google firebase collection name, to be used to receive notifications\
-            \ on checkout updates."
         firebaseDatabase:
+          description: >-
+            Google firebase database name, to be used to receive notifications
+            on checkout updates.
           type: string
-          description: "Google firebase database name, to be used to receive notifications\
-            \ on checkout updates."
           example: pc-test-734bc
         firebaseDocument:
+          description: >-
+            Google firebase document name, to be used to receive notifications
+            on checkout updates.
           type: string
-          description: "Google firebase document name, to be used to receive notifications\
-            \ on checkout updates."
         timestamp:
-          type: string
-          description: The date time of creating the payment in ISO8601 format (yyyy-MM-ddTHH:mm:ss.SSSZZ).
           format: date-time
+          description: >-
+            The date time of creating the payment in ISO8601 format
+            (yyyy-MM-ddTHH:mm:ss.SSSZZ).
+          type: string
         branchId:
-          type: string
           description: The PointCheckout branch ID associated with this checkout.
-          example: "1601731695315563241"
-        branchName:
           type: string
+          example: '1601731695315563241'
+        branchName:
           description: The PointCheckout branch name associated with this checkout.
+          type: string
           example: Test store
-        totalRefunded:
-          type: number
-          description: The total amount refunded from the checkout in checkout currency.
-          example: 0.0
-      description: Result Object.
     M_CheckoutLinkResponseWrapper:
       type: object
       properties:
         success:
-          type: boolean
           description: Whether or not this operation completed successfully.
+          type: boolean
           example: true
         elapsed:
-          type: integer
-          description: Time in milliseconds elapsed at server processing this request.
           format: int64
+          description: Time in milliseconds elapsed at server processing this request.
+          type: integer
           example: 12
         result:
           $ref: '#/components/schemas/M_CheckoutLinkResponseV2_0'
-    M_CheckoutPaymentLinkRequestV2_0:
+    M_CheckoutMobilePaymentRequestV2_0:
       required:
-      - amount
-      - currency
-      - description
-      - orderId
-      - requestId
+        - amount
+        - billingAddress
+        - currency
+        - customer
+        - items
+        - orderId
+        - requestId
       type: object
       properties:
         requestId:
+          description: >-
+            A unique Identifier for this request, can be used later to query the
+            status on the checkout.
           type: string
+          example: CHK-100000214-r1
         orderId:
+          description: >-
+            A merchant unique transaction ID for this checkout. This can be the
+            order ID. Must match any reference shown to the user during checkout
+            / order history.
           type: string
+          example: CHK-100000214
         currency:
+          description: ISO 4217 Currency Code (3 letter currency code).
           type: string
+          example: AED
         amount:
+          description: The amount customers must pay.
           minimum: 0
           exclusiveMinimum: true
           type: number
+          example: 100
         language:
+          description: >-
+            2 Letter ISO 639-1 language code, for viewing the payment page. When
+            the language is not supported, the system will revert to the
+            default.
           maxLength: 3
           minLength: 2
           type: string
+          example: EN
         branchId:
-          type: integer
           format: int64
+          description: The PointCheckout branch ID associated with this checkout.
+          type: integer
         allowedPaymentMethods:
+          description: >-
+            Array containing payment methods to be available at the payment
+            page. When left empty all available options will show. When provided
+            the payment methods order in the payment page will follow the same
+            order passed in this parameter.
           type: array
           items:
-            type: string
+            description: >-
+              Array containing payment methods to be available at the payment
+              page. When left empty all available options will show. When
+              provided the payment methods order in the payment page will follow
+              the same order passed in this parameter.
             enum:
-            - PointCheckout
-            - Card
-            - Cash
-            - ZainCash
+              - POINTCHECKOUT
+              - CARD
+            type: string
         defaultPaymentMethod:
-          type: string
+          description: >-
+            Active payment method when opening the payment page. When left empty
+            the default for your account at PointCheckout will be used.
           enum:
-          - PointCheckout
-          - Card
-          - Cash
-          - ZainCash
+            - POINTCHECKOUT
+            - CARD
+          type: string
+          example: CARD
+        totals:
+          $ref: '#/components/schemas/CheckoutRequestTotals'
+        customer:
+          $ref: '#/components/schemas/CheckoutCustomer'
+        billingAddress:
+          $ref: '#/components/schemas/CheckoutAddress'
+        deliveryAddress:
+          $ref: '#/components/schemas/CheckoutAddress'
+        items:
+          description: An array of the items associated with this order.
+          type: array
+          items:
+            $ref: '#/components/schemas/M_CheckoutRequestItem'
+    M_CheckoutMobilePaymentResponseWrapper:
+      type: object
+      properties:
+        success:
+          description: Whether or not this operation completed successfully.
+          type: boolean
+          example: true
+        elapsed:
+          format: int64
+          description: Time in milliseconds elapsed at server processing this request.
+          type: integer
+          example: 12
+        result:
+          $ref: '#/components/schemas/DeviceCheckoutResponse'
+    M_CheckoutPaymentLinkRequestV2_0:
+      required:
+        - amount
+        - currency
+        - description
+        - orderId
+        - requestId
+      type: object
+      properties:
+        requestId:
+          description: >-
+            A unique Identifier for this request, can be used later to query the
+            status on the checkout.
+          type: string
+          example: CHK-100000214-r1
+        orderId:
+          description: >-
+            A merchant unique transaction ID for this checkout. This can be the
+            order ID. Must match any reference shown to the user during checkout
+            / order history.
+          type: string
+          example: CHK-100000214
+        currency:
+          description: ISO 4217 Currency Code (3 letter currency code).
+          type: string
+          example: AED
+        amount:
+          description: The amount customers must pay.
+          minimum: 0
+          exclusiveMinimum: true
+          type: number
+          example: 100
+        language:
+          description: >-
+            2 Letter ISO 639-1 language code, for viewing the payment page. When
+            the language is not supported, the system will revert to the
+            default.
+          maxLength: 3
+          minLength: 2
+          type: string
+          example: EN
+        branchId:
+          format: int64
+          description: The PointCheckout branch ID associated with this checkout.
+          type: integer
+        allowedPaymentMethods:
+          description: >-
+            Array containing payment methods to be available at the payment
+            page. When left empty all available options will show. When provided
+            the payment methods order in the payment page will follow the same
+            order passed in this parameter.
+          type: array
+          items:
+            description: >-
+              Array containing payment methods to be available at the payment
+              page. When left empty all available options will show. When
+              provided the payment methods order in the payment page will follow
+              the same order passed in this parameter.
+            enum:
+              - POINTCHECKOUT
+              - CARD
+            type: string
+        defaultPaymentMethod:
+          description: >-
+            Active payment method when opening the payment page. When left empty
+            the default for your account at PointCheckout will be used.
+          enum:
+            - POINTCHECKOUT
+            - CARD
+          type: string
+          example: CARD
         totals:
           $ref: '#/components/schemas/CheckoutRequestTotals'
         description:
+          description: Description of the order.
           type: string
         expiresIn:
+          format: int32
+          description: >-
+            Number of minutes the payment will remain available, after that the
+            payment will expire..
           maximum: 10080
           minimum: 15
           type: integer
-          format: int32
+          example: 1440
         sendSms:
+          description: Indicator to send the payment link via SMS to the customer.
+          default: false
           type: boolean
+          example: true
         sendEmail:
+          description: Indicator to send the payment link via Email to the customer.
+          default: false
           type: boolean
+          example: true
         customer:
           $ref: '#/components/schemas/CheckoutCustomer'
         billingAddress:
@@ -1485,219 +1590,374 @@ components:
         deliveryAddress:
           $ref: '#/components/schemas/CheckoutAddress'
         items:
+          description: An array of the items associated with this order.
           type: array
           items:
             $ref: '#/components/schemas/M_CheckoutRequestItem'
-        returnUrl:
-          type: string
     M_CheckoutQRRequestV2_0:
       required:
-      - amount
-      - currency
-      - orderId
-      - requestId
+        - amount
+        - currency
+        - orderId
+        - requestId
       type: object
       properties:
         requestId:
+          description: >-
+            A unique Identifier for this request, can be used later to query the
+            status on the checkout.
           type: string
+          example: CHK-100000214-r1
         orderId:
+          description: >-
+            A merchant unique transaction ID for this checkout. This can be the
+            order ID. Must match any reference shown to the user during checkout
+            / order history.
           type: string
+          example: CHK-100000214
         currency:
+          description: ISO 4217 Currency Code (3 letter currency code).
           type: string
+          example: AED
         amount:
+          description: The amount customers must pay.
           minimum: 0
           exclusiveMinimum: true
           type: number
+          example: 100
         language:
+          description: >-
+            2 Letter ISO 639-1 language code, for viewing the payment page. When
+            the language is not supported, the system will revert to the
+            default.
           maxLength: 3
           minLength: 2
           type: string
+          example: EN
         branchId:
-          type: integer
           format: int64
+          description: The PointCheckout branch ID associated with this checkout.
+          type: integer
         allowedPaymentMethods:
+          description: >-
+            Array containing payment methods to be available at the payment
+            page. When left empty all available options will show. When provided
+            the payment methods order in the payment page will follow the same
+            order passed in this parameter.
           type: array
           items:
-            type: string
+            description: >-
+              Array containing payment methods to be available at the payment
+              page. When left empty all available options will show. When
+              provided the payment methods order in the payment page will follow
+              the same order passed in this parameter.
             enum:
-            - PointCheckout
-            - Card
-            - Cash
-            - ZainCash
+              - POINTCHECKOUT
+              - CARD
+            type: string
         defaultPaymentMethod:
-          type: string
+          description: >-
+            Active payment method when opening the payment page. When left empty
+            the default for your account at PointCheckout will be used.
           enum:
-          - PointCheckout
-          - Card
-          - Cash
-          - ZainCash
+            - POINTCHECKOUT
+            - CARD
+          type: string
+          example: CARD
         totals:
           $ref: '#/components/schemas/CheckoutRequestTotals'
         description:
+          description: Description of the order.
           type: string
         deviceReference:
+          description: >-
+            Merchant device reference, to be used by the merchant to indicate
+            the source device of the checkout if more than one device is used to
+            submit checkouts to PointCheckout.
           type: string
         qrSize:
+          format: int32
+          description: the size of the QR image in pixels.
+          default: 300
           maximum: 1024
           minimum: 64
           type: integer
-          format: int32
+          example: 600
         expiresIn:
+          format: int32
+          description: >-
+            Number of minutes the payment will remain available, after that the
+            payment will expire..
           maximum: 10080
           minimum: 5
           type: integer
-          format: int32
+          example: 1440
         customer:
           $ref: '#/components/schemas/CheckoutCustomer'
         billingAddress:
           $ref: '#/components/schemas/CheckoutAddress'
         items:
+          description: An array of the items associated with this order.
           type: array
           items:
             $ref: '#/components/schemas/M_CheckoutRequestItem'
-        deliveryAddress:
-          $ref: '#/components/schemas/CheckoutAddress'
-        returnUrl:
-          type: string
     M_CheckoutRequestItem:
+      description: An array of the items associated with this order.
       required:
-      - linetotal
-      - name
-      - quantity
+        - linetotal
+        - name
+        - quantity
       type: object
       properties:
         name:
+          description: The name of the item being sold to the customer.
           type: string
+          example: Dark grey sunglasses
         sku:
+          description: Merchant item SKU.
           type: string
+          example: '1116521'
         unitprice:
+          description: Product unit price.
           minimum: 0
           exclusiveMinimum: false
           type: number
+          example: 50
         quantity:
+          description: Quantity of item being bought by the user.
           minimum: 0
           exclusiveMinimum: true
           type: number
+          example: 2
         linetotal:
+          description: Total selling price for quantity of this item.
           minimum: 0
           exclusiveMinimum: false
           type: number
+          example: 100
     M_CheckoutResponseWrapper:
       type: object
       properties:
         success:
-          type: boolean
           description: Whether or not this operation completed successfully.
+          type: boolean
           example: true
         elapsed:
-          type: integer
-          description: Time in milliseconds elapsed at server processing this request.
           format: int64
+          description: Time in milliseconds elapsed at server processing this request.
+          type: integer
           example: 12
         result:
           $ref: '#/components/schemas/CheckoutResponse'
+    M_CheckoutWebPaymentRequestV2_0:
+      required:
+        - amount
+        - billingAddress
+        - currency
+        - customer
+        - items
+        - orderId
+        - requestId
+        - returnUrl
+      type: object
+      properties:
+        requestId:
+          description: >-
+            A unique Identifier for this request, can be used later to query the
+            status on the checkout.
+          type: string
+          example: CHK-100000214-r1
+        orderId:
+          description: >-
+            A merchant unique transaction ID for this checkout. This can be the
+            order ID. Must match any reference shown to the user during checkout
+            / order history.
+          type: string
+          example: CHK-100000214
+        currency:
+          description: ISO 4217 Currency Code (3 letter currency code).
+          type: string
+          example: AED
+        amount:
+          description: The amount customers must pay.
+          minimum: 0
+          exclusiveMinimum: true
+          type: number
+          example: 100
+        language:
+          description: >-
+            2 Letter ISO 639-1 language code, for viewing the payment page. When
+            the language is not supported, the system will revert to the
+            default.
+          maxLength: 3
+          minLength: 2
+          type: string
+          example: EN
+        branchId:
+          format: int64
+          description: The PointCheckout branch ID associated with this checkout.
+          type: integer
+        allowedPaymentMethods:
+          description: >-
+            Array containing payment methods to be available at the payment
+            page. When left empty all available options will show. When provided
+            the payment methods order in the payment page will follow the same
+            order passed in this parameter.
+          type: array
+          items:
+            description: >-
+              Array containing payment methods to be available at the payment
+              page. When left empty all available options will show. When
+              provided the payment methods order in the payment page will follow
+              the same order passed in this parameter.
+            enum:
+              - POINTCHECKOUT
+              - CARD
+            type: string
+        defaultPaymentMethod:
+          description: >-
+            Active payment method when opening the payment page. When left empty
+            the default for your account at PointCheckout will be used.
+          enum:
+            - POINTCHECKOUT
+            - CARD
+          type: string
+          example: CARD
+        totals:
+          $ref: '#/components/schemas/CheckoutRequestTotals'
+        customer:
+          $ref: '#/components/schemas/CheckoutCustomer'
+        billingAddress:
+          $ref: '#/components/schemas/CheckoutAddress'
+        deliveryAddress:
+          $ref: '#/components/schemas/CheckoutAddress'
+        items:
+          description: An array of the items associated with this order.
+          type: array
+          items:
+            $ref: '#/components/schemas/M_CheckoutRequestItem'
+        returnUrl:
+          description: URL to redirect user to after a successful or failed payment.
+          type: string
+          example: https://shop.example.com/payment-redirect/
+    M_CheckoutWebPaymentResponseWrapper:
+      type: object
+      properties:
+        success:
+          description: Whether or not this operation completed successfully.
+          type: boolean
+          example: true
+        elapsed:
+          format: int64
+          description: Time in milliseconds elapsed at server processing this request.
+          type: integer
+          example: 12
+        result:
+          $ref: '#/components/schemas/ECommerceCheckoutResponse'
     M_ExampleGetBranchErrorResponse:
       type: object
       properties:
         success:
-          type: boolean
           description: Whether or not this operation completed successfully.
+          type: boolean
           example: false
         elapsed:
-          type: integer
-          description: Time in milliseconds elapsed at server processing this request.
           format: int64
+          description: Time in milliseconds elapsed at server processing this request.
+          type: integer
           example: 3
         error:
-          type: string
           description: Error message
+          type: string
           example: Branch not found for API merchant
     M_ExampleGetCheckoutErrorResponse:
       type: object
       properties:
         success:
-          type: boolean
           description: Whether or not this operation completed successfully.
+          type: boolean
           example: false
         elapsed:
-          type: integer
-          description: Time in milliseconds elapsed at server processing this request.
           format: int64
+          description: Time in milliseconds elapsed at server processing this request.
+          type: integer
           example: 3
         error:
-          type: string
           description: Error message
+          type: string
           example: Checkout not found for API merchant
     M_ExampleGetListErrorResponse:
       type: object
       properties:
         success:
-          type: boolean
           description: Whether or not this operation completed successfully.
+          type: boolean
           example: false
         elapsed:
-          type: integer
-          description: Time in milliseconds elapsed at server processing this request.
           format: int64
+          description: Time in milliseconds elapsed at server processing this request.
+          type: integer
           example: 3
         error:
-          type: string
           description: Error message.
+          type: string
           example: page size parameter must be a positive integer
     M_ExampleGetWebhookErrorResponse:
       type: object
       properties:
         success:
-          type: boolean
           description: Whether or not this operation completed successfully.
+          type: boolean
           example: false
         elapsed:
-          type: integer
-          description: Time in milliseconds elapsed at server processing this request.
           format: int64
+          description: Time in milliseconds elapsed at server processing this request.
+          type: integer
           example: 3
         error:
-          type: string
           description: Error message
+          type: string
           example: Webhook not found for API merchant
     M_ExamplePostBranchErrorResponse:
       type: object
       properties:
         success:
-          type: boolean
           description: Whether or not this operation completed successfully.
+          type: boolean
           example: false
         elapsed:
-          type: integer
-          description: Time in milliseconds elapsed at server processing this request.
           format: int64
+          description: Time in milliseconds elapsed at server processing this request.
+          type: integer
           example: 3
         error:
-          type: string
           description: Error message.
+          type: string
           example: A branch already exists with the same name 'Store'
     M_PageResponseCheckoutResponseWrapper:
       type: object
       properties:
         success:
-          type: boolean
           description: Whether or not this operation completed successfully.
+          type: boolean
           example: true
         elapsed:
-          type: integer
-          description: Time in milliseconds elapsed at server processing this request.
           format: int64
+          description: Time in milliseconds elapsed at server processing this request.
+          type: integer
           example: 12
         result:
           $ref: '#/components/schemas/PageResponseCheckoutResponse'
     M_WebhookRequestV2_0:
       required:
-      - address
+        - address
       type: object
       properties:
         address:
+          description: Webhook endpoint that PointCheckout server will push messages to.
           type: string
     M_WebhookResponseV2_0:
+      description: Result Object.
       type: object
       properties:
         id:
@@ -1710,47 +1970,76 @@ components:
           type: boolean
         enabled:
           type: boolean
-      description: Result Object.
     M_WebhookResponseWrapper:
       type: object
       properties:
         success:
-          type: boolean
           description: Whether or not this operation completed successfully.
+          type: boolean
           example: true
         elapsed:
-          type: integer
-          description: Time in milliseconds elapsed at server processing this request.
           format: int64
+          description: Time in milliseconds elapsed at server processing this request.
+          type: integer
           example: 12
         result:
           $ref: '#/components/schemas/M_WebhookResponseV2_0'
     PageResponseCheckoutResponse:
+      description: Result Object.
       type: object
       properties:
         page:
-          type: integer
-          description: "Item page number, starting with 0"
           format: int32
+          description: Item page number, starting with 0
+          type: integer
           example: 0
         size:
-          type: integer
-          description: Number of items per page
           format: int32
+          description: Number of items per page
+          type: integer
           example: 10
         totalPages:
-          type: integer
-          description: Total pages
           format: int32
+          description: Total pages
+          type: integer
           example: 1
         totalElements:
-          type: integer
-          description: Total elements in the current page
           format: int64
+          description: Total elements in the current page
+          type: integer
           example: 7
         content:
-          type: array
           description: Page content array
+          type: array
           items:
             $ref: '#/components/schemas/CheckoutResponse'
-      description: Result Object.
+  securitySchemes:
+    ApiKey:
+      type: apiKey
+      name: X-POINTCHECKOUT-KEY
+      in: header
+    ApiSecret:
+      type: apiKey
+      name: X-POINTCHECKOUT-SECRET
+      in: header
+  headers: {}
+  responses: {}
+  parameters:
+    branchID:
+      name: Branch ID
+      in: path
+      description: The ID of the merchant branch
+      required: true
+      deprecated: false
+      x-last-modified: 1625078609093
+security:
+  - ApiKey: []
+    ApiSecret: []
+tags:
+  - name: Checkout
+    description: API endpoints for checkout management.
+    x-last-modified: 1625078377436
+  - name: Branches
+    description: API endpoints for branch management.
+  - name: Webhooks
+    description: API endpoints for webhook management.

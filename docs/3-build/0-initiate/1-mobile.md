@@ -1,6 +1,6 @@
 ---
-title: Payment Links
-slug: payment-links
+title: Mobile SDK payment
+slug: sdk
 hide_title: false
 hide_table_of_contents: false
 ---

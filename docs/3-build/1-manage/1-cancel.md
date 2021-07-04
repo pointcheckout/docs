@@ -1,8 +1,6 @@
 ---
-title: Get payment details
-slug: details
-hide_title: false
-hide_table_of_contents: false
+title: Cancel unpaid checkout
+slug: cancel
 ---
 
 On this page we've listed some Docusaurus-related communities that you can be a part of; see the other pages in this section for additional online and in-person learning materials.

@@ -52,9 +52,8 @@ The PointCheckout SDK requires the following permissions. Please add them to you
 ### Adding SafetyNet Support
 You must add Google's SafetyNet API to your `app/build.gradle`. For details on how to add SafetyNet to your project, follow the instructions found in [this guide](https://developers.google.com/android/guides/setup).
 
-## Using the SDK
-### SDK Flow
-The PointCheckout Android SDK usage requires three distinct steps for you to accept card payments:
+## SDK Flow
+The PointCheckout Android SDK requires three distinct steps for you to accept card payments:
 1. Create a new Device Checkout
 2. Initiate the SDK's PointCheckoutClient using the provided checkout key
 3. Query the API for the payment status
@@ -64,15 +63,26 @@ mobile SDK
 
 ![Sequence Diagram](/img/docs/integrate/sdks/sdk-flow.png)
 
-### Device Checkout request
+## Using the SDK
+
+### Create a new Device Checkout request
 Send new checkout request to [PointCheckout's API](https://www.pointcheckout.com/en/developers/api/api-integration) using endpoint `/mer/v1.2/checkouts` (check the [documentation](https://www.pointcheckout.com/en/developers/api/api-integration) for more details).
 
-### Initializing PointCheckoutClient
-Create an object of PointCheckoutClient:
+:::danger SERVER API CALL
+API calls made to the PointCheckout API endpoints should be made from your server. You should **NEVER** include your API keys in your mobile application. A mallicious user can gain access to your account if those keys are exposed.
+:::
+
+### Create a new the PointCheckoutClient
+Create an object of PointCheckoutClient pointing to the required environment.
 
 ```jsx
-PointCheckoutClient pcoClient = new PointCheckoutClient();
+PointCheckoutClient pcoClient = new PointCheckoutClient(environment);
 ```
+|Environment|Description|
+|-|-|
+|`Enviornment.PRODUCTION`|Use this for accepting customer payments|
+|`Enviornment.TEST`|Use this during integration testing|
+
 :::tip
 Keep a reference of the created client to reuse the same instance
 :::
@@ -87,7 +97,7 @@ pcoClient.initialize(context);
 Invoke the `initialize` method when the app starts as it requires 2-3 seconds to initialize the SDK. If the client is not initialized and `pay` is called, the client will call initialize internally before calling pay resulting in delay.
 :::
 
-### Commencing Payment Process
+### Start the Payment Process
 
 To commence the payment process, you must call the static `pay` method of the `PointCheckoutClient`. This method accepts 3 parameters:
 - **`context`** which refers to the current activity context
@@ -111,11 +121,18 @@ pcoClient.pay(context, checkoutKey, new PointCheckoutEventListener() {
 ```
 Calling the `pay` function will open a modal where the user will be able to complete the payment in a secure manner.
 
-### Listening Payment Events
+### Listen to Payment Events
 
 The `PointCheckoutEventListener` event listener has two callbacks:
 1. `onPaymentCancel` which is called if the user closes the modal by clicking on close button; and
 2. `onPaymentUpdate` which is called the checkout status is updated (paid, cancelled, failed .etc). You **MUST** call PointCheckout API to fetch the new status of the checkout to verify that its been successfully paid.
+
+### Retrieve Checkout Status
+Retrieve checkout request to [PointCheckout's API](https://www.pointcheckout.com/en/developers/api/api-integration) using endpoint `/mer/v2.0/checkouts` (check the [documentation](https://www.pointcheckout.com/en/developers/api/api-integration) for more details).
+
+:::danger SERVER API CALL
+API calls made to the PointCheckout API endpoints should be made from your server. You should **NEVER** include your API keys in your mobile application. A mallicious user can gain access to your account if those keys are exposed.
+:::
 
 ## API References
 **1. New Device Checkout**
