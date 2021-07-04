@@ -32,7 +32,7 @@ const features = [
   },
   {
     title: 'E-Commerce Plugins',
-    target: '/docs/integrate/plugins',
+    target: '/docs/integrate/ecomm',
     imageUrl: 'img/home/plugins.svg',
     description: (
       <>
