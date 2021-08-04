@@ -112,3 +112,10 @@
   box-shadow: unset;
   max-height: 160px;
 }
+
+
+
+/* show redocusaurus categories menu*/
+.redocusaurus .menu-content div.scrollbar-container {
+  display: block !important;
+}
