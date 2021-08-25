@@ -139,18 +139,18 @@ paths:
               $ref: '#/components/schemas/CheckoutMobilePaymentRequest'
         required: true
       responses:
-        "200":
-          description: Checkout details
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/CheckoutMobilePaymentResponseWrapper'
         "400":
           description: Bad Request
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/GetCheckoutErrorResponse'
+        "200":
+          description: Checkout details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CheckoutMobilePaymentResponseWrapper'
       x-sort:
         sort: "140"
   /checkout:
@@ -435,20 +435,20 @@ paths:
           minimum: 1
           type: number
       responses:
-        "200":
-          description: List of subscriptions.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/PageResponseSubscriptionResponseWrapper'
         "400":
           description: Bad Request
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/GetListErrorResponse'
+        "200":
+          description: List of subscriptions.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PageResponseSubscriptionResponseWrapper'
       x-sort:
-        sort: "200"
+        sort: "1130"
     post:
       tags:
       - Customer subscription
@@ -461,134 +461,20 @@ paths:
               $ref: '#/components/schemas/SubscriptionRequest'
         required: true
       responses:
-        "400":
-          description: Bad Request
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/GetSubscriptionErrorResponse'
         "200":
           description: Subscription details
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/SubscriptionResponseWrapper'
-  /subscription/{subscriptionId}/payment/{paymentId}/notify:
-    post:
-      tags:
-      - Customer subscription
-      summary: Notify subscription payment
-      operationId: notify-subscription-payment
-      parameters:
-      - name: subscriptionId
-        in: path
-        description: Subscription Id retrieved from PointCheckout API.
-        required: true
-        schema:
-          type: string
-      - name: paymentId
-        in: path
-        description: Subscription payment Id retrieved from PointCheckout API.
-        required: true
-        schema:
-          type: string
-      responses:
-        "200":
-          description: Notify subscription payment
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/SubscriptionPaymentResponseWrapper'
         "400":
           description: Bad Request
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/GetSubscriptionErrorResponse'
-  /subscription/{subscriptionId}/payment/{paymentId}/cancel:
-    post:
-      tags:
-      - Customer subscription
-      summary: Cancel subscription payment
-      operationId: cancel-subscription-payment
-      parameters:
-      - name: subscriptionId
-        in: path
-        description: Subscription Id retrieved from PointCheckout API.
-        required: true
-        schema:
-          type: string
-      - name: paymentId
-        in: path
-        description: Subscription payment Id retrieved from PointCheckout API.
-        required: true
-        schema:
-          type: string
-      responses:
-        "200":
-          description: Cancel subscription payment
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/SubscriptionPaymentResponseWrapper'
-        "400":
-          description: Bad Request
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/GetSubscriptionErrorResponse'
-  /subscription/{subscriptionId}/deactivate:
-    post:
-      tags:
-      - Customer subscription
-      summary: Deactivate subscription
-      operationId: deactivate-subscription
-      parameters:
-      - name: subscriptionId
-        in: path
-        description: Subscription Id retrieved from PointCheckout API.
-        required: true
-        schema:
-          type: string
-      responses:
-        "200":
-          description: OK
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/SubscriptionResponseWrapper'
-        "400":
-          description: Bad Request
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/GetSubscriptionErrorResponse'
-  /subscription/{subscriptionId}/activate:
-    post:
-      tags:
-      - Customer subscription
-      summary: Aactivate subscription
-      operationId: activate-subscription
-      parameters:
-      - name: subscriptionId
-        in: path
-        description: Subscription Id retrieved from PointCheckout API.
-        required: true
-        schema:
-          type: string
-      responses:
-        "200":
-          description: OK
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/SubscriptionResponseWrapper'
-        "400":
-          description: Bad Request
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/GetSubscriptionErrorResponse'
+      x-sort:
+        sort: "1110"
   /subscription/{subscriptionId}:
     get:
       tags:
@@ -615,6 +501,64 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/GetSubscriptionErrorResponse'
+      x-sort:
+        sort: "1120"
+  /subscription/{subscriptionId}/pause:
+    post:
+      tags:
+      - Customer subscription
+      summary: Pause subscription
+      operationId: pause-subscription
+      parameters:
+      - name: subscriptionId
+        in: path
+        description: Subscription Id retrieved from PointCheckout API.
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SubscriptionResponseWrapper'
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetSubscriptionErrorResponse'
+      x-sort:
+        sort: "1140"
+  /subscription/{subscriptionId}/resume:
+    post:
+      tags:
+      - Customer subscription
+      summary: Resume subscription
+      operationId: resume-subscription
+      parameters:
+      - name: subscriptionId
+        in: path
+        description: Subscription Id retrieved from PointCheckout API.
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SubscriptionResponseWrapper'
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetSubscriptionErrorResponse'
+      x-sort:
+        sort: "1150"
   /subscription/{subscriptionId}/payment:
     get:
       tags:
@@ -643,18 +587,20 @@ paths:
           minimum: 1
           type: number
       responses:
-        "400":
-          description: Bad Request
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/GetSubscriptionErrorResponse'
         "200":
           description: Get subscription payments
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/SubscriptionPaymentResponseWrapper'
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetSubscriptionErrorResponse'
+      x-sort:
+        sort: "1170"
   /branches/{branchId}:
     get:
       tags:
@@ -706,6 +652,12 @@ paths:
           minimum: 1
           type: number
       responses:
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetListErrorResponse'
         "200":
           description: List of all branches.
           content:
@@ -714,12 +666,6 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/BranchResponseWrapper'
-        "400":
-          description: Bad Request
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/GetListErrorResponse'
       x-sort:
         sort: "10000"
     post:
