@@ -42,6 +42,8 @@ tags:
   description: API endpoints for branch management.
 - name: Webhooks
   description: API endpoints for webhook management.
+- name: Customer subscription
+  description: API endpoints for Customer subscription management.
 paths:
   /checkout/web:
     post:
@@ -83,18 +85,18 @@ paths:
               $ref: '#/components/schemas/CheckoutPaymentLinkRequest'
         required: true
       responses:
-        "400":
-          description: Bad Request
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/GetCheckoutErrorResponse'
         "200":
           description: Checkout details
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/CheckoutLinkResponseWrapper'
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetCheckoutErrorResponse'
       x-sort:
         sort: "120"
   /checkout/qr:
@@ -110,18 +112,18 @@ paths:
               $ref: '#/components/schemas/CheckoutQRRequest'
         required: true
       responses:
-        "200":
-          description: Checkout details
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/CheckoutQRResponseWrapper'
         "400":
           description: Bad Request
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/GetCheckoutErrorResponse'
+        "200":
+          description: Checkout details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CheckoutQRResponseWrapper'
       x-sort:
         sort: "130"
   /checkout/mobile:
@@ -137,18 +139,18 @@ paths:
               $ref: '#/components/schemas/CheckoutMobilePaymentRequest'
         required: true
       responses:
-        "200":
-          description: Checkout details
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/CheckoutMobilePaymentResponseWrapper'
         "400":
           description: Bad Request
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/GetCheckoutErrorResponse'
+        "200":
+          description: Checkout details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CheckoutMobilePaymentResponseWrapper'
       x-sort:
         sort: "140"
   /checkout:
@@ -244,18 +246,18 @@ paths:
           minimum: 1
           type: number
       responses:
-        "400":
-          description: Bad Request
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/GetListErrorResponse'
         "200":
           description: List of checkouts.
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/PageResponseCheckoutResponseWrapper'
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetListErrorResponse'
       x-sort:
         sort: "200"
   /checkout/{checkoutId}:
@@ -272,18 +274,18 @@ paths:
         schema:
           type: string
       responses:
-        "400":
-          description: Bad Request
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/GetCheckoutErrorResponse'
         "200":
           description: Get Checkout by ID
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/CheckoutResponseWrapper'
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetCheckoutErrorResponse'
       x-sort:
         sort: "210"
   /checkout/{checkoutId}/cancel:
@@ -353,20 +355,252 @@ paths:
           type: string
         example: Out of stock
       responses:
-        "400":
-          description: Bad Request
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/GetCheckoutErrorResponse'
         "200":
           description: Get Checkout by ID
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/CheckoutResponseWrapper'
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetCheckoutErrorResponse'
       x-sort:
         sort: "310"
+  /subscription:
+    get:
+      tags:
+      - Customer subscription
+      summary: Search subscriptions
+      operationId: search-subscriptions
+      parameters:
+      - name: status
+        in: query
+        description: comma separated list of subscription statuses
+        required: false
+        schema:
+          type: array
+          items:
+            type: string
+            enum:
+            - ACTIVE
+            - INACTIVE
+            - ARCHIVED
+            - EXPIRED
+      - name: customer.reference
+        in: query
+        description: query by customer reference Id
+        required: false
+        schema:
+          type: string
+      - name: customer.email
+        in: query
+        description: query by customer email
+        required: false
+        schema:
+          type: string
+      - name: customer.phone
+        in: query
+        description: query by customer phone number
+        required: false
+        schema:
+          type: string
+      - name: afterId
+        in: query
+        description: filer checouts after the provided id
+        required: false
+        schema:
+          type: integer
+      - name: afterTimestamp
+        in: query
+        description: query checkouts created after specific date/time, date format
+          is `yyyy-mm-dd HH:MM:SS`
+        required: false
+        schema:
+          type: string
+      - name: page
+        in: query
+        description: page number, default is 0
+        required: false
+        schema:
+          minimum: 0
+          type: number
+      - name: size
+        in: query
+        description: page size, default is 20
+        required: false
+        schema:
+          minimum: 1
+          type: number
+      responses:
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetListErrorResponse'
+        "200":
+          description: List of subscriptions.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PageResponseSubscriptionResponseWrapper'
+      x-sort:
+        sort: "1130"
+    post:
+      tags:
+      - Customer subscription
+      summary: Create subscription
+      operationId: create-subscription
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SubscriptionRequest'
+        required: true
+      responses:
+        "200":
+          description: Subscription details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SubscriptionResponseWrapper'
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetSubscriptionErrorResponse'
+      x-sort:
+        sort: "1110"
+  /subscription/{subscriptionId}:
+    get:
+      tags:
+      - Customer subscription
+      summary: Get subscription by Id
+      operationId: get-subscription
+      parameters:
+      - name: subscriptionId
+        in: path
+        description: Subscription Id retrieved from PointCheckout API.
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          description: Get subscription by ID
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SubscriptionResponseWrapper'
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetSubscriptionErrorResponse'
+      x-sort:
+        sort: "1120"
+  /subscription/{subscriptionId}/pause:
+    post:
+      tags:
+      - Customer subscription
+      summary: Pause subscription
+      operationId: pause-subscription
+      parameters:
+      - name: subscriptionId
+        in: path
+        description: Subscription Id retrieved from PointCheckout API.
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SubscriptionResponseWrapper'
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetSubscriptionErrorResponse'
+      x-sort:
+        sort: "1140"
+  /subscription/{subscriptionId}/resume:
+    post:
+      tags:
+      - Customer subscription
+      summary: Resume subscription
+      operationId: resume-subscription
+      parameters:
+      - name: subscriptionId
+        in: path
+        description: Subscription Id retrieved from PointCheckout API.
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SubscriptionResponseWrapper'
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetSubscriptionErrorResponse'
+      x-sort:
+        sort: "1150"
+  /subscription/{subscriptionId}/payment:
+    get:
+      tags:
+      - Customer subscription
+      summary: Get subscription payments
+      operationId: get-subscription-payments
+      parameters:
+      - name: subscriptionId
+        in: path
+        description: Subscription Id retrieved from PointCheckout API.
+        required: true
+        schema:
+          type: string
+      - name: page
+        in: query
+        description: page number, default is 0
+        required: false
+        schema:
+          minimum: 0
+          type: number
+      - name: size
+        in: query
+        description: page size, default is 20
+        required: false
+        schema:
+          minimum: 1
+          type: number
+      responses:
+        "200":
+          description: Get subscription payments
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SubscriptionPaymentResponseWrapper'
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetSubscriptionErrorResponse'
+      x-sort:
+        sort: "1170"
   /branches/{branchId}:
     get:
       tags:
@@ -381,18 +615,18 @@ paths:
         schema:
           type: string
       responses:
-        "400":
-          description: Bad Request
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/GetBranchErrorResponse'
         "200":
           description: Branch details.
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/BranchResponseWrapper'
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetBranchErrorResponse'
       x-sort:
         sort: "10010"
   /branches:
@@ -474,18 +708,18 @@ paths:
         schema:
           type: string
       responses:
-        "400":
-          description: Bad Request
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/GetBranchErrorResponse'
         "200":
           description: Branch details.
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/BranchResponseWrapper'
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetBranchErrorResponse'
       x-sort:
         sort: "10030"
   /branches/{branchId}/enable:
@@ -502,18 +736,18 @@ paths:
         schema:
           type: string
       responses:
-        "400":
-          description: Bad Request
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/GetBranchErrorResponse'
         "200":
           description: Branch details.
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/BranchResponseWrapper'
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetBranchErrorResponse'
       x-sort:
         sort: "10040"
   /webhooks/{webhookId}:
@@ -530,18 +764,18 @@ paths:
         schema:
           type: string
       responses:
-        "200":
-          description: Webhook details.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/WebhookResponseWrapper'
         "400":
           description: Bad Request
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/GetWebhookErrorResponse'
+        "200":
+          description: Webhook details.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WebhookResponseWrapper'
       x-sort:
         sort: "10060"
   /webhooks:
@@ -618,18 +852,18 @@ paths:
         schema:
           type: string
       responses:
-        "200":
-          description: Webhook details.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/WebhookResponseWrapper'
         "400":
           description: Bad Request
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/GetWebhookErrorResponse'
+        "200":
+          description: Webhook details.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WebhookResponseWrapper'
       x-sort:
         sort: "10080"
   /webhooks/{webhookId}/disable:
@@ -646,18 +880,18 @@ paths:
         schema:
           type: string
       responses:
-        "200":
-          description: Webhook details.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/WebhookResponseWrapper'
         "400":
           description: Bad Request
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/GetWebhookErrorResponse'
+        "200":
+          description: Webhook details.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WebhookResponseWrapper'
       x-sort:
         sort: "10090"
   /webhooks/{webhookId}/enable:
@@ -674,18 +908,18 @@ paths:
         schema:
           type: string
       responses:
-        "200":
-          description: Webhook details.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/WebhookResponseWrapper'
         "400":
           description: Bad Request
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/GetWebhookErrorResponse'
+        "200":
+          description: Webhook details.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WebhookResponseWrapper'
       x-sort:
         sort: "10100"
   /webhooks/{webhookId}/delete:
@@ -702,18 +936,18 @@ paths:
         schema:
           type: string
       responses:
-        "200":
-          description: Webhook details.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/WebhookResponseWrapper'
         "400":
           description: Bad Request
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/GetWebhookErrorResponse'
+        "200":
+          description: Webhook details.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WebhookResponseWrapper'
       x-sort:
         sort: "10110"
 components:
@@ -930,7 +1164,8 @@ components:
           type: string
           description: The PointCheckout branch name associated with this checkout.
           example: Test store
-      description: Result Object.
+      description: Checkout associated with the payment, this can be null if the payment
+        link is never opened
     CheckoutLinkResponseWrapper:
       type: object
       properties:
@@ -1893,6 +2128,22 @@ components:
           type: string
           description: Error message.
           example: page size parameter must be a positive integer
+    GetSubscriptionErrorResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+          description: Whether or not this operation completed successfully.
+          example: false
+        elapsed:
+          type: integer
+          description: Time in milliseconds elapsed at server processing this request.
+          format: int64
+          example: 3
+        error:
+          type: string
+          description: Error message
+          example: Subscription not found for API merchant
     GetWebhookErrorResponse:
       type: object
       properties:
@@ -1952,6 +2203,49 @@ components:
           example: 12
         result:
           $ref: '#/components/schemas/PageResponseCheckoutResponse'
+    PageResponseSubscriptionResponse:
+      type: object
+      properties:
+        page:
+          type: integer
+          description: Item page number, starting with 0
+          format: int32
+          example: 0
+        size:
+          type: integer
+          description: Number of items per page
+          format: int32
+          example: 10
+        totalPages:
+          type: integer
+          description: Total pages
+          format: int32
+          example: 1
+        totalElements:
+          type: integer
+          description: Total elements in the current page
+          format: int64
+          example: 7
+        content:
+          type: array
+          description: Page content array
+          items:
+            $ref: '#/components/schemas/SubscriptionResponse'
+      description: Result Object.
+    PageResponseSubscriptionResponseWrapper:
+      type: object
+      properties:
+        success:
+          type: boolean
+          description: Whether or not this operation completed successfully.
+          example: true
+        elapsed:
+          type: integer
+          description: Time in milliseconds elapsed at server processing this request.
+          format: int64
+          example: 12
+        result:
+          $ref: '#/components/schemas/PageResponseSubscriptionResponse'
     PostBranchErrorResponse:
       type: object
       properties:
@@ -1968,6 +2262,176 @@ components:
           type: string
           description: Error message.
           example: A branch already exists with the same name 'Store'
+    SubscriptionPaymentResponse:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Subscription payment ID at PointCheckout database
+          example: "1653241101733169556"
+        displayId:
+          type: string
+          description: Subscription payment human readable short key, serves as an
+            easier reference to the subscription
+          example: QS3IM5
+        checkout:
+          $ref: '#/components/schemas/CheckoutLinkResponse'
+        timestamp:
+          type: string
+          description: The date time of creating the payment in ISO8601 format (yyyy-MM-ddTHH:mm:ss.SSSZZ).
+          format: date-time
+        cancelled:
+          type: boolean
+          description: Whether this payment is cancelled or not
+      description: Result Object.
+    SubscriptionPaymentResponseWrapper:
+      type: object
+      properties:
+        success:
+          type: boolean
+          description: Whether or not this operation completed successfully.
+          example: true
+        elapsed:
+          type: integer
+          description: Time in milliseconds elapsed at server processing this request.
+          format: int64
+          example: 12
+        result:
+          $ref: '#/components/schemas/SubscriptionPaymentResponse'
+    SubscriptionRequest:
+      required:
+      - amount
+      - currency
+      - description
+      - sendEvery
+      - sendOnHour
+      - startDate
+      type: object
+      properties:
+        description:
+          type: string
+          description: Subscription decription
+          example: dozen of cookies
+        currency:
+          type: string
+          description: ISO 4217 Currency Code (3 letter currency code) associated
+            with this subscription.
+          example: USD
+        amount:
+          type: number
+          description: The grand total of the whole order. This is the amount the
+            customer must pay.
+          example: 1499.99
+        customer:
+          $ref: '#/components/schemas/CheckoutCustomer'
+        customerId:
+          type: integer
+          description: 'Customer id at PointCheckout database '
+          format: int64
+        startDate:
+          type: string
+          description: The start date of the subscription in format (yyyy-MM-dd).
+          format: date
+        endDate:
+          type: string
+          description: The end date of the subscription in format (yyyy-MM-dd).
+          format: date
+        sendOnHour:
+          type: integer
+          description: The hour of day the checkout will be created on
+          format: int32
+          example: 3
+        sendEvery:
+          type: string
+          description: When to create the checkout
+          example: TWO_MONTHS
+          enum:
+          - DAY
+          - WEEK
+          - TWO_WEEKS
+          - MONTH
+          - TWO_MONTHS
+          - THREE_MONTHS
+          - SIX_MONTHS
+          - YEAR
+    SubscriptionResponse:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Subscription ID at PointCheckout database
+          example: "1653241101733169556"
+        displayId:
+          type: string
+          description: Subscription human readable short key, serves as an easier
+            reference to the subscription
+          example: QS3IM5
+        description:
+          type: string
+          description: Subscription decription
+          example: dozen of cookies
+        currency:
+          type: string
+          description: ISO 4217 Currency Code (3 letter currency code) associated
+            with this subscription.
+          example: USD
+        amount:
+          type: number
+          description: The grand total of the whole order. This is the amount the
+            customer must pay.
+          example: 1499.99
+        status:
+          type: string
+          description: Current subscription status.
+          example: ACTIVE
+          enum:
+          - ACTIVE
+          - INACTIVE
+          - ARCHIVED
+          - EXPIRED
+        customer:
+          $ref: '#/components/schemas/CheckoutCustomer'
+        startDate:
+          type: string
+          description: The start date of the subscription in format (yyyy-MM-dd).
+          format: date
+        endDate:
+          type: string
+          description: The end date of the subscription in format (yyyy-MM-dd).
+          format: date
+        sendOnHour:
+          type: integer
+          description: The hour of day the checkout will be created on
+          format: int32
+          example: 3
+        period:
+          type: integer
+          description: The period between every checkout to be created
+          format: int32
+          example: 1
+        periodUnit:
+          type: string
+          description: The period unit
+          example: DAYS
+          enum:
+          - DAYS
+          - WEEKS
+          - MONTHS
+      description: Result Object.
+    SubscriptionResponseWrapper:
+      type: object
+      properties:
+        success:
+          type: boolean
+          description: Whether or not this operation completed successfully.
+          example: true
+        elapsed:
+          type: integer
+          description: Time in milliseconds elapsed at server processing this request.
+          format: int64
+          example: 12
+        result:
+          $ref: '#/components/schemas/SubscriptionResponse'
     WebhookRequest:
       required:
       - address
