@@ -112,18 +112,18 @@ paths:
               $ref: '#/components/schemas/CheckoutQRRequest'
         required: true
       responses:
-        "400":
-          description: Bad Request
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/GetCheckoutErrorResponse'
         "200":
           description: Checkout details
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/CheckoutQRResponseWrapper'
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetCheckoutErrorResponse'
       x-sort:
         sort: "130"
   /checkout/mobile:
@@ -139,18 +139,18 @@ paths:
               $ref: '#/components/schemas/CheckoutMobilePaymentRequest'
         required: true
       responses:
-        "400":
-          description: Bad Request
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/GetCheckoutErrorResponse'
         "200":
           description: Checkout details
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/CheckoutMobilePaymentResponseWrapper'
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetCheckoutErrorResponse'
       x-sort:
         sort: "140"
   /checkout:
@@ -220,7 +220,7 @@ paths:
           type: string
       - name: afterId
         in: query
-        description: filer checouts after the provided id
+        description: filter checkouts after the provided id
         required: false
         schema:
           type: integer
@@ -274,18 +274,18 @@ paths:
         schema:
           type: string
       responses:
-        "200":
-          description: Get Checkout by ID
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/CheckoutResponseWrapper'
         "400":
           description: Bad Request
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/GetCheckoutErrorResponse'
+        "200":
+          description: Get Checkout by ID
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CheckoutResponseWrapper'
       x-sort:
         sort: "210"
   /checkout/{checkoutId}/cancel:
@@ -355,18 +355,18 @@ paths:
           type: string
         example: Out of stock
       responses:
-        "200":
-          description: Get Checkout by ID
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/CheckoutResponseWrapper'
         "400":
           description: Bad Request
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/GetCheckoutErrorResponse'
+        "200":
+          description: Get Checkout by ID
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CheckoutResponseWrapper'
       x-sort:
         sort: "310"
   /subscription:
@@ -409,13 +409,13 @@ paths:
           type: string
       - name: afterId
         in: query
-        description: filer checouts after the provided id
+        description: filter subscriptions after the provided id
         required: false
         schema:
           type: integer
       - name: afterTimestamp
         in: query
-        description: query checkouts created after specific date/time, date format
+        description: query subscriptions created after specific date/time, date format
           is `yyyy-mm-dd HH:MM:SS`
         required: false
         schema:
@@ -435,18 +435,18 @@ paths:
           minimum: 1
           type: number
       responses:
-        "400":
-          description: Bad Request
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/GetListErrorResponse'
         "200":
           description: List of subscriptions.
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/PageResponseSubscriptionResponseWrapper'
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetListErrorResponse'
       x-sort:
         sort: "1130"
     post:
@@ -489,18 +489,18 @@ paths:
         schema:
           type: string
       responses:
-        "200":
-          description: Get subscription by ID
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/SubscriptionResponseWrapper'
         "400":
           description: Bad Request
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/GetSubscriptionErrorResponse'
+        "200":
+          description: Get subscription by ID
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SubscriptionResponseWrapper'
       x-sort:
         sort: "1120"
   /subscription/{subscriptionId}/pause:
@@ -517,18 +517,18 @@ paths:
         schema:
           type: string
       responses:
-        "200":
-          description: OK
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/SubscriptionResponseWrapper'
         "400":
           description: Bad Request
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/GetSubscriptionErrorResponse'
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SubscriptionResponseWrapper'
       x-sort:
         sort: "1140"
   /subscription/{subscriptionId}/resume:
@@ -545,18 +545,18 @@ paths:
         schema:
           type: string
       responses:
-        "200":
-          description: OK
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/SubscriptionResponseWrapper'
         "400":
           description: Bad Request
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/GetSubscriptionErrorResponse'
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SubscriptionResponseWrapper'
       x-sort:
         sort: "1150"
   /subscription/{subscriptionId}/payment:
@@ -592,13 +592,13 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/SubscriptionPaymentResponseWrapper'
+                $ref: '#/components/schemas/PageResponseSubscriptionPaymentResponseWrapper'
         "400":
           description: Bad Request
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/GetSubscriptionErrorResponse'
+                $ref: '#/components/schemas/GetListErrorResponse'
       x-sort:
         sort: "1170"
   /branches/{branchId}:
@@ -680,18 +680,18 @@ paths:
               $ref: '#/components/schemas/BranchRequest'
         required: true
       responses:
-        "200":
-          description: Branch details.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/BranchResponseWrapper'
         "400":
           description: Bad Request
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/PostBranchErrorResponse'
+        "200":
+          description: Branch details.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BranchResponseWrapper'
       x-sort:
         sort: "10020"
   /branches/{branchId}/disable:
@@ -764,18 +764,18 @@ paths:
         schema:
           type: string
       responses:
-        "400":
-          description: Bad Request
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/GetWebhookErrorResponse'
         "200":
           description: Webhook details.
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/WebhookResponseWrapper'
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetWebhookErrorResponse'
       x-sort:
         sort: "10060"
   /webhooks:
@@ -852,18 +852,18 @@ paths:
         schema:
           type: string
       responses:
-        "400":
-          description: Bad Request
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/GetWebhookErrorResponse'
         "200":
           description: Webhook details.
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/WebhookResponseWrapper'
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetWebhookErrorResponse'
       x-sort:
         sort: "10080"
   /webhooks/{webhookId}/disable:
@@ -880,18 +880,18 @@ paths:
         schema:
           type: string
       responses:
-        "400":
-          description: Bad Request
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/GetWebhookErrorResponse'
         "200":
           description: Webhook details.
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/WebhookResponseWrapper'
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetWebhookErrorResponse'
       x-sort:
         sort: "10090"
   /webhooks/{webhookId}/enable:
@@ -908,18 +908,18 @@ paths:
         schema:
           type: string
       responses:
-        "400":
-          description: Bad Request
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/GetWebhookErrorResponse'
         "200":
           description: Webhook details.
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/WebhookResponseWrapper'
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetWebhookErrorResponse'
       x-sort:
         sort: "10100"
   /webhooks/{webhookId}/delete:
@@ -936,18 +936,18 @@ paths:
         schema:
           type: string
       responses:
-        "400":
-          description: Bad Request
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/GetWebhookErrorResponse'
         "200":
           description: Webhook details.
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/WebhookResponseWrapper'
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetWebhookErrorResponse'
       x-sort:
         sort: "10110"
 components:
@@ -1032,8 +1032,8 @@ components:
           example: "12345"
         country:
           type: string
-          description: Address country (3 letter ISO country code)
-          example: '[COUNTRY 3-LETTER ISO CODE]'
+          description: Address country (ISO 3166-1 alpha-3 or alpha-2 country code)
+          example: UAE
       description: Delivery address
     CheckoutCustomer:
       required:
@@ -1049,11 +1049,11 @@ components:
         firstName:
           type: string
           description: Customer first name.
-          example: John
+          example: '[First name]'
         lastName:
           type: string
           description: Customer last name.
-          example: Doe
+          example: '[Last name]'
         email:
           type: string
           description: Customer email address.
@@ -1063,6 +1063,9 @@ components:
           description: Customer phone number with international calling code (Ex.
             971567xxxxxx)..
           example: '[CUSTOMER PHONE]'
+      description: Customer associated with this subscription
+    CheckoutCustomerResponse:
+      type: object
       description: Customer associated with this checkout
     CheckoutLinkResponse:
       type: object
@@ -1134,7 +1137,12 @@ components:
           - Cash
           - ZainCash
         customer:
-          $ref: '#/components/schemas/CheckoutCustomer'
+          $ref: '#/components/schemas/CheckoutCustomerResponse'
+        subscriptionId:
+          type: string
+          description: The Id of the subscription at PointCheckout database that the
+            checkout was issued for
+          example: "1619465605181100275"
         billingAddress:
           $ref: '#/components/schemas/CheckoutAddress'
         deliveryAddress:
@@ -1543,7 +1551,7 @@ components:
           description: Base64 encoded QR code PNG image.
           example: iVBORw0KGgoAAAANSUhEUgAAASwAAAEsCAYAAAB5fY51AAAQq0lEQVR42u3deaxcVR0H8KKIa9xiQowmRv9QY2KiuEQUBTUxURPjAhiRRHGBqASRBBRiCSg2SkuhbFLZLFCpoLJZkIqisghIkVLQQgvI1rRAW97S1743b97xzTNosPPat8zc8zt3Pt9kkjaZN3fuved+7p37u+ecOUlEpJDMsQlEBFgiIsASEWCJiABLRARYIgIsERFgiYgAS0SAJSICLBERYIkIsEREgCUiAiwRAZaISOlgzZkzJ8yr099vNp831b+tYpt2+rvUebt0+lio4m9LPC6BBSxgAQtYwAIWsIAFLGABC1jAAhawgAUsYFW0oSM1jlwNsIqDP/o+6vR2id7+Or1uJW4XYAELWMACFrCABSxgAQtYwAIWsIAFLGABC1gpharW1Xm5uRpW9AOz08ut4rtEPylHPWECC1jAAhawgAUsYAELWMACFrCABSxgAQtYwCp0w1S5bpHAKhGYEiu0JXapAhawgAUsYAELWMACFrCABSxgAQtYwAIWsIAFrKzvi3SA5EKsxCpcXQ50YAELWMACFrCABSxgAQtYwAIWsIAFLGABC1g1BytXBa+Kxhu9mlNF9SoXMLmqp9HXzXhYwAIWsIAFLGABC1jAAhawgAUsYAELWMACVo3Aij7zs/d5Xy++z8zPwPI+7wMWsIDlfd4HLGB5n/cBC1jA8j7vA1YBYEVPru4XkcaRyvV5nd6mkdpGie2l+GMZWMACFrCABSxgAQtYwAIWsIAFLGABC1jAAlbMhjWb5VbRUKv4ftEPwkjjmEWfLCXS9lMlBBawgAUsYAELWMACFrCABSxgAQtYwAIWsArFpIoKVPQuRtGrhLnG4Yo+flWuE0jpxzmwgAUsYAELWMACFrCABSxgAQtYwAIWsIAFrACTGdRlYoVIFbdcDT8SRLnWI/pM18ACFrCABSxgAQtYwAIWsIAFLGABC1jAAhawKqrWRT/4q6gS9tp2zoVEpO9XIiZRuyIBC1jAAhawgAUsYAELWMACFrCABSxgAQtYPQtWFYk04H+ksa/qciCVODFFr7UrYAELWMACFrCABSxgAQtYwAIWsIAFLGABC1hdAKsu1Y1I6xtpAoFISESv/pU4zlpUnIAFLGABC1jAAhawgAUsYAELWMACFrCABSxgBe22EKnCGL1yWOJkGpH2UfTqaelQAgtYwAIWsIAFLGABC1jAAhawgAUsYAELWD0LVvSqRV0qfZGqVyVW4XK1+15DFljAAhawgAUsYAELWMACFrCABSxgAQtYwAJWRXBEagglztpb4n7LBWqJE4/UZT2ABSxgAQtYwAIWsIAFLGABC1jAAhawgAUsYGVs5JWseIBZbKtslNEP/iq2Va62G2kiiUjtHljAAhawgAUsYAELWMACFrCABSxgAQtYwAJWAZWluswWnGsZkZYbqf3V5cRQ4kzSwAIWsIAFLGABC1jAAhawgAUsYAELWMACFrAK6A5TYheFOk+cEb2SViJYkdoksIAVqtxcSoAFLGABC1jAAhawgAUsYAELWMACFrBKwinCxs+9XGDF6iYU6XiLeswAC1jAAhawgAUsYAELWMASYAELWMACFrB6AqzZbOhIy4hUuekJxJqjaWxwY2puWpeaT69NzWceSWMj2yptg7nabomTS0SoWAILWBVmLI1uXJ2233RiGly6b+o/7VWpb/7zU9/Jc/73OuXFaeC8t6eh67+VGg/dMI5aA1jAAhawqk1j3Yo0ePEHx1Ha7blA7eI1sPjNafjv509cjQELWMACVnd/9fU/kbZe/qlpIdUWrgv3SqMb7gYWsIAFrC5dVT16a+o/c89ZY/Xf18KXpJHVS4EFrHxg5aomVrGTernS13joD+PAvKxzWD37mv+8NLxycVfbYK5EOhFGbc/AAlbH07qx3n/aK6aAz/PTwPlvT0NXHZSGrvtq2nrlFyb+3zd/913+3ciaK4AFLGABa3YZGxlKA+e+bRc/7V6atv3hmNTc/FD7+17PPD5RSdwZev2LXjnp3wMLWMAC1pSy7c9zd4rV4EXvn3juaqo37AeXfWzSz9p62SeBBSxgAWtmaQ5sSH2nTn7fauuvPpPGGtN8MHS0kYauPmjSz2w8fCOwgFXdhq7LBBE5G1aUbL/5h5NfWS1538yfYm8Mj1+Z7T3JVdYnssER6fiIdAzWZtYcYNUYrLGxNHDuW9uDdcqLUvPp+2d5I//e1LfgBTt+9oLdU7PvcWABC1jAmsbPwU3rxgF5Xluwtq04oiPL2HpV+5+Gw3dfCCxgAQtYU8/IvUsn/Tk4uuGejiyjsfbatp8/dO3XgAUsYAFrGvev/nJ8+8cPznzd+OVXszO/Orf1jf8E3GPH+2MXfwBYwErZ4KjLRBJ1WpddZej6b7a/2b50n47eJ2vX1Wdg8VtmvE+qOKhzdevJ1aaABaz4YP32K+3BunS/ji6n/+zX7ngVd/YbgQUsYAFrGmBdc0j3wWo2Uv+iV+94hfWztwILWMACViywmpsfbr+MSz4ELGABC1ixwBpeeXb7KuF1hwELWLEQi7SDq95JVS4jLFhjzTRwwTvaLmNk9cW1PdnmAjBqmwQWsDoD1vKvdxWs1jDJbZ/zWvDCNDb4JLCABSxgTQOs677RNbB2Nr7W1l9/tta3M4AFLGAVBNbohlWp/6zXTz5aw2N/BRawgAWs1nOaY2nDU1vSHfesTTfcuipdc+Odae2/1lcD1uhwGr7jjInB/iYdruaKA8O1U2AVAFakrgxVoBhtVutOI3XXfQ+mk376q/TxQ+elvfb/Xnrn577739eii5Z3BKyx4b6JTsujT60Z//dAGmsMp7FtW9Lo47en7Tf9IA2c86adDgTYf8aeEwP8lQBRrhNXrhnUgQWsShrNbXffnw4+5vTnAPX/r46BNbD+OWO09y18+dTnLFzwwv9MslrIlROwgAWsDjaaga3b0txFy3YKVVfBms5rwR4TI0OU9FMPWMACVoe29RMbNqX9v33KlLDKDVarW87I2uXF3ZsCFrCA1YFtvf7JzekTh82bMlY5wRr8xUdSc/ODRd5MB1ahVcISuwpE77Yw078fHNqW9j9y11dWH/vaSeno+RenMy65Ni1etiLdsvKfFYK1Wxpc8t40suaq1l+knIlU/YtURQcWsCoB64QzL9spVIccd1a65a5/psbo6JQ+b9pgDT2Z+s9+Q+o75cX/G1p5wR6p//TXpMGl+04MCDi6fuXEGFgRAixgASsTWHeuXrfD4wrPvt5z4LHpkqv/kprN6UEx0+ewxka2p7HBjRNXXK0RRVt9BiMGWMACViawvnzsWW2xeu+Bx6U/3rZ6Rt+jm11zgAUsYPUoWPc+8MikPwMvuvJPM/4ewAJWMWBVUY2I3g2iip3eiUYz//yr2mLVemC0OYvJIkoBq9ttoy7HArCAlR2sVrebTx8+vy1YN87wpyCwgAUsYHUFrGf6B9O7DtjxZvuHv3RCGh5pAAtYwAJWHLBWT3L/6vCTzp91GwAWsIAFrI6Cdetda9qC9ZPzrgQWsHobrFwNodPfOVpFcDaf+afb720L1sKfXwOsLs/OHbkLWfRJN4DVo2DdseqBtmC1nnoHFrCABaxQYD302IZJH2mYbUYeWD4x8N7/v4bvWQIsYAELWNP/zO3DI+n9B81t2x1n49PPpF4IsIAFrELAauXQ489pe5W1+JcrgAWs3gArFxJ17tbTrXW7dPnNbcH64MHH98RVVg5golcdO92egQWsjq3blr7BtPcXvt8WrdbV12wfIAUWsIAFrI6u28nnXTlpB+ijfrwkbd8+AixgAQtYMdZtc99A+sghP5gUrc8fdWq6b+2ju/ycVmfpq//4t/Tpw09On/zGj3d4taqPo6NNYAELWMCa3br9/pa70177Tz7i6LsP+F46ct6FacUtq9KmLf0T8LQ6T480GumRJ55My5bfnA74zsKdjlr689/c6AoLWGWAZYKI6hr5THPakt9OaeKJFmz7femE9NHxq7J9vjh3Sn9z0NGL0kjA+2F1rVJH6oYDLGB1BazWFdNJ5/x6WrPmTOX18cPmpfUbNxVxDwtYwAJWIWA9i9Z5l9+Q3n3gsR3BqnU/69H1TxVz0x1YwAJWQWA9m5X3PZg+e8SCGUPV+tk49/RlqX9wqKgqIbCABawCwWql0RhNV/z+9nTAkQunDFXryuzb8y5Iq9Y8nEoIsICVrVoSaTD+nNh1Oq2fif9Y91g6d/yn4hE/umDiZ94+Bx8/0Q/xw18+ceKxh+NO/UW6/He3pg1PbUl1SxXVsBKr2cbDAlZIsCZDLNozVcACFrCA1fMBFrCABSxgAQtYwAIWsIBV2U4vcbm5cJJY7aUuXc2iz0wNLGAJsIAFLGABC1jAAhawgAUsYAELWMDqObCi4xSpmtiNZcjM912k/RvphBn1JAqsGoCV41GMKrZLpPcBC1jAAhawgAUsYAELWMACFrCABazeftI9elUvOia5gM5VgcoFfq4TcIltsucG8AMWsIAFLGABC1jAAhawgAUsYAELWMACFrCqACsSHJEaR66KURV/G+mAq6JqpoKcgAUsYAELWMACFrCABSxgAQtYwAIWsIAFLGB1A6xIGytXxbLEWXtzbZde6yYUHfLoVX5gAQtYwAIWsIAFLGABC1jAAhawgAUsYAGr58CqoppY51cuPEsc9ylSN6ESu/BEP/EDC1jAAhawgAUsYAELWMACFrCABSxgAQtYwKpo5eo8PlT02X0joR19puYSK8MlTc4LLGABC1jAAhawgAUsYAELWMACFrCABSxgAatHZi6OBEKkqk+J27Qu+y3X5wELWMCy34AFLA0fWMACFrCABSxgAQtYwLLfgJWxIljSxspdmavzySJSlTXSSS/SiRpYwAIWsIAFLGABC1jAAhawgAUsYAELWMACVkawou/gSONN5arwREIn+neOfixEAr82Mz8DC1jAAhawgAUsYAELWMACFrCABSxgAQtYucAqsfIQqdISadwns3inbJ8Xqb1EPc6BBSxgAQtYwAIWsIAFLGABC1jAAhawgAWsngWrxI0VvZpYl3HCSpycIzqe0bc9sIAFLGABC1jAAhawgAUsYAELWMACFrCABawaJdJkBiVWlkqEI9IYWVVAFB1AYAELWMACFrCABSxgAQtYwAIWsIAFLGABC1gFVC1yVTKiTxARCcVI2y/XSSpSN6sqTuhdPfaABSxgAQtYwAIWsIAFLGABC1jAAhawgAWsXgUrevUv1w7JdYCUWCWMPiZYpJN39GonsIAFLGABC1jAAhawgAUsYAELWMACFrCABayK4Ihefcl1UFcBavTqbvQTSIlVTDM/AwtYwAIWsIAFLGABC1jAAhawgAUsYAELWMCq1ThNkbZfru8SHcVIJ8dI6xHhCQFgAQtYwAIWsIAFLGABC1jAAhawgAUsYAELWD0MVhUNPxdsERpvJ/Zb9PYXaRv03HhYwAIWsIAFLGABC1jAAhawgAUsYAELWMACVnSwqmio0XdwpBNDrgM4elefEiuH0bcVsIAFLGABC1jAAhawgAUsYAELWMACFrCABawuVGkijeMTfTbeSFWzSCezEscdK7FSGjXAAhawgAUsYAELWMACFrCABSxgAQtYwAJWT4AlIgIsERFgiQiwRESAJSICLBEBlogIsEQEWCIiwBIRAZaIAEtEBFgiIsASEWCJiABLRARYIgIsEZEg+TdqxKkY1UvgRgAAAABJRU5ErkJggg==
         customer:
-          $ref: '#/components/schemas/CheckoutCustomer'
+          $ref: '#/components/schemas/CheckoutCustomerResponse'
         billingAddress:
           $ref: '#/components/schemas/CheckoutAddress'
         deliveryAddress:
@@ -1738,7 +1746,7 @@ components:
           - Cash
           - ZainCash
         customer:
-          $ref: '#/components/schemas/CheckoutCustomer'
+          $ref: '#/components/schemas/CheckoutCustomerResponse'
         billingAddress:
           $ref: '#/components/schemas/CheckoutAddress'
         deliveryAddress:
@@ -1948,7 +1956,7 @@ components:
           - Cash
           - ZainCash
         customer:
-          $ref: '#/components/schemas/CheckoutCustomer'
+          $ref: '#/components/schemas/CheckoutCustomerResponse'
         billingAddress:
           $ref: '#/components/schemas/CheckoutAddress'
         deliveryAddress:
@@ -2049,7 +2057,7 @@ components:
           - Cash
           - ZainCash
         customer:
-          $ref: '#/components/schemas/CheckoutCustomer'
+          $ref: '#/components/schemas/CheckoutCustomerResponse'
         billingAddress:
           $ref: '#/components/schemas/CheckoutAddress'
         deliveryAddress:
@@ -2203,6 +2211,49 @@ components:
           example: 12
         result:
           $ref: '#/components/schemas/PageResponseCheckoutResponse'
+    PageResponseSubscriptionPaymentResponse:
+      type: object
+      properties:
+        page:
+          type: integer
+          description: Item page number, starting with 0
+          format: int32
+          example: 0
+        size:
+          type: integer
+          description: Number of items per page
+          format: int32
+          example: 10
+        totalPages:
+          type: integer
+          description: Total pages
+          format: int32
+          example: 1
+        totalElements:
+          type: integer
+          description: Total elements in the current page
+          format: int64
+          example: 7
+        content:
+          type: array
+          description: Page content array
+          items:
+            $ref: '#/components/schemas/SubscriptionPaymentResponse'
+      description: Result Object.
+    PageResponseSubscriptionPaymentResponseWrapper:
+      type: object
+      properties:
+        success:
+          type: boolean
+          description: Whether or not this operation completed successfully.
+          example: true
+        elapsed:
+          type: integer
+          description: Time in milliseconds elapsed at server processing this request.
+          format: int64
+          example: 12
+        result:
+          $ref: '#/components/schemas/PageResponseSubscriptionPaymentResponse'
     PageResponseSubscriptionResponse:
       type: object
       properties:
@@ -2283,21 +2334,7 @@ components:
         cancelled:
           type: boolean
           description: Whether this payment is cancelled or not
-      description: Result Object.
-    SubscriptionPaymentResponseWrapper:
-      type: object
-      properties:
-        success:
-          type: boolean
-          description: Whether or not this operation completed successfully.
-          example: true
-        elapsed:
-          type: integer
-          description: Time in milliseconds elapsed at server processing this request.
-          format: int64
-          example: 12
-        result:
-          $ref: '#/components/schemas/SubscriptionPaymentResponse'
+      description: Page content array
     SubscriptionRequest:
       required:
       - amount
@@ -2332,15 +2369,19 @@ components:
           type: string
           description: The start date of the subscription in format (yyyy-MM-dd).
           format: date
+          example: 2021-08-10
         endDate:
           type: string
           description: The end date of the subscription in format (yyyy-MM-dd).
           format: date
+          example: 2024-05-01
         sendOnHour:
+          maximum: 23
+          minimum: 0
           type: integer
-          description: The hour of day the checkout will be created on
+          description: The hour of day in UTC the checkout will be created on
           format: int32
-          example: 3
+          example: 10
         sendEvery:
           type: string
           description: When to create the checkout
@@ -2354,6 +2395,10 @@ components:
           - THREE_MONTHS
           - SIX_MONTHS
           - YEAR
+        returnUrl:
+          type: string
+          description: URL to redirect user to after a successful or failed payment.(Optional)
+          example: https://example.com/subscription/payment-check/
     SubscriptionResponse:
       type: object
       properties:
@@ -2390,7 +2435,7 @@ components:
           - ARCHIVED
           - EXPIRED
         customer:
-          $ref: '#/components/schemas/CheckoutCustomer'
+          $ref: '#/components/schemas/CheckoutCustomerResponse'
         startDate:
           type: string
           description: The start date of the subscription in format (yyyy-MM-dd).

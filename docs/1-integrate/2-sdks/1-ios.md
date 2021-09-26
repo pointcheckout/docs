@@ -41,7 +41,7 @@ replace ${version} with the latest version of the SDK, you can check all availab
 ## Using the SDK
 
 ### Device Checkout request
-Send new checkout request to [PointCheckout's API](https://www.pointcheckout.com/en/developers/api/api-integration) using endpoint `/mer/v2.0/checkouts` (check the [documentation](https://www.pointcheckout.com/en/developers/api/api-integration) for more details).
+Send new checkout request to [PointCheckout's API](/api/#operation/create-web-checkout), check the [documentation](/docs/integrate/merchant-api/mobile-payment) for more details.
 
 :::danger SERVER API CALL
 API calls made to the PointCheckout API endpoints should be made from your server. You should **NEVER** include your API keys in your mobile application. A mallicious user can gain access to your account if those keys are exposed.
@@ -99,7 +99,7 @@ class ViewController: UIViewController, PointCheckoutPaymentDelegate{
 ```
 
 ### Retrieve Checkout Status
-Retrieve checkout request to [PointCheckout's API](https://www.pointcheckout.com/en/developers/api/api-integration) using endpoint `/mer/v2.0/checkouts` (check the [documentation](https://www.pointcheckout.com/en/developers/api/api-integration) for more details).
+Retrieve checkout details from [PointCheckout's API](/api/#operation/get-checkout), check the [documentation](/docs/integrate/merchant-api/mobile-payment) for more details.
 
 :::danger SERVER API CALL
 API calls made to the PointCheckout API endpoints should be made from your server. You should **NEVER** include your API keys in your mobile application. A mallicious user can gain access to your account if those keys are exposed.
