@@ -8,7 +8,9 @@ hide_table_of_contents: false
 On this page we describe the steps required to initiate and verify a payment via the PointCheckout payment gateway for web based applications
 
 ## How it works
+
 Three steps are required in order to accept payments via the PointCheckout payment gateway for web-based applications:
+
 1. Create a new Web Checkout specifying the `returnURL` where user is redirected after payment
 2. Redirect user to the `redirectURL` received in the response
 3. On return, Query the API for the payment status
@@ -21,17 +23,17 @@ web integration
 ## Step 1: Create a new checkout
 
 :::danger SERVER API CALL
-API calls made to the PointCheckout API endpoints should be made from your server. You should NEVER include your API keys in your mobile application. A mallicious user can gain access to your account if those keys are exposed.
+API calls made to the PointCheckout API endpoints should be made from your server. You should NEVER include your API keys in your mobile application. A malicious user can gain access to your account if those keys are exposed.
 :::
 
-When your shopper is ready to pay, create a new web checkout by making a call from your server to <a href="/api/#operation/create_checkout_web" target="_blank">`POST /checkout/web`</a>. In your request, you must include the following required parameters:
+When your shopper is ready to pay, create a new web checkout by making a call from your server to <a href="/api/#operation/create-web-checkout" target="_blank">`POST /checkout/web`</a>. In your request, you must include the following required parameters:
 
 **Parameter**|**Description**
 --|--
 `requestId` | A unique Identifier for this request, can be used later to query the status on the checkout
 `orderId`   | This can be the order ID. Must match any reference shown to the user during checkout / order history
 `currency`  | ISO 4217 Currency Code (3 letter currency code)
-`amount`    | A postive decimal number representing the amount customer should pay
+`amount`    | A positive decimal number representing the amount customer should pay
 `returnUrl` | Customer will be redirected to this URL after a successful or failed payment
 
 Here's an example of how you would create a new checkout for **100.00 AED**:
