@@ -42,7 +42,7 @@ Include the PointCheckout Android SDK dependency to your project in `your_projec
 
 ```jsx
 dependencies {
-  implementation 'com.github.pointcheckout:android-sdk:v1.0.0'
+  implementation 'com.github.pointcheckout:android-sdk:v1.3'
 }
 ```
 
@@ -119,19 +119,17 @@ To commence the payment process, you must call the static `pay` method of the `P
 * **`listener`** that will be called on payment update or cancellation
 
 ```jsx
-pcoClient.pay(context, checkoutKey, new PointCheckoutEventListener() {
-    @Override
-    public void onPaymentCancel() {
-        System.out.println("!!PAYMENT CANCELLED");
-    }
+pcClient.pay(context, checkoutKey, new PointCheckoutEventListener() {
+                @Override
+                public void onUpdate() {
+                    System.out.println("UPDATE CALLBACK");
+                }
 
-    @Override
-    public void onPaymentUpdate() {
-        // This does not mean a payment has been made. You must check the status
-        // of the payment using the server API
-        System.out.println("!!PAYMENT UPDATED");
-    }
-});
+                @Override
+                public void onDismiss() {
+                    System.out.println("USER CLOSED THE MODAL");
+                }
+        });
 ```
 
 Calling the `pay` function will open a modal where the user will be able to complete the payment in a secure manner.
@@ -140,8 +138,8 @@ Calling the `pay` function will open a modal where the user will be able to comp
 
 The `PointCheckoutEventListener` event listener has two callbacks:
 
-1. `onPaymentCancel` which is called if the user closes the modal by clicking on close button; and
-2. `onPaymentUpdate` which is called the checkout status is updated (paid, cancelled, failed .etc). You **MUST** call PointCheckout API to fetch the new status of the checkout to verify that its been successfully paid.
+1. `onUpdate` which is called the checkout status is updated (paid, cancelled, failed .etc). You **MUST** call PointCheckout API to fetch the new status of the checkout to verify that its been successfully paid.
+2. `onDismiss` which is called if the user closes the modal by clicking on close button.
 
 ### Retrieve Checkout Status
 
@@ -157,6 +155,6 @@ API calls made to the PointCheckout API endpoints should be made from your serve
 
 [**Instructions**](/docs/integrate/merchant-api/mobile-payment) / [**API Details**](/api/#operation/create-mobile-checkout)
 
-### Get Checkout Details**
+### Get Checkout Details
 
 [**API Details**](/api/#operation/get-checkout)
