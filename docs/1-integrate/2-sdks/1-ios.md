@@ -31,7 +31,7 @@ pod 'PointCheckoutSdk', :git => 'git@github.com:pointcheckout/merchant-ios-sdk.g
 
 :::note
 replace ${version} with the latest version of the SDK, you can check all available versions [here](https://github.com/pointcheckout/merchant-ios-sdk/releases). Example: <br />
-`pod 'PointCheckoutSdk', :git => 'git@github.com:pointcheckout/merchant-ios-sdk.git', :tag=> v1.1`
+`pod 'PointCheckoutSdk', :git => 'git@github.com:pointcheckout/merchant-ios-sdk.git', :tag=> v1.3`
 :::
 
 2. Execute `pod install` inside the project directory.
@@ -76,8 +76,9 @@ Calling the `pay` function will open a modal where the user will be able to comp
 ### Listen to Payment Events
 
 The `PointCheckoutPaymentDelegate` has two callbacks:
-1. `onDismiss` which is called if the user closes the modal by clicking on dismiss or close button; and
-2. `onUpdate` which is called the checkout status is updated (paid, cancelled, failed .etc). You **MUST** call PointCheckout API to fetch the new status of the checkout to verify that its been successfully paid.
+
+1. `onUpdate` which is called the checkout status is updated (paid, cancelled, failed .etc). You **MUST** call PointCheckout API to fetch the new status of the checkout to verify that its been successfully paid.
+2. `onDismiss` which is called if the user closes the modal by clicking on dismiss or close button.
 
 ```swift
 import UIKit
