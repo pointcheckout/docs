@@ -1,18 +1,18 @@
 ---
-title: Registering for a PointCheckout merchant account
+title: Registering for a Paymennt merchant account
 sidebar_label: 'Registration Process'
 ---
 
-This guide will walk you through the process of registering for a PointCheckout merchant account.
+This guide will walk you through the process of registering for a Paymennt merchant account.
 
 Once you’ve submitted your application, you’ll join a short queue. Our team will review your application and may reach out to you to confirm a few details or, most probably, will leave you a message on your application, guiding you through the still required information/ documentation. The onboarding process timeframe depends on the complexity of your company and the documents uploaded.
 
 :::info APPLICATION DOWNLOAD
-Before starting, you must have downloaded the PayLink by PointCheckout mobile application. [Learn more](/guides/registration/install)
+Before starting, you must have downloaded the Paymennt mobile application. [Learn more](/guides/registration/install)
 :::
 
 :::caution AUTHORIZED SIGNATORY
-The user setting up the account must be an authorized signatory of the entity forwhich the PointCheckout merchant account is being created.
+The user setting up the account must be an authorized signatory of the entity for which the Paymennt merchant account is being created.
 :::
 
 ## Account requirements
@@ -22,19 +22,19 @@ Before beginning the registration process, familiarize yourself with our [Accoun
 Please make sure you have available the following documents and information as they will be required during the registration process:
 
 1. Company Trade License issued by a registration authority in a supported country
-2. Governmet Issued ID of authorized signatory (Emirates ID or National ID)
+2. Government Issued ID of authorized signatory (Emirates ID or National ID)
 3. Government issued IDs (EID, National ID, Passport, etc) of shareholders and owners more than 25% of the company
 
 ## Account Registration Process
 
 ### Account Country Selection
-To start, launch the PayLink by Pointcheckout mobile application:
-- Launch the PayLink by PointCheckout app
+To start, launch the Paymennt mobile application:
+- Launch the Paymennt app
 - Select the country of registration
 
 ### Applicant KYC (Know Your Customer)
 The following steps allow us to identify you as an applicant and to verify your identity. This is required as part of our regulators and card scheme obligations.
-1. **Enter your phone number**. This number will be used to log you in in the future to complete your application and to access your PointCheckout merchant account using the application.
+1. **Enter your phone number**. This number will be used to log you in in the future to complete your application and to access your Paymennt merchant account using the application.
 2. **One Time Password**. Verify your phone by entering the 6 digit code received via SMS.
 3. **Security Pin**. Create a 4 digit pin code which can be used going forward to access your account.
 4. **Personal Infomartion**. Provide your name and contact email address. Please note that this email address will be the primary email address used for communications regarding your account.

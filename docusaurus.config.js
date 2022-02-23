@@ -3,19 +3,19 @@
 const path = require('path');
 
 module.exports = {
-  title: 'pointcheckout documentation',
-  tagline: 'build amazing payment experiences with the pointcheckout platform',
-  url: 'https://docs.pointcheckout.com',
+  title: 'Paymennt documentation',
+  tagline: 'build amazing experiences with the paymennt platform',
+  url: 'https://docs.paymennt.com',
   baseUrl: '/',
   onBrokenLinks: 'throw',
   onBrokenMarkdownLinks: 'warn',
   favicon: 'img/favicon.ico',
-  organizationName: 'pointcheckout',
+  organizationName: 'paymennt',
   projectName: 'docs',
   themeConfig: {
     navbar: {
       logo: {
-        alt: 'PointCheckout logo',
+        alt: 'Paymennt logo',
         src: 'img/logo.svg',
       },
       items: [
@@ -69,7 +69,7 @@ module.exports = {
       {
         specs: [
           {
-            spec: 'api/pointcheckout.yaml',
+            spec: 'api/paymennt.yaml',
             routePath: '/api'
           }
         ],

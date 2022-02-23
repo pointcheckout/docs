@@ -1,7 +1,5 @@
 ---
-title: Getting started with PointCheckout
-sidebar_label: PointCheckout
+title: Getting started with Paymennt
+sidebar_label: Paymennt
 slug: /
 ---
-
-Getting started placeholder
