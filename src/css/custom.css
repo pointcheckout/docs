@@ -10,24 +10,18 @@
 /* You can override the default Infima variables here. */
 :root {
   /* COLORS */
-  --ifm-color-primary: #25405d;
-  --ifm-color-primary-dark: #213a54;
-  --ifm-color-primary-darker: #1f364f;
-  --ifm-color-primary-darkest: #1a2d41;
-  --ifm-color-primary-light: #294666;
-  --ifm-color-primary-lighter: #2b4a6b;
-  --ifm-color-primary-lightest: #305379;
+  --ifm-color-primary: #6f2277;
+  --ifm-color-primary-dark: #6f2277;
+  --ifm-color-primary-darker: #631e6b;
+  --ifm-color-primary-darkest: #581b5f;
+  --ifm-color-primary-light: #7d3884;
+  --ifm-color-primary-lighter: #8b4e92;
+  --ifm-color-primary-lightest: #9a649f;
 
-  --ifm-color-warning: #ee8801;
-  --ifm-color-warning-dark: #d67a01;
-  --ifm-color-warning-darker: #ca7401;
-  --ifm-color-warning-darkest: #a75f01;
-  --ifm-color-warning-light: #fe9509;
-  --ifm-color-warning-lighter: #fe9a15;
-  --ifm-color-warning-lightest: #fea939;
+  --ifm-color-secondary: #ed1163;
 
   --ifm-heading-color: var(--ifm-color-primary);
-  --ifm-link-color: var(--ifm-color-warning-darker);
+  --ifm-link-color: var(--ifm-color-secondary);
 
   /* LOOK AND FEEL */
   --ifm-button-border-radius: 24px;
@@ -40,10 +34,10 @@
 
   /* NAVBAR */
   --ifm-navbar-link-color: var(--ifm-color-primary);
-  --ifm-navbar-link-hover-color: var(--ifm-color-warning);
+  --ifm-navbar-link-hover-color: var(--ifm-color-secondary);
 
   /* FOOTER */
-  --ifm-footer-link-hover-color: var(--ifm-color-warning);
+  --ifm-footer-link-hover-color: var(--ifm-color-secondary);
   --ifm-footer-padding-vertical: calc(var(--ifm-spacing-vertical) / 2);
 }
 
@@ -74,7 +68,6 @@
 
 .menu__list-item {
   font-weight: var(--ifm-font-weight-normal);
-  font-size:
 }
 
 .menu__link--active {
@@ -105,7 +98,7 @@
 }
 
 .markdown .card {
-  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+  box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
 }
 
 .markdown .card img {

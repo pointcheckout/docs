@@ -40,7 +40,7 @@ module.exports = {
       ],
     },
     footer: {
-      style: 'dark',
+      style: 'light',
       copyright: `Copyright © ${new Date().getFullYear()} PointCheckout, Ltd.`,
     },
     colorMode: {
@@ -74,7 +74,7 @@ module.exports = {
           }
         ],
         theme: {
-          primaryColor: '#25405d',
+          primaryColor: '#6f2277',
           redocOptions: {
             disableSearch: true,
             hideDownloadButton: true
