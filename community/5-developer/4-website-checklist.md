@@ -5,7 +5,7 @@ sidebar_label: Website Checklist
 
 Use this checklist to make sure your website conforms with card network standards and best practices for internet commerce.
 
-This checklist contains a list of the common elements—such as product descriptions, clear policies, and proper security features—that each business using Paymennt should address on its website. Following those recommendations reduces the risks of customer confusin and disputed. It also helps you meet Paymennt's standards and the standards set by the credit card networks.
+This checklist contains a list of the common elements—such as product descriptions, clear policies, and proper security features—that each business using paymennt.com should address on its website. Following those recommendations reduces the risks of customer confusin and disputed. It also helps you meet paymennt.com's standards and the standards set by the credit card networks.
 
 ## Website Go-Live Checklist
 ### Description of what you are selling

@@ -1,14 +1,14 @@
 ---
-title: Integrate your system with Paymennt
+title: Integrate your system with paymennt.com
 sidebar_label: QR Payment
 ---
 
-Make getting paid faster and easier than ever! Paymennt APIs provide an easy way to let your customers pay for their orders easily and securely.
+Make getting paid faster and easier than ever! paymennt.com APIs provide an easy way to let your customers pay for their orders easily and securely.
 QR Payments are especially useful when the customer is trying to make an in-store payment or making in-person payment on delivery.
 
 ## Integration flow
 
-1. When a customer is ready to pay for their order, ٌYour system sends a [Create QR checkout](/api/#operation/create-qr-checkout) API call to Paymennt API with the order details.
+1. When a customer is ready to pay for their order, ٌYour system sends a [Create QR checkout](/api/#operation/create-qr-checkout) API call to paymennt.com API with the order details.
 2. The response from the API call includes the `base64QR` which is Base64 encoded QR code PNG image data. This QR Code contains the URL for the checkout payment page.
 3. Once you retrieve the QR image, you should present it to the customer ( On a mobile device, POS System, Web Page, or any kind of applicable display).
 4. Once the customer scans the QR and completes the payment, call the [Get Checkout](/api/#operation/get-checkout) API call to retrieve the status.
@@ -42,7 +42,7 @@ A checkout can have multiple statuses that describe the current state that the c
 | **PENDING**             | New Checkout. User has not completed the payment. |
 | **AUTHORIZED**          | The payment has been authorized, a subsequent Capture or Cancel payment API call is expected before the checkout Expires. |
 | **PAID**                | This status is effective when a customer has successfully completed the payment associated with this checkout. |
-| **FAILED**              | Payment failed due to payment failure. Paymennt failed to recover such a checkout process. |
+| **FAILED**              | Payment failed due to payment failure. paymennt.com failed to recover such a checkout process. |
 | **CANCELLED**           | User cancelled the checkout process and returned to the merchant page. |
 | **EXPIRED**             | Checkout has expired without being processed |
 | **REFUNDED**            | Checkout has been fully refunded to the Shopper |

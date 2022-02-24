@@ -9,7 +9,7 @@ title: WooCommerce
 <br />
 <br />
 
-From downloading the plugin to requesting your first test payment, learn how to get started with the Paymennt for WooCommerce plugin.
+From downloading the plugin to requesting your first test payment, learn how to get started with the paymennt.com for WooCommerce plugin.
 
 :::info
 This guide assumes that you have already [set up WooCommerce on your WordPress instance](https://docs.woocommerce.com/document/installing-uninstalling-woocommerce/).
@@ -38,7 +38,7 @@ This guide assumes that you have already [set up WooCommerce on your WordPress i
 ## Configure the plugin
 1. Log in to WordPress as an administrator.
 2. In the left menu, click _WooCommerce_ > _Settings_ > _Payments_.
-3. Find the Paymennt payment method and click on **Manage**
+3. Find the paymennt.com payment method and click on **Manage**
 
 
 ![](/img/docs/integrate/ecomm/woocommerce/woocommerce-2.png)
@@ -57,7 +57,7 @@ That's it! You're ready to start testing.
    to the checkout.
 3. Enter the required customer and billing details.
 4. Select the **PointCheckout payment method**.
-5. Click **Place Order**. You will now be redirected to the Paymennt payment page.
+5. Click **Place Order**. You will now be redirected to the paymennt.com payment page.
 6. Enter the following card details:
     - Number: `4242 4242 4242 4242`
     - Expiry date: `12/25`

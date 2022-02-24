@@ -5,17 +5,17 @@ hide_title: false
 hide_table_of_contents: false
 ---
 
-On this page we describe the steps required to initiate and verify a payment via the Paymennt payment gateway for web based applications
+On this page we describe the steps required to initiate and verify a payment via the paymennt.com payment gateway for web based applications
 
 ## How it works
 
-Three steps are required in order to accept payments via the Paymennt payment gateway for web-based applications:
+Three steps are required in order to accept payments via the paymennt.com payment gateway for web-based applications:
 
 1. Create a new Web Checkout specifying the `returnURL` where user is redirected after payment
 2. Redirect user to the `redirectURL` received in the response
 3. On return, Query the API for the payment status
 
-The diagram below shows the overall flow to be used in order to accept payments using the Paymennt
+The diagram below shows the overall flow to be used in order to accept payments using the paymennt.com
 web integration
 
 ![Website integration flow](/img/docs/build/initiate/web-flow.png)
@@ -23,7 +23,7 @@ web integration
 ## Step 1: Create a new checkout
 
 :::danger SERVER API CALL
-API calls made to the Paymennt API endpoints should be made from your server. You should NEVER include your API keys in your mobile application. A malicious user can gain access to your account if those keys are exposed.
+API calls made to the paymennt.com API endpoints should be made from your server. You should NEVER include your API keys in your mobile application. A malicious user can gain access to your account if those keys are exposed.
 :::
 
 When your shopper is ready to pay, create a new web checkout by making a call from your server to <a href="/api/#operation/create-web-checkout" target="_blank">`POST /checkout/web`</a>. In your request, you must include the following required parameters:
@@ -100,14 +100,14 @@ A paid checkout will have the status of `PAID`. If the checkout has a status oth
 
 ### Checkout status values
 
-Below is a list of available status codes that may be provided via the Paymennt API to describe the status of a checkout:
+Below is a list of available status codes that may be provided via the paymennt.com API to describe the status of a checkout:
 
 STATUS | DETAILS
 :-- | :--
 **`PENDING`** | New Checkout. User has not completed the payment.
 **`AUTHORIZED`** | The payment has been authorized. A subsequent `CAPTURE` or `CANCEL` API call is expected before expiry.
 **`PAID`** | This status is effective when a customer has successfully completed the payment associated with this checkout.
-**`FAILED`** | Payment failed due to payment failure. Paymennt failed to recover such a checkout process.
+**`FAILED`** | Payment failed due to payment failure. paymennt.com failed to recover such a checkout process.
 **`CANCELLED`** | User cancelled the checkout process and returned to the merchant page.
 **`EXPIRED`** | Checkout has expired without being processed
 **`REFUNDED`** | Checkout has been fully refunded to customer

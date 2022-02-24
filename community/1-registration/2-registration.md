@@ -1,18 +1,18 @@
 ---
-title: Registering for a Paymennt merchant account
+title: Registering for a paymennt.com merchant account
 sidebar_label: 'Registration Process'
 ---
 
-This guide will walk you through the process of registering for a Paymennt merchant account.
+This guide will walk you through the process of registering for a paymennt.com merchant account.
 
 Once you’ve submitted your application, you’ll join a short queue. Our team will review your application and may reach out to you to confirm a few details or, most probably, will leave you a message on your application, guiding you through the still required information/ documentation. The onboarding process timeframe depends on the complexity of your company and the documents uploaded.
 
 :::info APPLICATION DOWNLOAD
-Before starting, you must have downloaded the Paymennt mobile application. [Learn more](/guides/registration/install)
+Before starting, you must have downloaded the paymennt.com mobile application. [Learn more](/guides/registration/install)
 :::
 
 :::caution AUTHORIZED SIGNATORY
-The user setting up the account must be an authorized signatory of the entity for which the Paymennt merchant account is being created.
+The user setting up the account must be an authorized signatory of the entity for which the paymennt.com merchant account is being created.
 :::
 
 ## Account requirements
@@ -28,13 +28,13 @@ Please make sure you have available the following documents and information as t
 ## Account Registration Process
 
 ### Account Country Selection
-To start, launch the Paymennt mobile application:
-- Launch the Paymennt app
+To start, launch the paymennt.com mobile application:
+- Launch the paymennt.com app
 - Select the country of registration
 
 ### Applicant KYC (Know Your Customer)
 The following steps allow us to identify you as an applicant and to verify your identity. This is required as part of our regulators and card scheme obligations.
-1. **Enter your phone number**. This number will be used to log you in in the future to complete your application and to access your Paymennt merchant account using the application.
+1. **Enter your phone number**. This number will be used to log you in in the future to complete your application and to access your paymennt.com merchant account using the application.
 2. **One Time Password**. Verify your phone by entering the 6 digit code received via SMS.
 3. **Security Pin**. Create a 4 digit pin code which can be used going forward to access your account.
 4. **Personal Infomartion**. Provide your name and contact email address. Please note that this email address will be the primary email address used for communications regarding your account.

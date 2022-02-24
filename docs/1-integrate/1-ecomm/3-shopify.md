@@ -21,12 +21,12 @@ This guide assumes that you already have a paid [Shopify account](https://www.sh
 4. Navigate to `API credentials` tab and press on `Install app`.
 ![](/img/docs/integrate/ecomm/shopify/shopify-4.png)
 
-5. Copy the `Admin API access token` from the Paymennt application as shown below. We will use this in the next section.
+5. Copy the `Admin API access token` from the paymennt.com application as shown below. We will use this in the next section.
 ![](/img/docs/integrate/ecomm/shopify/shopify-5.png)
 
 ## Configure paymennt.com
 
-### Paymennt.com Web Console
+### paymennt.com Web Console
 
 To complete this integration, you must first login to the [paymennt.com Web Console](/guides/portal/login)
 
@@ -75,7 +75,7 @@ From the side menu, Select **"Integrations"** -> **"Shopify Integration"** as sh
 ![](/img/docs/integrate/ecomm/shopify/shopify-setup-5.png)
 
 3. Fill in the required details to setup the manual payment method:
-    - Custom payment method name: `Card payment (via Paymennt)`
+    - Custom payment method name: `Card payment (via paymennt.com)`
     - Additional details: `Complete your purchase using a credit or debit card`
 4. Click `Activate` when done
 

@@ -2,7 +2,7 @@ openapi: 3.0.1
 info:
   title: Merchant API
   description: |-
-    Paymennt provides a collection of APIs that enable you to process and manage payments. Our APIs accept and return JSON in the HTTP body, and return standard HTTP response codes. You can consume the APIs directly using
+    paymennt.com provides a collection of APIs that enable you to process and manage payments. Our APIs accept and return JSON in the HTTP body, and return standard HTTP response codes. You can consume the APIs directly using
 
     your favorite HTTP/REST library or make use of one of our SDKs.
 
@@ -12,7 +12,7 @@ info:
 
     ### API Basics
 
-    The Paymennt API gives you access to pretty much all the features you can use on our dashboard and lets you extend them for use in your application. It strives to be RESTful and is organized around the main resources you would be interacting with - with a few notable exceptions.
+    The paymennt.com API gives you access to pretty much all the features you can use on our dashboard and lets you extend them for use in your application. It strives to be RESTful and is organized around the main resources you would be interacting with - with a few notable exceptions.
 
     ### Requests and Response
 
@@ -29,9 +29,9 @@ info:
   version: "2.0"
 servers:
 - url: https://api.paymennt.com/mer/v2.0/
-  description: Paymennt live environment
+  description: paymennt.com live environment
 - url: https://api.test.paymennt.com/mer/v2.0/
-  description: Paymennt test environment
+  description: paymennt.com test environment
 security:
 - ApiKey: []
   ApiSecret: []
@@ -283,7 +283,7 @@ paths:
       parameters:
       - name: checkoutId
         in: path
-        description: Checkout Id retrieved from Paymennt API.
+        description: Checkout Id retrieved from paymennt.com API.
         required: true
         schema:
           type: string
@@ -343,7 +343,7 @@ paths:
       parameters:
       - name: checkoutId
         in: path
-        description: Checkout Id retrieved from Paymennt API.
+        description: Checkout Id retrieved from paymennt.com API.
         required: true
         schema:
           type: string
@@ -509,7 +509,7 @@ paths:
       parameters:
       - name: subscriptionId
         in: path
-        description: Subscription Id retrieved from Paymennt API.
+        description: Subscription Id retrieved from paymennt.com API.
         required: true
         schema:
           type: string
@@ -539,7 +539,7 @@ paths:
       parameters:
       - name: subscriptionId
         in: path
-        description: Subscription Id retrieved from Paymennt API.
+        description: Subscription Id retrieved from paymennt.com API.
         required: true
         schema:
           type: string
@@ -569,7 +569,7 @@ paths:
       parameters:
       - name: subscriptionId
         in: path
-        description: Subscription Id retrieved from Paymennt API.
+        description: Subscription Id retrieved from paymennt.com API.
         required: true
         schema:
           type: string
@@ -599,7 +599,7 @@ paths:
       parameters:
       - name: subscriptionId
         in: path
-        description: Subscription Id retrieved from Paymennt API.
+        description: Subscription Id retrieved from paymennt.com API.
         required: true
         schema:
           type: string
@@ -1131,7 +1131,7 @@ components:
       properties:
         id:
           type: string
-          description: Checkout ID at Paymennt database
+          description: Checkout ID at paymennt.com database
           example: "1653241101733169556"
         displayId:
           type: string
@@ -1199,7 +1199,7 @@ components:
           $ref: '#/components/schemas/CheckoutCustomerResponse'
         subscriptionId:
           type: string
-          description: The Id of the subscription at Paymennt database that the
+          description: The Id of the subscription at paymennt.com database that the
             checkout was issued for
           example: "1619465605181100275"
         billingAddress:
@@ -1225,11 +1225,11 @@ components:
           format: date-time
         branchId:
           type: string
-          description: The Paymennt branch ID associated with this checkout.
+          description: The paymennt.com branch ID associated with this checkout.
           example: "1601731695315563241"
         branchName:
           type: string
-          description: The Paymennt branch name associated with this checkout.
+          description: The paymennt.com branch name associated with this checkout.
           example: Test store
       description: "Checkout associated with the payment, this can be null if the\
         \ payment link is never opened"
@@ -1294,7 +1294,7 @@ components:
           $ref: '#/components/schemas/CheckoutAddress'
         branchId:
           type: integer
-          description: The Paymennt branch ID associated with this checkout.
+          description: The paymennt.com branch ID associated with this checkout.
           format: int64
         allowedPaymentMethods:
           type: array
@@ -1314,7 +1314,7 @@ components:
         defaultPaymentMethod:
           type: string
           description: Active payment method when opening the payment page. When left
-            empty the default for your account at Paymennt will be used.
+            empty the default for your account at paymennt.com will be used.
           example: CARD
           enum:
           - CARD
@@ -1399,7 +1399,7 @@ components:
           $ref: '#/components/schemas/CheckoutAddress'
         branchId:
           type: integer
-          description: The Paymennt branch ID associated with this checkout.
+          description: The paymennt.com branch ID associated with this checkout.
           format: int64
         allowedPaymentMethods:
           type: array
@@ -1419,7 +1419,7 @@ components:
         defaultPaymentMethod:
           type: string
           description: Active payment method when opening the payment page. When left
-            empty the default for your account at Paymennt will be used.
+            empty the default for your account at paymennt.com will be used.
           example: CARD
           enum:
           - CARD
@@ -1476,7 +1476,7 @@ components:
           type: string
           description: "Merchant device reference, to be used by the merchant to indicate\
             \ the source device of the checkout if more than one device is used to\
-            \ submit checkouts to Paymennt."
+            \ submit checkouts to paymennt.com."
         qrSize:
           maximum: 1024
           minimum: 64
@@ -1498,7 +1498,7 @@ components:
           $ref: '#/components/schemas/CheckoutAddress'
         branchId:
           type: integer
-          description: The Paymennt branch ID associated with this checkout.
+          description: The paymennt.com branch ID associated with this checkout.
           format: int64
         allowedPaymentMethods:
           type: array
@@ -1518,7 +1518,7 @@ components:
         defaultPaymentMethod:
           type: string
           description: Active payment method when opening the payment page. When left
-            empty the default for your account at Paymennt will be used.
+            empty the default for your account at paymennt.com will be used.
           example: CARD
           enum:
           - CARD
@@ -1544,7 +1544,7 @@ components:
       properties:
         id:
           type: string
-          description: Checkout ID at Paymennt database
+          description: Checkout ID at paymennt.com database
           example: "1653241101733169556"
         displayId:
           type: string
@@ -1637,11 +1637,11 @@ components:
           format: date-time
         branchId:
           type: string
-          description: The Paymennt branch ID associated with this checkout.
+          description: The paymennt.com branch ID associated with this checkout.
           example: "1601731695315563241"
         branchName:
           type: string
-          description: The Paymennt branch name associated with this checkout.
+          description: The paymennt.com branch name associated with this checkout.
           example: Test store
       description: Result Object.
     CheckoutQRResponseWrapper:
@@ -1736,7 +1736,7 @@ components:
       properties:
         id:
           type: string
-          description: Checkout ID at Paymennt database
+          description: Checkout ID at paymennt.com database
           example: "1653241101733169556"
         displayId:
           type: string
@@ -1767,11 +1767,11 @@ components:
           example: 0.0
         branchId:
           type: string
-          description: The Paymennt branch ID associated with this checkout.
+          description: The paymennt.com branch ID associated with this checkout.
           example: "1601731695315563241"
         branchName:
           type: string
-          description: The Paymennt branch name associated with this checkout.
+          description: The paymennt.com branch name associated with this checkout.
           example: Test store
         status:
           type: string
@@ -1898,7 +1898,7 @@ components:
           example: https://shop.example.com/payment-redirect/
         branchId:
           type: integer
-          description: The Paymennt branch ID associated with this checkout.
+          description: The paymennt.com branch ID associated with this checkout.
           format: int64
         allowedPaymentMethods:
           type: array
@@ -1918,7 +1918,7 @@ components:
         defaultPaymentMethod:
           type: string
           description: Active payment method when opening the payment page. When left
-            empty the default for your account at Paymennt will be used.
+            empty the default for your account at paymennt.com will be used.
           example: CARD
           enum:
           - CARD
@@ -1950,7 +1950,7 @@ components:
       properties:
         id:
           type: string
-          description: Checkout ID at Paymennt database
+          description: Checkout ID at paymennt.com database
           example: "1653241101733169556"
         displayId:
           type: string
@@ -2039,11 +2039,11 @@ components:
           format: date-time
         branchId:
           type: string
-          description: The Paymennt branch ID associated with this checkout.
+          description: The paymennt.com branch ID associated with this checkout.
           example: "1601731695315563241"
         branchName:
           type: string
-          description: The Paymennt branch name associated with this checkout.
+          description: The paymennt.com branch name associated with this checkout.
           example: Test store
       description: Result Object.
     ECommerceCheckoutResponse:
@@ -2051,7 +2051,7 @@ components:
       properties:
         id:
           type: string
-          description: Checkout ID at Paymennt database
+          description: Checkout ID at paymennt.com database
           example: "1653241101733169556"
         displayId:
           type: string
@@ -2140,11 +2140,11 @@ components:
           format: date-time
         branchId:
           type: string
-          description: The Paymennt branch ID associated with this checkout.
+          description: The paymennt.com branch ID associated with this checkout.
           example: "1601731695315563241"
         branchName:
           type: string
-          description: The Paymennt branch name associated with this checkout.
+          description: The paymennt.com branch name associated with this checkout.
           example: Test store
       description: Result Object.
     GetBranchErrorResponse:
@@ -2377,7 +2377,7 @@ components:
       properties:
         id:
           type: string
-          description: Subscription payment ID at Paymennt database
+          description: Subscription payment ID at paymennt.com database
           example: "1653241101733169556"
         displayId:
           type: string
@@ -2422,7 +2422,7 @@ components:
           $ref: '#/components/schemas/CheckoutCustomer'
         customerId:
           type: integer
-          description: 'Customer id at Paymennt database '
+          description: 'Customer id at paymennt.com database '
           format: int64
         startDate:
           type: string
@@ -2463,7 +2463,7 @@ components:
       properties:
         id:
           type: string
-          description: Subscription ID at Paymennt database
+          description: Subscription ID at paymennt.com database
           example: "1653241101733169556"
         displayId:
           type: string
@@ -2543,7 +2543,7 @@ components:
       properties:
         address:
           type: string
-          description: Webhook endpoint that Paymennt server will push messages
+          description: Webhook endpoint that paymennt.com server will push messages
             to.
     WebhookResponse:
       type: object

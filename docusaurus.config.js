@@ -3,19 +3,19 @@
 const path = require('path');
 
 module.exports = {
-  title: 'Paymennt documentation',
-  tagline: 'build amazing experiences with the paymennt platform',
+  title: 'paymennt.com documentation',
+  tagline: 'build amazing experiences with the paymennt.com platform',
   url: 'https://docs.paymennt.com',
   baseUrl: '/',
   onBrokenLinks: 'throw',
   onBrokenMarkdownLinks: 'warn',
   favicon: 'img/favicon.ico',
-  organizationName: 'paymennt',
+  organizationName: 'paymennt.com',
   projectName: 'docs',
   themeConfig: {
     navbar: {
       logo: {
-        alt: 'Paymennt logo',
+        alt: 'paymennt.com logo',
         src: 'img/logo.svg',
       },
       items: [

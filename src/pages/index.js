@@ -13,8 +13,8 @@ const features = [
     imageUrl: 'img/home/guides.svg',
     description: (
       <>
-        Learn the ins and outs of the Paymennt platform. Our product guides will show you how to manage your
-        Paymennt merchant account and covers topics critical for any business.
+        Learn the ins and outs of the paymennt.com platform. Our product guides will show you how to manage your
+        paymennt.com merchant account and covers topics critical for any business.
       </>
     ),
   },
@@ -24,7 +24,7 @@ const features = [
     imageUrl: 'img/home/accept.svg',
     description: (
       <>
-        Learn about the ins and outs of the Paymennt platform through  boosts an
+        Learn about the ins and outs of the paymennt.com platform through  boosts an
         array of tools  was designed from the ground up to be easily installed and
         used to get your website up and running quickly.
       </>
@@ -36,7 +36,7 @@ const features = [
     imageUrl: 'img/home/plugins.svg',
     description: (
       <>
-      Connect your e-commerce platform to the powerful payment processing capabilities of Paymennt. Choose a quick,
+      Connect your e-commerce platform to the powerful payment processing capabilities of paymennt.com. Choose a quick,
       reliable, and low-code solution thanks to our flexible plugins.
       </>
     ),
@@ -47,7 +47,7 @@ const features = [
     imageUrl: 'img/home/sdks.svg',
     description: (
       <>
-        Whether for your server or your mobile app, Paymennt provides you with an array of SDKs to make your
+        Whether for your server or your mobile app, paymennt.com provides you with an array of SDKs to make your
         product development journey simpler.
       </>
     ),

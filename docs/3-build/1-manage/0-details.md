@@ -4,7 +4,7 @@ slug: details
 ---
 
 :::danger SERVER API CALL
-API calls made to the Paymennt API endpoints should be made from your server. You should NEVER include your API keys in your mobile application. A mallicious user can gain access to your account if those keys are exposed.
+API calls made to the paymennt.com API endpoints should be made from your server. You should NEVER include your API keys in your mobile application. A malicious user can gain access to your account if those keys are exposed.
 :::
 
 To retrieve the details and status of a checkout  , make an API call from your server to <a href="/api/#operation/get_checkout" target="_blank">`GET /checkout/{checkoutId}`</a>. The `checkoutId` is the ID received during the craetion of the checkout.

@@ -4,4 +4,4 @@ sidebar_label: Quickstart
 slug: /developer
 ---
 
-Get up and running with our client libraries and start developing your Paymennt integration.
+Get up and running with our client libraries and start developing your paymennt.com integration.

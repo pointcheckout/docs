@@ -18,7 +18,7 @@ When your customer subscribes for a recurring payment option, create a new subsc
 `description` | The description of this subscription, this description will be shown in the invoice on the payment/confirmation pages.
 `currency`  | ISO 4217 Currency Code (3 letter currency code)
 `amount`    | A positive decimal number representing the amount customer should pay
-`customerId`* | The customer ID at Paymennt Database, this is not required when the `customer` details are provided.
+`customerId`* | The customer ID at paymennt.com Database, this is not required when the `customer` details are provided.
 `customer`* | Customer that the Payment link will be sent to, the system will make a lookup on the customers to find the customer with the same Phone/Email, if not found new customer will be created, this is not required when the `customerId` is provided.
 `startDate` | The start date of the subscription in format (yyyy-MM-dd), This will be used as a reference date for the scheduled payment requests.
 `sendOnHour` | The hour of day (UTC) that the link wil be sent on.
