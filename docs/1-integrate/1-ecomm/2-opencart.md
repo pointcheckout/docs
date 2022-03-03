@@ -7,7 +7,7 @@ title: OpenCart
 <br />
 <br />
 
-From downloading the plugin to requesting your first test payment, learn how to get started with the pointcheckout for OpenCart plugin.
+From downloading the plugin to requesting your first test payment, learn how to get started with the paymennt.com for OpenCart plugin.
 
 :::info
 This guide assumes that you have already [set up OpenCart](https://docs.opencart.com/installation/).
@@ -44,7 +44,7 @@ That's it! You're ready to start testing.
    to the checkout.
 3. Enter the required customer and billing details.
 4. Select the **PointCheckout payment method**.
-5. Click **Confirm Order**. You will now be redirected to the PointCheckout payment page.
+5. Click **Confirm Order**. You will now be redirected to the paymennt.com payment page.
 6. Enter the following card details:
     - Number: `4242 4242 4242 4242`
     - Expiry date: `12/25`

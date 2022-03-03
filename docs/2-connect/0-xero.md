@@ -1,19 +1,19 @@
 ---
-title: Painless payments with Xero and PointCheckout
+title: Painless payments with Xero and paymennt.com
 sidebar_label: Xero
 ---
 
-Make getting paid faster and easier than ever! PointCheckout is now integrated with Xero. Xero is the best accounting software for growing companies. Its service plans and features easily accommodate the different stages (and needs) of small businesses.
+Make getting paid faster and easier than ever! paymennt.com is now integrated with Xero. Xero is the best accounting software for growing companies. Its service plans and features easily accommodate the different stages (and needs) of small businesses.
 
-This integration will make it easier for your customers to pay your Xero invoices online using PointCheckout.
+This integration will make it easier for your customers to pay your Xero invoices online using paymennt.com.
 
 :::caution Before you start
 Your user account must have Administrator permission to access this service
 :::
 
-## Logging in to the PointCheckout Web Console
+## Logging in to the paymennt.com Web Console
 
-To complete this integration, you must first login to the [PointCheckout Web Console](/guides/portal/login)
+To complete this integration, you must first login to the [paymennt.com Web Console](/guides/portal/login)
 
 ## Access Xero Integration configuration
 
@@ -27,17 +27,17 @@ From the side menu, Select **"Integrations"** -> **"Xero"** as shown in the imag
 
 ![connect xero](/img/docs/integrate/3rd-party/xero/connect.png)
 
-2. Select the Xero **Organization** you would like to link to this PointCheckout account.
+2. Select the Xero **Organization** you would like to link to this paymennt.com account.
 
 :::tip
-PointCheckout supports 1 single Organization per PointCheckout account. If you manage multiple PointCheckout clients and have multiple Organizations available to your Xero account, make sure all of them are selected. You can specify which organization is linked to this specific PointCheckout account in the next step.
+paymennt.com supports 1 single Organization per paymennt.com account. If you manage multiple paymennt.com clients and have multiple Organizations available to your Xero account, make sure all of them are selected. You can specify which organization is linked to this specific paymennt.com account in the next step.
 :::
 
-![authorize pointcheckout](/img/docs/integrate/3rd-party/xero/authorize.png)
+![authorize paymennt.com](/img/docs/integrate/3rd-party/xero/authorize.png)
 
-3. (Multiple Organizations Only) Selecting organization to link to your PointCheckout Account
+3. (Multiple Organizations Only) Selecting organization to link to your paymennt.com Account
 
-If you have multiple organizations selected in _Step 2_ above, you will be prompted to select which one you want to link to your PointCheckout account. If you have only one selected Organization, you will not see a prompt.
+If you have multiple organizations selected in _Step 2_ above, you will be prompted to select which one you want to link to your paymennt.com account. If you have only one selected Organization, you will not see a prompt.
 
 ## Adding a Payment Button to your Xero Invoices
 
@@ -47,7 +47,7 @@ The next steps explain how to add a **"Pay Now"** button to your Xero invoices
 The following instructions are also available on the **Xero Central** page [Add a payment service that uses a custom URL](https://central.xero.com/s/article/Custom-URL)
 :::
 
-1. Copy **Custom payment URL** from the **"Xero"** screen on your PointCheckout account.
+1. Copy **Custom payment URL** from the **"Xero"** screen on your paymennt.com account.
 
 ![xero connected](/img/docs/integrate/3rd-party/xero/connected.png)
 

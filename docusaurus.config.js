@@ -3,19 +3,19 @@
 const path = require('path');
 
 module.exports = {
-  title: 'pointcheckout documentation',
-  tagline: 'build amazing payment experiences with the pointcheckout platform',
-  url: 'https://docs.pointcheckout.com',
+  title: 'paymennt.com documentation',
+  tagline: 'build amazing experiences with the paymennt.com platform',
+  url: 'https://docs.paymennt.com',
   baseUrl: '/',
   onBrokenLinks: 'throw',
   onBrokenMarkdownLinks: 'warn',
   favicon: 'img/favicon.ico',
-  organizationName: 'pointcheckout',
+  organizationName: 'paymennt.com',
   projectName: 'docs',
   themeConfig: {
     navbar: {
       logo: {
-        alt: 'PointCheckout logo',
+        alt: 'paymennt.com logo',
         src: 'img/logo.svg',
       },
       items: [
@@ -40,7 +40,7 @@ module.exports = {
       ],
     },
     footer: {
-      style: 'dark',
+      style: 'light',
       copyright: `Copyright © ${new Date().getFullYear()} PointCheckout, Ltd.`,
     },
     colorMode: {
@@ -69,12 +69,12 @@ module.exports = {
       {
         specs: [
           {
-            spec: 'api/pointcheckout.yaml',
+            spec: 'api/paymennt.yaml',
             routePath: '/api'
           }
         ],
         theme: {
-          primaryColor: '#25405d',
+          primaryColor: '#6f2277',
           redocOptions: {
             disableSearch: true,
             hideDownloadButton: true
